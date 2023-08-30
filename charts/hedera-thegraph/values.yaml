@@ -1,0 +1,51 @@
+nameOverride: hedera-the-graph
+
+global:
+  hostname: ""
+  image: {}
+  namespaceOverride: ""
+  podAnnotations: {}
+  useReleaseForNameLabel: false  # Set the name label to the release name for Marketplace
+
+labels: {}
+
+db:
+  host: ""  # Auto-generated from the database sub-charts
+  name: postgres
+  schema: public
+  owner:
+    password: ""  # Randomly generated if left blank
+    username: postgres
+
+ipfs:
+  enabled: true
+  host: "" # Auto-generated from the ipfs sub-charts
+  port: 10125
+
+
+postgresql:
+  enabled: true
+  pgpool:
+    adminPassword: "unsecured-password"
+  postgresql:
+    password: "unsecured-password"
+    repmgrPassword: "unsecured-password"
+
+index-node:
+  role: "index-node"
+  enabled: true
+  config:
+    ipfs: "htg2-ipfs:10125"
+    chains: 
+      mainnet:
+        providers:
+        - label: hedera-mainnet
+          transport: rpc
+          url: https://mainnet.hashio.io/api
+          features: []
+  postgres:
+    host: htg2-postgresql-pgpool
+    user: "postgres"
+    db: "postgres"
+    password: 
+      value: "unsecured-password"

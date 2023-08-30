@@ -128,3 +128,10 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+# chart generated files
+charts/*.tgz
+charts/*.lock
+charts/*.prov
+charts/*.tar.gz

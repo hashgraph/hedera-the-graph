@@ -1,0 +1,15 @@
+apiVersion: v2
+name: graph-node
+description: A Helm chart for Graph Protocol Nodes
+type: application
+version: 0.1.0
+keywords:
+  - graphprotocol
+  - hedera
+home: https://github.com/hashgraph/hedera-the-graph
+sources:
+  - https://github.com/graphprotocol/graph-node
+maintainers:
+  - name: Hedera Smart Contracts Team
+    email: engsmartcontracts@hedera.com
+appVersion: v0.1.0
