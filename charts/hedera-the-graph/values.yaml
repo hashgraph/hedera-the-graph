@@ -94,6 +94,57 @@ index-node:
   image: 
     tag: "v0.28.2"
 
-
+query-node:
+  role: "query-node"
+  enabled: true
+  config:
+    ipfs: 
+      #value: "ht2-ipfs:10125" # Recomended to use ipfs.host and ipfs.port and leave this from secret.
+      fromConfigMap:
+        name: "hedera-the-graph-configmap"
+        key: "IPFS_HOST"
+    chains: 
+      mainnet:
+        providers:
+        - label: hedera-mainnet
+          transport: rpc
+          url: https://mainnet.hashio.io/api
+          features: []
+  postgres:
+    db: 
+      # value: "graph-node" # Recomended to use global.postgresql.database and leave this from secret.
+      fromConfigMap:
+        name: "hedera-the-graph-configmap"
+        key: "DB_NAME"
+    host: 
+      #value: "ht2-postgresql-pgpool" # Recomended to use global.postgresql.host and leave this from secret.
+      fromConfigMap:
+        name: "hedera-the-graph-configmap"
+        key: "POSTGRES_HOST"
+    replicaHost: ""
+    user: 
+      #value: "postgres" # Recomended to use global.postgresql.username and leave this from secret.
+      fromSecret:
+        name: "hedera-the-graph-passwords"
+        key: "PG_USERNAME"
+    password:
+      #value: "" # Randomly generated if left blank, Recomended to use global.postgresql.password and leave this from secret.
+      fromSecret:
+        name: "hedera-the-graph-passwords"
+        key: "PG_PASSWORD"
+  image: 
+    tag: "v0.28.2"
+    ipfs: 
+      #value: "ht2-ipfs:10125"
+      fromConfigMap:
+        name: "hedera-the-graph-configmap"
+        key: "IPFS_HOST"
+    chains: 
+      mainnet:
+        providers:
+        - label: hedera-mainnet
+          transport: rpc
+          url: https://mainnet.hashio.io/api
+          features: []
 
 

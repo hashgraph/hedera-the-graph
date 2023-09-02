@@ -8,5 +8,8 @@ dependencies:
 - name: graphprotocol-node
   repository: file://../graphprotocol-node
   version: 0.1.0
-digest: sha256:e0dcc678340390fe1e22b5baa7cd693dd19e6a03ca2813f69a10a1ac1357b9c6
-generated: "2023-09-01T17:11:06.119994-06:00"
+- name: graphprotocol-node
+  repository: file://../graphprotocol-node
+  version: 0.1.0
+digest: sha256:21db6c4d4f4420fb749c9907e756c10b289b3fe02717effee6e06c7fb906871a
+generated: "2023-09-02T17:05:38.80305-06:00"

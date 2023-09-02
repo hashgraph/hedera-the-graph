@@ -42,3 +42,9 @@ dependencies:
     condition: index-node.enabled
     repository: file://../graphprotocol-node
     version: 0.1.0
+
+  - alias: query-node
+    name: graphprotocol-node
+    condition: query-node.enabled
+    repository: file://../graphprotocol-node
+    version: 0.1.0
