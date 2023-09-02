@@ -71,8 +71,8 @@ config:
   
 
 postgres:
-  db: ""
-    # value: ""
+  db: 
+    value: ""
     # fromConfigMap:
     #   name:
     #   key:

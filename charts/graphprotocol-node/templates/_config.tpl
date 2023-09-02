@@ -1,9 +1,8 @@
 # Config.toml based on https://github.com/graphprotocol/graph-node/blob/5613dca92213810b3cca57979f5facc2d670e34a/docs/config.md#configuring-multiple-databases
 {{- define "graphprotocol-node.config" -}}
-{{- $pgDB := required "postgres.db wasn't specified" .Values.postgres.db }}
 [store]
 [store.primary]
-  connection = "postgresql://$PG_USERNAME:$PG_PASS@$PG_HOST/{{ $pgDB }}"
+  connection = "postgresql://$PG_USERNAME:$PG_PASS@$PG_HOST/$PG_DB"
   weight = 1
   pool_size = 10
 

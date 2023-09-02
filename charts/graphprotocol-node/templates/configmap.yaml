@@ -11,3 +11,6 @@ data:
   {{- if not (hasKey .Values.postgres.host "fromConfigMap") }}  
   PG_HOST: {{ .Values.postgres.host.value | quote }}
   {{- end }}
+  {{- if not (hasKey .Values.postgres.db "fromConfigMap") }}  
+  PG_DB: {{ .Values.postgres.db.value | quote }}
+  {{- end }}

@@ -75,6 +75,12 @@ spec:
               value: {{ .Values.role | quote }}
             - name: GRAPH_KILL_IF_UNRESPONSIVE
               value: "false"
+            - name: "GRAPH_LOG"
+              value: "debug"
+            - name: GRAPH_ETHEREUM_MAX_BLOCK_RANGE_SIZE
+              value: "1000"
+            - name: GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER
+              value: "1"
             - name: ipfs
               valueFrom:
                 configMapKeyRef:                  
@@ -119,6 +125,16 @@ spec:
                   {{- else }}
                     name: {{ include "graphprotocol-node.fullname" . }}-config
                     key: PG_HOST
+                  {{- end }}
+            - name: PG_DB
+              valueFrom:
+                configMapKeyRef:
+                  {{- if hasKey .Values.postgres.db "fromConfigMap" }}
+                    name: {{ .Values.postgres.db.fromConfigMap.name }}
+                    key: {{ .Values.postgres.db.fromConfigMap.key }}
+                  {{- else }}
+                    name: {{ include "graphprotocol-node.fullname" . }}-config
+                    key: PG_DB
                   {{- end }}
           ports:
             - name: metrics

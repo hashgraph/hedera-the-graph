@@ -3,22 +3,55 @@ nameOverride: hedera-the-graph
 labels: {}
 
 global:
-  # set the following overrides values only if wish to use postgresql.enabled=true
   postgresql:
-    username: "postgres"
-    password: "password" # Randomly generated if left blank
-    database: "graph-node"
+    # username recomended to use default `postgres` if using postgresql sub-chart (postgresql.enabled: true).
+    username: "postgres" # Default username, Requiered if external postgresql is used.
+    password: "" # Randomly generated if left blank, Requiered if external postgresql is used
+    database: "graph-node" # Default database name
+    host: "" # Auto-generated from the postgresql sub-charts, Requiered if external postgresql is used
 
 ipfs:
-  enabled: true
-  host: "" # Auto-generated from the ipfs sub-charts
+  enabled: true # Set to false if external ipfs is used
+  host: "" # Auto-generated from the ipfs sub-charts, Requiered if external ipfs is used
   port: 10125
 
 postgresql:
-  enabled: true
-
-db:
-  host: ""
+  enabled: true # Set to false if external postgresql is used
+  metrics:
+    enabled: false
+    resources:
+      limits:
+        cpu: 50m
+        memory: 50Mi
+      requests:
+        cpu: 20m
+        memory: 25Mi
+  nameOverride: postgres
+  persistence:
+  size: 500Gi
+  pgpool:
+    existingSecret: hedera-the-graph-passwords
+    extraEnvVarsSecret: hedera-the-graph-passwords
+    childLifeTime: 60
+    childMaxConnections: 2
+    resources:
+      limits:
+        cpu: 600m
+        memory: 750Mi
+      requests:
+        cpu: 200m
+        memory: 256Mi
+  postgresql:
+    existingSecret: hedera-the-graph-passwords
+    extraEnvVarsSecret: hedera-the-graph-passwords
+    replicaCount: 1
+    resources:
+      limits:
+        cpu: 1500m
+        memory: 1000Mi
+      requests:
+        cpu: 250m
+        memory: 500Mi 
 
 index-node:
   role: "index-node"
@@ -37,8 +70,11 @@ index-node:
           url: https://mainnet.hashio.io/api
           features: []
   postgres:
-    db: "graph-node"
-      #value: "graph-node"
+    db: 
+      # value: "graph-node"
+      fromConfigMap:
+        name: "hedera-the-graph-configmap"
+        key: "DB_NAME"
     host: 
       #value: "ht2-postgresql-pgpool"
       fromConfigMap:
@@ -51,7 +87,10 @@ index-node:
         name: "hedera-the-graph-passwords"
         key: "PG_USERNAME"
     password:
-      value: "password"
+      #value: "" # Randomly generated if left blank
+      fromSecret:
+        name: "hedera-the-graph-passwords"
+        key: "PG_PASSWORD"
   image: 
     tag: "v0.28.2"
 

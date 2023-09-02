@@ -29,8 +29,8 @@ Namespace
 Constructs the database host that should be used by all components.
 */}}
 {{- define "hedera-the-graph.db" -}}
-{{- if .Values.db.host -}}
-{{- tpl .Values.db.host . -}}
+{{- if .Values.global.postgresql.host -}}
+{{- tpl .Values.global.postgresql.host . -}}
 {{- else if and .Values.postgresql.enabled (gt (.Values.postgresql.pgpool.replicaCount | int) 0) -}}
 {{- include "postgresql-ha.pgpool" .Subcharts.postgresql -}}
 {{- else if .Values.postgresql.enabled -}}
