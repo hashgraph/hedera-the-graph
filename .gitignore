@@ -135,8 +135,8 @@ charts/*.tgz
 charts/*.lock
 charts/*.prov
 charts/*.tar.gz
-
+charts/hedera-the-graph/Chart.lock
+charts/graphprotocol-node/Chart.lock
 
 # DS_Store
 .DS_Store
-
