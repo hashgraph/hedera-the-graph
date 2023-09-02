@@ -1,0 +1,14 @@
+{{- $name := "hedera-the-graph-configmap" -}}
+{{- $dbHost := include "hedera-the-graph.db" . -}}
+{{- $dbName := .Values.global.postgresql.database -}}
+{{- $ipfsHost := include "hedera-the-graph.ipfs" . -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  labels: {{ include "hedera-the-graph.labels" . | nindent 4 }}
+  name: {{ $name }}
+  namespace: {{ include "hedera-the-graph.namespace" . }}
+data:
+  POSTGRES_HOST: "{{ $dbHost }}"
+  DB_NAME: "{{ $dbName }}"
+  IPFS_HOST: "{{ $ipfsHost }}"

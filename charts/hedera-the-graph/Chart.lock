@@ -1,0 +1,12 @@
+dependencies:
+- name: postgresql-ha
+  repository: https://charts.bitnami.com/bitnami
+  version: 11.8.1
+- name: ipfs
+  repository: https://charts.truecharts.org/
+  version: 7.0.3
+- name: graphprotocol-node
+  repository: file://../graphprotocol-node
+  version: 0.1.0
+digest: sha256:e0dcc678340390fe1e22b5baa7cd693dd19e6a03ca2813f69a10a1ac1357b9c6
+generated: "2023-09-01T17:11:06.119994-06:00"

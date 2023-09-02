@@ -1,0 +1,60 @@
+nameOverride: hedera-the-graph
+
+labels: {}
+
+global:
+  # set the following overrides values only if wish to use postgresql.enabled=true
+  postgresql:
+    username: "postgres"
+    password: "password" # Randomly generated if left blank
+    database: "graph-node"
+
+ipfs:
+  enabled: true
+  host: "" # Auto-generated from the ipfs sub-charts
+  port: 10125
+
+postgresql:
+  enabled: true
+
+db:
+  host: ""
+
+index-node:
+  role: "index-node"
+  enabled: true
+  config:
+    ipfs: 
+      #value: "ht2-ipfs:10125"
+      fromConfigMap:
+        name: "hedera-the-graph-configmap"
+        key: "IPFS_HOST"
+    chains: 
+      mainnet:
+        providers:
+        - label: hedera-mainnet
+          transport: rpc
+          url: https://mainnet.hashio.io/api
+          features: []
+  postgres:
+    db: "graph-node"
+      #value: "graph-node"
+    host: 
+      #value: "ht2-postgresql-pgpool"
+      fromConfigMap:
+        name: "hedera-the-graph-configmap"
+        key: "POSTGRES_HOST"
+    replicaHost: ""
+    user: 
+      #value: "postgres"
+      fromSecret:
+        name: "hedera-the-graph-passwords"
+        key: "PG_USERNAME"
+    password:
+      value: "password"
+  image: 
+    tag: "v0.28.2"
+
+
+
+
