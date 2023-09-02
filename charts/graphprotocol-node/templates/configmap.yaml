@@ -14,3 +14,4 @@ data:
   {{- if not (hasKey .Values.postgres.db "fromConfigMap") }}  
   PG_DB: {{ .Values.postgres.db.value | quote }}
   {{- end }}
+  

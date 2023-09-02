@@ -146,5 +146,3 @@ query-node:
           transport: rpc
           url: https://mainnet.hashio.io/api
           features: []
-
-

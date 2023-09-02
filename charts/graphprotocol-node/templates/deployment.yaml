@@ -91,7 +91,6 @@ spec:
                   name: {{ include "graphprotocol-node.fullname" . }}-config
                   key: IPFS
                 {{- end }}
-              # value: {{ required "config.ipfs wasn't specified" .Values.config.ipfs | quote }}
             - name: GRAPH_ALLOW_NON_DETERMINISTIC_FULLTEXT_SEARCH
               value: "true"
             - name: GRAPH_NODE_CONFIG
