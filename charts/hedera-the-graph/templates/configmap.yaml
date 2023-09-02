@@ -12,4 +12,3 @@ data:
   POSTGRES_HOST: "{{ $dbHost }}"
   DB_NAME: "{{ $dbName }}"
   IPFS_HOST: "{{ $ipfsHost }}"
-  
