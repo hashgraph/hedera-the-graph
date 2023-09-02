@@ -5,12 +5,13 @@ type: application
 version: 0.1.0
 keywords:
   - graphprotocol
-  - ethereum
-home: https://thegraph.com/
+  - hedera
+  - hashgraph
+  - thegraph
+home: https://github.com/hashgraph/hedera-the-graph
 sources:
   - https://github.com/graphprotocol/graph-node
 maintainers:
-  # TODO: Change maintainers list
-  - email: dm3ch@dm3ch.net
-    name: dm3ch
+  - name: Hedera Smart Contracts Team
+    email: engsmartcontracts@hedera.com
 appVersion: v0.24.1
