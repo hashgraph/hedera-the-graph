@@ -47,7 +47,6 @@ global:
         username: "postgres"
         password: "password"
         database: "graph-node"
-    ```
 ```
 
 
