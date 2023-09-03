@@ -30,7 +30,7 @@ example to use `ipfs.infura.io` as external ipfs server.
 
 ```yaml
 ipfs:
-  enabled: true # Set to false if external ipfs is used
+  enabled: false # Set to false if external ipfs is used
   host: "ipfs.infura.io" # Auto-generated from the ipfs sub-charts, Requiered if external ipfs is used
   port: 5001
 ```
@@ -49,6 +49,39 @@ global:
         database: "graph-node"
     ```
 ```
+
+
+### Index and Query Nodes
+
+Hedera The Graph node is composed of two components: an Index Node and a Query Node. The Index Node is responsible for indexing data from the Hedera network and storing it in a database. The Query Node is responsible for serving queries from the GraphQL API.
+
+By default, both the Index Node and Query Node are enabled. If you wish to disable either of these components, set the following values:
+
+```yaml
+index-node:
+  enabled: false
+
+query-node:
+  enabled: false
+```
+
+Also, is only possible to have a single replica of the Index Node. But is possible to have as many replicas of the Query Node as desired. To set the number of replicas for the Query Node, set the following value:
+
+```yaml
+query-node:
+  replicas: 2
+```
+
+The default number of replicas for the Query Node is 1.
+
+#### Values if you don't want dedicated query node.
+Is possible to do queries using the index node, so for small testing environments is possible to disable the query node and use the index node for querys.
+
+  ```yaml
+  query-node:
+    enabled: false
+  ```
+
 
 ## Installing the Chart
 
