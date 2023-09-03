@@ -74,7 +74,7 @@ query-node:
 The default number of replicas for the Query Node is 1.
 
 #### Values if you don't want dedicated query node.
-Is possible to do queries using the index node, so for small testing environments is possible to disable the query node and use the index node for querys.
+Is possible to do queries using the index node, so for small testing environments is possible to disable the query node and use the index node for queries.
 
   ```yaml
   query-node:
