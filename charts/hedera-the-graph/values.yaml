@@ -63,11 +63,11 @@ index-node:
         name: "hedera-the-graph-configmap"
         key: "IPFS_HOST"
     chains: 
-      mainnet:
+      testnet:
         providers:
-        - label: hedera-mainnet
+        - label: hedera-testnet
           transport: rpc
-          url: https://mainnet.hashio.io/api
+          url: https://testnet.hashio.io/api
           features: []
   postgres:
     db: 
@@ -104,11 +104,11 @@ query-node:
         name: "hedera-the-graph-configmap"
         key: "IPFS_HOST"
     chains: 
-      mainnet:
+      testnet:
         providers:
-        - label: hedera-mainnet
+        - label: hedera-testnet
           transport: rpc
-          url: https://mainnet.hashio.io/api
+          url: https://testnet.hashio.io/api
           features: []
   postgres:
     db: 
@@ -134,15 +134,3 @@ query-node:
         key: "PG_PASSWORD"
   image: 
     tag: "v0.28.2"
-    ipfs: 
-      #value: "ht2-ipfs:10125"
-      fromConfigMap:
-        name: "hedera-the-graph-configmap"
-        key: "IPFS_HOST"
-    chains: 
-      mainnet:
-        providers:
-        - label: hedera-mainnet
-          transport: rpc
-          url: https://mainnet.hashio.io/api
-          features: []
