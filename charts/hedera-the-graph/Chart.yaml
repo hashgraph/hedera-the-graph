@@ -23,7 +23,7 @@ maintainers:
 sources:
   - https://github.com/hashgraph/hedera-the-graph
 type: application
-version: 0.1.0
+version: 0.28.2
 dependencies:
   - alias: postgresql
     condition: postgresql.enabled
