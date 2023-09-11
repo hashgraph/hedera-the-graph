@@ -134,3 +134,4 @@ query-node:
         key: "PG_PASSWORD"
   image: 
     tag: "v0.28.2"
+    
