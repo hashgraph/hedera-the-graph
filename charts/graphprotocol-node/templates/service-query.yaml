@@ -1,3 +1,4 @@
+{{- if eq .Values.role "query-node" }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -26,12 +27,7 @@ spec:
     - port: {{ .Values.service.graphqlWsPort }}
       targetPort: graphql-ws
       protocol: TCP
-      name: graphql-ws
-    {{- if eq .Values.role "index-node" }}
-    - port: {{ .Values.service.indexPort }}
-      targetPort: index
-      protocol: TCP
-      name: index
-    {{- end }}
+      name: graphql-ws    
   selector:
     {{- include "graphprotocol-node.selectorLabels" . | nindent 4 }}
+{{- end }}

@@ -1,3 +1,4 @@
+{{- if eq .Values.role "query-node" -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -5,16 +6,9 @@ metadata:
   labels:
     {{- include "graphprotocol-node.labels" . | nindent 4 }}
 spec:
-  {{/* There shouldn't be more than 1 index (ingest) graph-protocol node in installation */}}
-  {{- if eq .Values.role "index-node" -}}
-  replicas: 1
-  strategy:
-    type: Recreate
-  {{- else -}}
   replicas: {{ .Values.replicaCount }}
   strategy:
     type: RollingUpdate
-  {{- end }}
   selector:
     matchLabels:
       {{- include "graphprotocol-node.selectorLabels" . | nindent 6 }}
@@ -59,18 +53,10 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            {{ if eq .Values.role "index-node" }}
-            {{- /* Index (ingest) node_id should equal BLOCK_INGESTOR env value to work in this mode */}}
-            - name: BLOCK_INGESTOR
-              value: {{ .Values.blockIngestorNodeId | quote }}
-            - name: node_id
-              value: {{ .Values.blockIngestorNodeId | quote }}
-            {{- else -}}
             - name: node_id
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            {{- end }}
             - name: node_role
               value: {{ .Values.role | quote }}
             - name: GRAPH_KILL_IF_UNRESPONSIVE
@@ -148,11 +134,6 @@ spec:
             - name: graphql-ws
               containerPort: 8001
               protocol: TCP
-            {{- if eq .Values.role "index-node" }}
-            - name: index
-              containerPort: 8030
-              protocol: TCP
-            {{- end }}
           livenessProbe:
             httpGet:
               path: /
@@ -183,3 +164,4 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+{{- end }}
