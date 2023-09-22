@@ -1,19 +1,19 @@
-{{- if .Values.ingressWebsocket.enabled -}}
+{{- if .Values.ingress.enabled -}}
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: {{ include "graphprotocol-node.fullname" . }}-ws
+  name: {{ include "hedera-the-graph-node.fullname" . }}
   labels:
-    {{- include "graphprotocol-node.labels" . | nindent 4 }}
-  {{- with .Values.ingressWebsocket.annotations }}
+    {{- include "hedera-the-graph-node.labels" . | nindent 4 }}
+  {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   ingressClassName: nginx
-  {{- if .Values.ingressWebsocket.tls }}
+  {{- if .Values.ingress.tls }}
   tls:
-    {{- range .Values.ingressWebsocket.tls }}
+    {{- range .Values.ingress.tls }}
     - hosts:
         {{- range .hosts }}
         - {{ . | quote }}
@@ -22,7 +22,7 @@ spec:
     {{- end }}
   {{- end }}
   rules:
-    {{- range .Values.ingressWebsocket.hosts }}
+    {{- range .Values.ingress.hosts }}
     - host: {{ . | quote }}
       http:
         paths:
@@ -30,8 +30,8 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: {{ include "graphprotocol-node.fullname" $ }}
+                name: {{ include "hedera-the-graph-node.fullname" $ }}
                 port:
-                  name: graphql-ws
+                  name: graphql
     {{- end }}
 {{- end }}

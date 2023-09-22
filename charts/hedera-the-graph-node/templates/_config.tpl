@@ -1,5 +1,5 @@
 # Config.toml based on https://github.com/graphprotocol/graph-node/blob/5613dca92213810b3cca57979f5facc2d670e34a/docs/config.md#configuring-multiple-databases
-{{- define "graphprotocol-node.config" -}}
+{{- define "hedera-the-graph-node.config" -}}
 [store]
 [store.primary]
   connection = "postgresql://$PG_USERNAME:$PG_PASS@$PG_HOST/$PG_DB"

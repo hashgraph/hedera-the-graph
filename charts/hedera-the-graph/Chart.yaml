@@ -38,13 +38,13 @@ dependencies:
     version: 7.0.3
 
   - alias: index-node
-    name: graphprotocol-node
+    name: hedera-the-graph-node
     condition: index-node.enabled
-    repository: file://../graphprotocol-node
+    repository: file://../hedera-the-graph-node
     version: 0.1.0
 
   - alias: query-node
-    name: graphprotocol-node
+    name: hedera-the-graph-node
     condition: query-node.enabled
-    repository: file://../graphprotocol-node
+    repository: file://../hedera-the-graph-node
     version: 0.1.0

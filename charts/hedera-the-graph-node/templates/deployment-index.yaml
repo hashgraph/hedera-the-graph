@@ -2,9 +2,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "graphprotocol-node.fullname" . }}
+  name: {{ include "hedera-the-graph-node.fullname" . }}
   labels:
-    {{- include "graphprotocol-node.labels" . | nindent 4 }}
+    {{- include "hedera-the-graph-node.labels" . | nindent 4 }}
 spec:
   {{/* There shouldn't be more than 1 index (ingest) graph-protocol node in installation */}}
   replicas: 1
@@ -12,7 +12,7 @@ spec:
     type: Recreate
   selector:
     matchLabels:
-      {{- include "graphprotocol-node.selectorLabels" . | nindent 6 }}
+      {{- include "hedera-the-graph-node.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -21,7 +21,7 @@ spec:
         {{-   toYaml . | nindent 8 }}
         {{- end }}
       labels:
-        {{- include "graphprotocol-node.selectorLabels" . | nindent 8 }}
+        {{- include "hedera-the-graph-node.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -44,7 +44,7 @@ spec:
                     name: {{ .Values.postgres.host.fromConfigMap.name }}
                     key: {{ .Values.postgres.host.fromConfigMap.key }}
                   {{- else }}
-                    name: {{ include "graphprotocol-node.fullname" . }}-config
+                    name: {{ include "hedera-the-graph-node.fullname" . }}-config
                     key: PG_HOST
                   {{- end }}
       containers:
@@ -76,7 +76,7 @@ spec:
                   name: {{ .Values.config.ipfs.fromConfigMap.name }}
                   key: {{ .Values.config.ipfs.fromConfigMap.key }}
                 {{- else }}
-                  name: {{ include "graphprotocol-node.fullname" . }}-config
+                  name: {{ include "hedera-the-graph-node.fullname" . }}-config
                   key: IPFS
                 {{- end }}
             - name: GRAPH_ALLOW_NON_DETERMINISTIC_FULLTEXT_SEARCH
@@ -90,7 +90,7 @@ spec:
                   name: {{ .Values.postgres.user.fromSecret.name }}
                   key: {{ .Values.postgres.user.fromSecret.key }}
                 {{- else }}
-                  name: {{ include "graphprotocol-node.fullname" . }}
+                  name: {{ include "hedera-the-graph-node.fullname" . }}
                   key: PG_USERNAME
                 {{- end }}
             - name: PG_PASS
@@ -100,7 +100,7 @@ spec:
                   name: {{ .Values.postgres.password.fromSecret.name }}
                   key: {{ .Values.postgres.password.fromSecret.key }}
                 {{- else }}
-                  name: {{ include "graphprotocol-node.fullname" . }}
+                  name: {{ include "hedera-the-graph-node.fullname" . }}
                   key: PG_PASSWORD
                 {{- end }}
             - name: "PG_HOST"
@@ -110,7 +110,7 @@ spec:
                     name: {{ .Values.postgres.host.fromConfigMap.name }}
                     key: {{ .Values.postgres.host.fromConfigMap.key }}
                   {{- else }}
-                    name: {{ include "graphprotocol-node.fullname" . }}-config
+                    name: {{ include "hedera-the-graph-node.fullname" . }}-config
                     key: PG_HOST
                   {{- end }}
             - name: PG_DB
@@ -120,7 +120,7 @@ spec:
                     name: {{ .Values.postgres.db.fromConfigMap.name }}
                     key: {{ .Values.postgres.db.fromConfigMap.key }}
                   {{- else }}
-                    name: {{ include "graphprotocol-node.fullname" . }}-config
+                    name: {{ include "hedera-the-graph-node.fullname" . }}-config
                     key: PG_DB
                   {{- end }}
           ports:
@@ -156,7 +156,7 @@ spec:
       volumes:
       - name: config
         secret:
-          secretName: {{ include "graphprotocol-node.fullname" . }}
+          secretName: {{ include "hedera-the-graph-node.fullname" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
