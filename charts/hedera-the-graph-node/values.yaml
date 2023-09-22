@@ -2,6 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
+# Overriding this value will only affect nodes with the role of query-node, as index-node is always a single replica
 replicaCount: 1
 
 image:
