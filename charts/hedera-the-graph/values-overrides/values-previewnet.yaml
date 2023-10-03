@@ -1,19 +1,19 @@
 index-node:
   config:
     chains:
-      mainnet:
+      previewnet:
         providers:
           - features: []
-            label: hedera-mainnet
+            label: hedera-previewnet
             transport: rpc
-            url: https://mainnet.hashio.io/api
+            url: https://previewnet.hashio.io/api
 
 query-node:
   config:
     chains:
-      mainnet:
+      previewnet:
         providers:
           - features: []
-            label: hedera-mainnet
+            label: hedera-previewnet
             transport: rpc
-            url: https://mainnet.hashio.io/api
+            url: https://previewnet.hashio.io/api

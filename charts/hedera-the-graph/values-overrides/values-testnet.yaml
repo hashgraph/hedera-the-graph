@@ -1,19 +1,19 @@
 index-node:
   config:
     chains:
-      mainnet:
+      testnet:
         providers:
           - features: []
-            label: hedera-mainnet
+            label: hedera-testnet
             transport: rpc
-            url: https://mainnet.hashio.io/api
+            url: https://testnet.hashio.io/api
 
 query-node:
   config:
     chains:
-      mainnet:
+      testnet:
         providers:
           - features: []
-            label: hedera-mainnet
+            label: hedera-testnet
             transport: rpc
-            url: https://mainnet.hashio.io/api
+            url: https://testnet.hashio.io/api

@@ -1,66 +1,11 @@
 # Default values for hedera-the-graph-node.
 # This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
-# Overriding this value will only affect nodes with the role of query-node, as index-node is always a single replica
-replicaCount: 1
-
-image:
-  repository: graphprotocol/graph-node
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: "v0.29.0"
-
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
-
-podAnnotations: {}
-
-podSecurityContext: {}
-  # fsGroup: 2000
-
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
-
-service:
-  annotations: {}
-  type: ClusterIP
-  metricsPort: 8040
-  jsonRpcPort: 8020
-  graphqlPort: 8000
-  graphqlWsPort: 8001
-  indexPort: 8030
-
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-nodeSelector: {}
-
-tolerations: []
 
 affinity: {}
+# Shouldn't have - sign, cause it would be replaced with _
+blockIngestorNodeId: index_node
 
 config:
-  ipfs: 
-    value: ""
-    # fromConfigMap:
-    #   name:
-    #   key:
   chains: {}
     # mainnet:
     #   providers:
@@ -69,60 +14,94 @@ config:
     #     url: url
     #     features: [ archive ]
     #     headers: {"Authorization": "Bearer foo"}
-  
-
-postgres:
-  db: 
-    value: ""
+  ipfs:
+    value: ''
     # fromConfigMap:
     #   name:
     #   key:
-  host:  
-    value: ""
-    # fromConfigMap:
-    #   name:
-    #   key:
-  replicaHost: ""
-  user: 
-    value: ""
-    # fromSecret:
-    #   name:
-    #   key:
-  password:
-    value: ""
-    # fromSecret:
-    #   name:
-    #   key:
 
-# Shouldn't have - sign, cause it would be replaced with _
-blockIngestorNodeId: index_node
+fullnameOverride: ''
 
-# Possible values: query-node, index-node
-role: "query-node"
+image:
+  pullPolicy: IfNotPresent
+  repository: graphprotocol/graph-node
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: v0.29.0
+
+imagePullSecrets: []
+
+ingress:
+  annotations: {}
+  enabled: false
+  hosts: null
+  tls: []
+
+ingressWebsocket:
+  annotations: {}
+  enabled: false
+  hosts: null
+  tls: []
 
 monitoring:
   enabled: false
 
-ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    # - host: chart-example.local
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+nameOverride: ''
 
-ingressWebsocket:
-  enabled: false
+nodeSelector: {}
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+postgres:
+  db:
+    value: ''
+    # fromConfigMap:
+    #   name:
+    #   key:
+  host:
+    value: ''
+    # fromConfigMap:
+    #   name:
+    #   key:
+  password:
+    value: ''
+    # fromSecret:
+    #   name:
+    #   key:
+  replicaHost: ''
+  user:
+    value: ''
+    # fromSecret:
+    #   name:
+    #   key:
+
+# Overriding this value will only affect nodes with the role of query-node, as index-node is always a single replica
+replicaCount: 1
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious choice for the user.
+  # This also increases chances charts run on environments with little resources, such as Minikube.
+  # If you do want to specify resources, uncomment the following lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+# Possible values: query-node, index-node
+role: query-node
+
+securityContext: {}
+
+service:
   annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    # - host: chart-example.local
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+  graphqlPort: 8000
+  graphqlWsPort: 8001
+  indexPort: 8030
+  jsonRpcPort: 8020
+  metricsPort: 8040
+  type: ClusterIP
+  
+tolerations: []
