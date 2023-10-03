@@ -14,4 +14,4 @@ sources:
 maintainers:
   - name: Hedera Smart Contracts Team
     email: engsmartcontracts@hedera.com
-appVersion: v0.24.1
+appVersion: v0.1.0
