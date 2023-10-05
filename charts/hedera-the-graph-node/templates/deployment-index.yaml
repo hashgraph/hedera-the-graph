@@ -1,0 +1,172 @@
+{{- if eq .Values.role "index-node" -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "hedera-the-graph-node.fullname" . }}
+  labels:
+    {{- include "hedera-the-graph-node.labels" . | nindent 4 }}
+spec:
+  {{/* There shouldn't be more than 1 index (ingest) graph-protocol node in installation */}}
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      {{- include "hedera-the-graph-node.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/secret.yaml: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+        {{-   toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "hedera-the-graph-node.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      initContainers:
+        - name: wait-for-rta
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/bin/sh", "-c"]
+          args:
+            - "until nc -z -w2 $PG_HOST 5432; do echo 'waiting for postgres'; sleep 2; done;"
+          env:
+            - name: "PG_HOST"
+              valueFrom:
+                configMapKeyRef:
+                  {{- if hasKey .Values.postgres.host "fromConfigMap" }}
+                    name: {{ .Values.postgres.host.fromConfigMap.name }}
+                    key: {{ .Values.postgres.host.fromConfigMap.key }}
+                  {{- else }}
+                    name: {{ include "hedera-the-graph-node.fullname" . }}-config
+                    key: PG_HOST
+                  {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            {{- /* Index (ingest) node_id should equal BLOCK_INGESTOR env value to work in this mode */}}
+            - name: BLOCK_INGESTOR
+              value: {{ .Values.blockIngestorNodeId | quote }}
+            - name: node_id
+              value: {{ .Values.blockIngestorNodeId | quote }}
+            - name: node_role
+              value: {{ .Values.role | quote }}
+            - name: GRAPH_KILL_IF_UNRESPONSIVE
+              value: "false"
+            - name: "GRAPH_LOG"
+              value: "debug"
+            - name: GRAPH_ETHEREUM_MAX_BLOCK_RANGE_SIZE
+              value: "1000"
+            - name: GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER
+              value: "1"
+            - name: ipfs
+              valueFrom:
+                configMapKeyRef:                  
+                {{- if hasKey .Values.config.ipfs "fromConfigMap" }}
+                  name: {{ .Values.config.ipfs.fromConfigMap.name }}
+                  key: {{ .Values.config.ipfs.fromConfigMap.key }}
+                {{- else }}
+                  name: {{ include "hedera-the-graph-node.fullname" . }}-config
+                  key: IPFS
+                {{- end }}
+            - name: GRAPH_ALLOW_NON_DETERMINISTIC_FULLTEXT_SEARCH
+              value: "true"
+            - name: GRAPH_NODE_CONFIG
+              value: "/etc/graph-node/config.toml"
+            - name: PG_USERNAME
+              valueFrom:
+                secretKeyRef:
+                {{- if hasKey .Values.postgres.user "fromSecret" }}
+                  name: {{ .Values.postgres.user.fromSecret.name }}
+                  key: {{ .Values.postgres.user.fromSecret.key }}
+                {{- else }}
+                  name: {{ include "hedera-the-graph-node.fullname" . }}
+                  key: PG_USERNAME
+                {{- end }}
+            - name: PG_PASS
+              valueFrom:
+                secretKeyRef:
+                {{- if hasKey .Values.postgres.password "fromSecret" }}
+                  name: {{ .Values.postgres.password.fromSecret.name }}
+                  key: {{ .Values.postgres.password.fromSecret.key }}
+                {{- else }}
+                  name: {{ include "hedera-the-graph-node.fullname" . }}
+                  key: PG_PASSWORD
+                {{- end }}
+            - name: "PG_HOST"
+              valueFrom:
+                configMapKeyRef:
+                  {{- if hasKey .Values.postgres.host "fromConfigMap" }}
+                    name: {{ .Values.postgres.host.fromConfigMap.name }}
+                    key: {{ .Values.postgres.host.fromConfigMap.key }}
+                  {{- else }}
+                    name: {{ include "hedera-the-graph-node.fullname" . }}-config
+                    key: PG_HOST
+                  {{- end }}
+            - name: PG_DB
+              valueFrom:
+                configMapKeyRef:
+                  {{- if hasKey .Values.postgres.db "fromConfigMap" }}
+                    name: {{ .Values.postgres.db.fromConfigMap.name }}
+                    key: {{ .Values.postgres.db.fromConfigMap.key }}
+                  {{- else }}
+                    name: {{ include "hedera-the-graph-node.fullname" . }}-config
+                    key: PG_DB
+                  {{- end }}
+          ports:
+            - name: metrics
+              containerPort: 8040
+              protocol: TCP
+            - name: json-rpc
+              containerPort: 8020
+              protocol: TCP
+            - name: graphql
+              containerPort: 8000
+              protocol: TCP
+            - name: graphql-ws
+              containerPort: 8001
+              protocol: TCP
+            - name: index
+              containerPort: 8030
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: metrics
+          readinessProbe:
+            httpGet:
+              path: /
+              port: metrics
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+          - name: config
+            mountPath: "/etc/graph-node"
+            readOnly: true
+      volumes:
+      - name: config
+        secret:
+          secretName: {{ include "hedera-the-graph-node.fullname" . }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

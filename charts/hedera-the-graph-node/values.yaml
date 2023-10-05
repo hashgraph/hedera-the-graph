@@ -1,0 +1,107 @@
+# Default values for hedera-the-graph-node.
+# This is a YAML-formatted file.
+
+affinity: {}
+# Shouldn't have - sign, cause it would be replaced with _
+blockIngestorNodeId: index_node
+
+config:
+  chains: {}
+    # mainnet:
+    #   providers:
+    #   - label: name
+    #     transport: rpc
+    #     url: url
+    #     features: [ archive ]
+    #     headers: {"Authorization": "Bearer foo"}
+  ipfs:
+    value: ''
+    # fromConfigMap:
+    #   name:
+    #   key:
+
+fullnameOverride: ''
+
+image:
+  pullPolicy: IfNotPresent
+  repository: graphprotocol/graph-node
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: v0.29.0
+
+imagePullSecrets: []
+
+ingress:
+  annotations: {}
+  enabled: false
+  hosts: null
+  tls: []
+
+ingressWebsocket:
+  annotations: {}
+  enabled: false
+  hosts: null
+  tls: []
+
+monitoring:
+  enabled: false
+
+nameOverride: ''
+
+nodeSelector: {}
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+postgres:
+  db:
+    value: ''
+    # fromConfigMap:
+    #   name:
+    #   key:
+  host:
+    value: ''
+    # fromConfigMap:
+    #   name:
+    #   key:
+  password:
+    value: ''
+    # fromSecret:
+    #   name:
+    #   key:
+  replicaHost: ''
+  user:
+    value: ''
+    # fromSecret:
+    #   name:
+    #   key:
+
+# Overriding this value will only affect nodes with the role of query-node, as index-node is always a single replica
+replicaCount: 1
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious choice for the user.
+  # This also increases chances charts run on environments with little resources, such as Minikube.
+  # If you do want to specify resources, uncomment the following lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+# Possible values: query-node, index-node
+role: query-node
+
+securityContext: {}
+
+service:
+  annotations: {}
+  graphqlPort: 8000
+  graphqlWsPort: 8001
+  indexPort: 8030
+  jsonRpcPort: 8020
+  metricsPort: 8040
+  type: ClusterIP
+  
+tolerations: []

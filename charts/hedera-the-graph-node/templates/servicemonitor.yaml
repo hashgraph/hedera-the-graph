@@ -1,0 +1,14 @@
+{{- if .Values.monitoring.enabled -}}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "hedera-the-graph-node.fullname" . }}
+  labels:
+    {{- include "hedera-the-graph-node.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+    {{- include "hedera-the-graph-node.selectorLabels" . | nindent 6 }}
+  endpoints:
+  - port: metrics
+{{- end -}}

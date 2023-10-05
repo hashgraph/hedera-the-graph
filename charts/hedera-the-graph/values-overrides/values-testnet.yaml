@@ -1,0 +1,19 @@
+index-node:
+  config:
+    chains:
+      testnet:
+        providers:
+          - features: []
+            label: hedera-testnet
+            transport: rpc
+            url: https://testnet.hashio.io/api
+
+query-node:
+  config:
+    chains:
+      testnet:
+        providers:
+          - features: []
+            label: hedera-testnet
+            transport: rpc
+            url: https://testnet.hashio.io/api

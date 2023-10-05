@@ -1,0 +1,19 @@
+index-node:
+  config:
+    chains:
+      previewnet:
+        providers:
+          - features: []
+            label: hedera-previewnet
+            transport: rpc
+            url: https://previewnet.hashio.io/api
+
+query-node:
+  config:
+    chains:
+      previewnet:
+        providers:
+          - features: []
+            label: hedera-previewnet
+            transport: rpc
+            url: https://previewnet.hashio.io/api

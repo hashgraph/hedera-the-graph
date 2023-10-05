@@ -1,0 +1,19 @@
+index-node:
+  config:
+    chains:
+      mainnet:
+        providers:
+          - features: []
+            label: hedera-mainnet
+            transport: rpc
+            url: https://mainnet.hashio.io/api
+
+query-node:
+  config:
+    chains:
+      mainnet:
+        providers:
+          - features: []
+            label: hedera-mainnet
+            transport: rpc
+            url: https://mainnet.hashio.io/api

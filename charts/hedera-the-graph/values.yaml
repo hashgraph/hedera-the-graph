@@ -1,0 +1,146 @@
+# Default values for hedera-the-graph set-up
+# This is a YAML-formatted file.
+
+global:
+  postgresql:
+    # Default database name
+    database: graph-node 
+    # Auto-generated from the postgresql sub-charts, Requiered if external postgresql is used
+    host: '' 
+    # Randomly generated if left blank, Requiered if external postgresql is used
+    password: '' 
+    # username recomended to use default `postgres` when using postgresql sub-chart (postgresql.enabled: true), Requiered if external postgresql is used
+    username: postgres
+
+index-node:
+  config:
+    chains:
+      testnet:
+        providers:
+          - features: []
+            label: hedera-testnet
+            transport: rpc
+            url: https://testnet.hashio.io/api
+    ipfs:
+      # value: "<ipfs-host>:<ipfs-port> (port default is 10125)"
+      fromConfigMap:
+        key: IPFS_HOST
+        name: hedera-the-graph-configmap
+  enabled: true
+  image:
+    tag: v0.28.2
+  postgres:
+    db:
+      #value: "<postgres-db-name>"
+      fromConfigMap:
+        key: DB_NAME
+        name: hedera-the-graph-configmap
+    host:
+      #value: "<postgres-host>"
+      fromConfigMap:
+        key: POSTGRES_HOST
+        name: hedera-the-graph-configmap
+    password:
+      #value: "" # Randomly generated if left blank
+      fromSecret:
+        key: PG_PASSWORD
+        name: hedera-the-graph-passwords
+    replicaHost: ''
+    user:
+      #value: "<postgres-username>"
+      fromSecret:
+        key: PG_USERNAME
+        name: hedera-the-graph-passwords
+  role: index-node
+
+ipfs:
+  # Set to false if external ipfs is used
+  enabled: true
+  # Auto-generated from the ipfs sub-charts, Requiered if external ipfs is used
+  host: ''
+  port: 10125
+
+labels: {}
+
+nameOverride: hedera-the-graph
+
+postgresql:
+  # Set to false if external postgresql is used
+  enabled: true
+  metrics:
+    enabled: false
+    resources:
+      limits:
+        cpu: 50m
+        memory: 50Mi
+      requests:
+        cpu: 20m
+        memory: 25Mi
+  nameOverride: postgres
+  persistence: null
+  pgpool:
+    childLifeTime: 60
+    childMaxConnections: 2
+    existingSecret: hedera-the-graph-passwords
+    extraEnvVarsSecret: hedera-the-graph-passwords
+    resources:
+      limits:
+        cpu: 600m
+        memory: 750Mi
+      requests:
+        cpu: 200m
+        memory: 256Mi
+  postgresql:
+    existingSecret: hedera-the-graph-passwords
+    extraEnvVarsSecret: hedera-the-graph-passwords
+    replicaCount: 1
+    resources:
+      limits:
+        cpu: 1500m
+        memory: 1000Mi
+      requests:
+        cpu: 250m
+        memory: 500Mi
+  size: 500Gi
+
+query-node:
+  config:
+    chains:
+      testnet:
+        providers:
+          - features: []
+            label: hedera-testnet
+            transport: rpc
+            url: https://testnet.hashio.io/api
+    ipfs:
+      # value: "<ipfs-host>:<ipfs-port> (port default is 10125)"
+      fromConfigMap:
+        key: IPFS_HOST
+        name: hedera-the-graph-configmap
+  enabled: true
+  image:
+    tag: v0.28.2
+  postgres:
+    db:
+      #value: "<postgres-db-name>"
+      fromConfigMap:
+        key: DB_NAME
+        name: hedera-the-graph-configmap
+    host:
+      #value: "<postgres-host>"
+      fromConfigMap:
+        key: POSTGRES_HOST
+        name: hedera-the-graph-configmap
+    password:
+      #value: "" # Randomly generated if left blank
+      fromSecret:
+        key: PG_PASSWORD
+        name: hedera-the-graph-passwords
+    replicaHost: ''
+    user:
+      #value: "<postgres-username>"
+      fromSecret:
+        key: PG_USERNAME
+        name: hedera-the-graph-passwords
+  role: query-node
+  replicas: 1
