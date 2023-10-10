@@ -2,10 +2,11 @@ name: Charts
 
 on:
   pull_request:
-    branches: [ main, release/**, 7** ]
+    branches: [ main, release/**]
   push:
-    branches: [ main, release/**, 7** ]
+    branches: [ main, release/**]
     tags: [ v* ]
+  workflow_dispatch:
 
 jobs:
   lint:
