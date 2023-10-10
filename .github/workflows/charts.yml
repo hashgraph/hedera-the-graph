@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [ main, release/**, 7-add-workflow-chart-install]
   push:
-    branches: [ main, release/*, 7-add-workflow-chart-install]
+    branches: [ main, release/*]
     tags: [ v* ]
 
 jobs:
