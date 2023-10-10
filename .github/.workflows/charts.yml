@@ -2,11 +2,10 @@ name: Charts
 
 on:
   pull_request:
-    branches: [ main, release/**]
+    branches: [ main, release/**, 7-add-workflow-chart-install]
   push:
-    branches: [ main, release/**]
+    branches: [ main, release/*, 7-add-workflow-chart-install]
     tags: [ v* ]
-  workflow_dispatch:
 
 jobs:
   lint:
