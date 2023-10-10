@@ -57,3 +57,4 @@ jobs:
 
       - name: Install chart
         run: ct install --helm-extra-args="--timeout 10m" --all
+
