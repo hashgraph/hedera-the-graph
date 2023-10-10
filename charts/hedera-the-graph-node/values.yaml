@@ -103,5 +103,5 @@ service:
   jsonRpcPort: 8020
   metricsPort: 8040
   type: ClusterIP
-  
+
 tolerations: []
