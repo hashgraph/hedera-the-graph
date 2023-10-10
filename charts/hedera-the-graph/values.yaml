@@ -77,7 +77,6 @@ postgresql:
         cpu: 20m
         memory: 25Mi
   nameOverride: postgres
-  persistence: null
   pgpool:
     childLifeTime: 60
     childMaxConnections: 2
