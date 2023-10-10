@@ -32,7 +32,7 @@ jobs:
         run: curl --retry 3 -fsL https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 
       - name: Create k3d cluster
-        run: k3d cluster  createrelay --agents 1 --timeout 5m --registry-create registry:0.0.0.0:5001 --image rancher/k3s:v1.25.9-k3s1
+        run: k3d cluster  create hedera-graph-node --agents 1 --timeout 5m --registry-create registry:0.0.0.0:5001 --image rancher/k3s:v1.25.9-k3s1
         timeout-minutes: 3
 
       - name: Set up Docker Qemu
