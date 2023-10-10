@@ -2,9 +2,9 @@ name: Charts
 
 on:
   pull_request:
-    branches: [ main, release/** ]
+    branches: [ main, release/**, 7** ]
   push:
-    branches: [ main, release/** ]
+    branches: [ main, release/**, 7** ]
     tags: [ v* ]
 
 jobs:
