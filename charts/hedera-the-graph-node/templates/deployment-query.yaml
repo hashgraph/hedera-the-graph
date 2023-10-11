@@ -41,7 +41,7 @@ spec:
                 configMapKeyRef:
                   {{- if hasKey .Values.postgres.host "fromConfigMap" }}
                     name: {{ .Values.postgres.host.fromConfigMap.name }}
-                    key: {{ .Values.postgres.host.fromConfigMap.key }}
+                    key: {{ .Values.postgres.host.fromConfigMap.key | quote }}
                   {{- else }}
                     name: {{ include "hedera-the-graph-node.fullname" . }}-config
                     key: PG_HOST
@@ -59,20 +59,12 @@ spec:
                   fieldPath: metadata.name
             - name: node_role
               value: {{ .Values.role | quote }}
-            - name: GRAPH_KILL_IF_UNRESPONSIVE
-              value: "false"
-            - name: "GRAPH_LOG"
-              value: "debug"
-            - name: GRAPH_ETHEREUM_MAX_BLOCK_RANGE_SIZE
-              value: "1000"
-            - name: GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER
-              value: "1"
             - name: ipfs
               valueFrom:
                 configMapKeyRef:                  
                 {{- if hasKey .Values.config.ipfs "fromConfigMap" }}
                   name: {{ .Values.config.ipfs.fromConfigMap.name }}
-                  key: {{ .Values.config.ipfs.fromConfigMap.key }}
+                  key: {{ .Values.config.ipfs.fromConfigMap.key | quote }}
                 {{- else }}
                   name: {{ include "hedera-the-graph-node.fullname" . }}-config
                   key: IPFS
@@ -86,7 +78,7 @@ spec:
                 secretKeyRef:
                 {{- if hasKey .Values.postgres.user "fromSecret" }}
                   name: {{ .Values.postgres.user.fromSecret.name }}
-                  key: {{ .Values.postgres.user.fromSecret.key }}
+                  key: {{ .Values.postgres.user.fromSecret.key | quote }}
                 {{- else }}
                   name: {{ include "hedera-the-graph-node.fullname" . }}
                   key: PG_USERNAME
@@ -96,7 +88,7 @@ spec:
                 secretKeyRef:
                 {{- if hasKey .Values.postgres.password "fromSecret" }}
                   name: {{ .Values.postgres.password.fromSecret.name }}
-                  key: {{ .Values.postgres.password.fromSecret.key }}
+                  key: {{ .Values.postgres.password.fromSecret.key | quote }}
                 {{- else }}
                   name: {{ include "hedera-the-graph-node.fullname" . }}
                   key: PG_PASSWORD
@@ -106,7 +98,7 @@ spec:
                 configMapKeyRef:
                   {{- if hasKey .Values.postgres.host "fromConfigMap" }}
                     name: {{ .Values.postgres.host.fromConfigMap.name }}
-                    key: {{ .Values.postgres.host.fromConfigMap.key }}
+                    key: {{ .Values.postgres.host.fromConfigMap.key | quote }}
                   {{- else }}
                     name: {{ include "hedera-the-graph-node.fullname" . }}-config
                     key: PG_HOST
@@ -116,11 +108,21 @@ spec:
                 configMapKeyRef:
                   {{- if hasKey .Values.postgres.db "fromConfigMap" }}
                     name: {{ .Values.postgres.db.fromConfigMap.name }}
-                    key: {{ .Values.postgres.db.fromConfigMap.key }}
+                    key: {{ .Values.postgres.db.fromConfigMap.key | quote }}
                   {{- else }}
                     name: {{ include "hedera-the-graph-node.fullname" . }}-config
                     key: PG_DB
                   {{- end }}
+            # Env Config for Query-Node
+            {{- range .Values.hederaEnvVars.queryNode }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}
+            # Extra Env vars values
+            {{- range .Values.extraEnvVars }}
+            - name: {{ .name }}
+              value: {{ .value | quote }}
+            {{- end }}            
           ports:
             - name: metrics
               containerPort: 8040

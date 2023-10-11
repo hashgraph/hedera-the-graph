@@ -87,7 +87,19 @@ Is possible to do queries using the index node, so for small testing environment
 To install the chart with the release name `my-release`:
 
 ```bash
-$ helm install my-release hedera-the-graph 
+helm install my-release hedera-the-graph 
+```
+
+By default it will use testnet, to use mainnet set the following value file:
+
+```bash
+helm install sl charts/hedera-the-graph -f charts/hedera-the-graph/values-overrides/values-mainnet.yaml  
+```
+
+same for previewnet:
+
+```bash
+helm install sl charts/hedera-the-graph -f charts/hedera-the-graph/values-overrides/values-previewnet.yaml  
 ```
 
 ## Uninstalling the Chart
@@ -95,5 +107,5 @@ $ helm install my-release hedera-the-graph
 To uninstall/delete the `my-release` deployment:
 
 ```bash
-$ helm uninstall my-release
+helm uninstall my-release
 ```
