@@ -113,16 +113,9 @@ spec:
                     name: {{ include "hedera-the-graph-node.fullname" . }}-config
                     key: PG_DB
                   {{- end }}
-            # Env Config for Query-Node
-            {{- range .Values.hederaEnvVars.queryNode }}
-            - name: {{ .name }}
-              value: {{ .value | quote }}
-            {{- end }}
-            # Extra Env vars values
-            {{- range .Values.extraEnvVars }}
-            - name: {{ .name }}
-              value: {{ .value | quote }}
-            {{- end }}            
+          envFrom:
+          - configMapRef:
+              name: {{ include "hedera-the-graph-node.fullname" . }}-config
           ports:
             - name: metrics
               containerPort: 8040

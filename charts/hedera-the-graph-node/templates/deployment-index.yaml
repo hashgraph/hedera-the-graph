@@ -52,7 +52,7 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          imagePullPolicy: {{ .Values.image.pullPolicy }}          
           env:
             {{- /* Index (ingest) node_id should equal BLOCK_INGESTOR env value to work in this mode */}}
             - name: BLOCK_INGESTOR
@@ -115,16 +115,9 @@ spec:
                     name: {{ include "hedera-the-graph-node.fullname" . }}-config
                     key: PG_DB
                   {{- end }}
-            # Env Config for Index-Node
-            {{- range .Values.hederaEnvVars.indexNode }}
-            - name: {{ .name }}
-              value: {{ .value | quote }}
-            {{- end }}
-            # Extra Env vars
-            {{- range .Values.extraEnvVars }}
-            - name: {{ .name }}
-              value: {{ .value | quote }}
-            {{- end }}             
+          envFrom:
+          - configMapRef:
+              name: {{ include "hedera-the-graph-node.fullname" . }}-config
           ports:
             - name: metrics
               containerPort: 8040

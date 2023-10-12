@@ -4,13 +4,15 @@ metadata:
   name: {{ include "hedera-the-graph-node.fullname" . }}-config
   labels:
     {{- include "hedera-the-graph-node.labels" . | nindent 4 }}
-data:  
-  {{- if not (hasKey .Values.config.ipfs "fromConfigMap") }}  
+data:    
+  {{- if not (hasKey .Values.config.ipfs "fromConfigMap") }}
   IPFS: {{ .Values.config.ipfs.value | quote }}
   {{- end }}
-  {{- if not (hasKey .Values.postgres.host "fromConfigMap") }}  
+  {{- if not (hasKey .Values.postgres.host "fromConfigMap") }}
   PG_HOST: {{ .Values.postgres.host.value | quote }}
   {{- end }}
-  {{- if not (hasKey .Values.postgres.db "fromConfigMap") }}  
+  {{- if not (hasKey .Values.postgres.db "fromConfigMap") }}
   PG_DB: {{ .Values.postgres.db.value | quote }}
   {{- end }}
+  # add hedera env vars from values.yaml
+  {{- .Values.config.hederaEnvVars | toYaml | trim | nindent 2 -}}
