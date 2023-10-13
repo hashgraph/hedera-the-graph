@@ -20,7 +20,43 @@ config:
     #   name:
     #   key:
 
+extraEnvVars: []
+  # - name: key1
+  #  value: value1
+  # - name: key2
+  #  value: value2
+
 fullnameOverride: ''
+
+hederaEnvVars:
+  queryNode:
+    - name: "GRAPH_KILL_IF_UNRESPONSIVE"
+      value: "false"
+    - name: "GRAPH_LOG"
+      value: "debug"
+    - name: "GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER"
+      value: "0"
+  indexNode:
+    - name: "GRAPH_KILL_IF_UNRESPONSIVE"
+      value: "false"
+    - name: "GRAPH_LOG"
+      value: "debug"
+    - name: "GRAPH_ETHEREUM_MAX_BLOCK_RANGE_SIZE"
+      value: "1000"
+    - name: "GRAPH_ETHEREUM_GENESIS_BLOCK_NUMBER"
+      value: "0"
+    - name: "ETHEREUM_REORG_THRESHOLD"
+      value: "0"
+    - name: "ETHEREUM_POLLING_INTERVAL"
+      value: "1000"
+    - name: "ETHEREUM_BLOCK_BATCH_SIZE"
+      value: "1"
+    - name: "GRAPH_ETHEREUM_MAX_EVENT_ONLY_RANGE"
+      value: "50"
+    - name: "GRAPH_ETHEREUM_BLOCK_INGESTOR_MAX_CONCURRENT_JSON_RPC_CALLS_FOR_TXN_RECEIPTS"
+      value: "100"
+    - name: "GRAPH_ETHEREUM_CLEANUP_BLOCKS"
+      value: "true"
 
 image:
   pullPolicy: IfNotPresent
@@ -103,5 +139,5 @@ service:
   jsonRpcPort: 8020
   metricsPort: 8040
   type: ClusterIP
-  
+
 tolerations: []

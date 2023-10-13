@@ -4,11 +4,11 @@
 global:
   postgresql:
     # Default database name
-    database: graph-node 
+    database: graph-node
     # Auto-generated from the postgresql sub-charts, Requiered if external postgresql is used
-    host: '' 
+    host: ''
     # Randomly generated if left blank, Requiered if external postgresql is used
-    password: '' 
+    password: ''
     # username recomended to use default `postgres` when using postgresql sub-chart (postgresql.enabled: true), Requiered if external postgresql is used
     username: postgres
 
@@ -31,23 +31,23 @@ index-node:
     tag: v0.28.2
   postgres:
     db:
-      #value: "<postgres-db-name>"
+      # value: "<postgres-db-name>"
       fromConfigMap:
         key: DB_NAME
         name: hedera-the-graph-configmap
     host:
-      #value: "<postgres-host>"
+      # value: "<postgres-host>"
       fromConfigMap:
         key: POSTGRES_HOST
         name: hedera-the-graph-configmap
     password:
-      #value: "" # Randomly generated if left blank
+      # value: "" # Randomly generated if left blank
       fromSecret:
         key: PG_PASSWORD
         name: hedera-the-graph-passwords
     replicaHost: ''
     user:
-      #value: "<postgres-username>"
+      # value: "<postgres-username>"
       fromSecret:
         key: PG_USERNAME
         name: hedera-the-graph-passwords
@@ -77,7 +77,8 @@ postgresql:
         cpu: 20m
         memory: 25Mi
   nameOverride: postgres
-  persistence: null
+  persistence:
+    size: 500Gi
   pgpool:
     childLifeTime: 60
     childMaxConnections: 2
@@ -122,23 +123,23 @@ query-node:
     tag: v0.28.2
   postgres:
     db:
-      #value: "<postgres-db-name>"
+      # value: "<postgres-db-name>"
       fromConfigMap:
         key: DB_NAME
         name: hedera-the-graph-configmap
     host:
-      #value: "<postgres-host>"
+      # value: "<postgres-host>"
       fromConfigMap:
         key: POSTGRES_HOST
         name: hedera-the-graph-configmap
     password:
-      #value: "" # Randomly generated if left blank
+      # value: "" # Randomly generated if left blank
       fromSecret:
         key: PG_PASSWORD
         name: hedera-the-graph-passwords
     replicaHost: ''
     user:
-      #value: "<postgres-username>"
+      # value: "<postgres-username>"
       fromSecret:
         key: PG_USERNAME
         name: hedera-the-graph-passwords
