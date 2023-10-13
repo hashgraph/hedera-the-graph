@@ -52,7 +52,7 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}          
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
             {{- /* Index (ingest) node_id should equal BLOCK_INGESTOR env value to work in this mode */}}
             - name: BLOCK_INGESTOR
