@@ -53,6 +53,7 @@ flowchart LR
 - **Proxy Service (axios):** relays the request to the The Graph Service, and returns the response to the user.
 - **Middleware Service (custom):** Is the glue that connects all the services together, it validates the token, and relays the request to the Proxy Service.
 - **DbSetup Service (custom):** Sets up the DB, creates the tables, and populates them with the initial data. (uses the DB Service for connection), this only needs to be run once, when the Auth Layer is first deployed.
+- **Admin Service (custom):** Provides the admin flows for the Auth Layer, it is a separate service from the Middleware Service, and it is only accessible on the Admin Port (8022), this is to prevent any unauthorized access to the admin flows, by keeping it secured behind a different port and accesible only by the Engineering Team.
 
 
 ## Configuration
