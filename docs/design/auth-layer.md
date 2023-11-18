@@ -13,7 +13,7 @@ When a project intends to deploy a sub-graph it does so using the GraphCLI tool,
 Since the GraphCli communicates with TheGraph Node using JSON-RPC 2.0, all the information needed for the validation of the token against the method being called and the params (name of graph, etc) is available in the JSON-RPC request. that means that conventional authentication methods that are created for REST APIs will not work for this use case. And there is a need for a custom solution.
 
 **example of request:**
-```json
+```http
 POST / HTTP/1.1
 Content-Length: 214
 Content-Type: application/json; charset=utf-8
