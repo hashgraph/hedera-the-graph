@@ -1,5 +1,41 @@
 # Design Document: Hedera The Graph Auth Layer
 
+## Context and Problem Statement
+### Deployment of Sub-Graphs using Graph CLI
+When a project intends to deploy a sub-graph it does so using the GraphCLI tool, this subsequently communicates with the provided IPFS API and the Graph-Node Service, however the Graph-Node Service does not validate the token provided by the GraphCLI tool, and instead relies on an Auth Layer that is part of the TheGraphStudio site, this Auth Layer is closed source and is not available for use by other projects.
+
+**example of command:**
+```bash
+ graph deploy --node http://<graph_host>:<graph_port>/  <subgraph-name> --access-token <token>
+```
+
+### Graph-Node Requests
+Since the GraphCli communicates with TheGraph Node using JSON-RPC 2.0, all the information needed for the validation of the token against the method being called and the params (name of graph, etc) is available in the JSON-RPC request. that means that conventional authentication methods that are created for REST APIs will not work for this use case. And there is a need for a custom solution.
+
+**example of request:**
+```json
+POST / HTTP/1.1
+Content-Length: 214
+Content-Type: application/json; charset=utf-8
+Accept: application/json
+User-Agent: jayson-4.0.0
+Authorization: Bearer 1234567890
+Host: localhost:3000
+Connection: close
+
+{
+    "method": "subgraph_deploy",
+    "jsonrpc": "2.0",
+    "params": {
+        "name": "subgraph-example-hts",
+        "ipfs_hash": "QmTsCPPVU6U5aRnawWCvWQa5zNtsrnDF95op1gTCUL8Put",
+        "version_label": "0.0.4"
+    },
+    "id": "c771f120-fed4-4567-9c57-61d470a4b09c"
+}
+```
+
+
 ## Goals or Objectives
 - Protect deployed sub-graphs from unauthorized access.
 - Provide Teams with the ability to manage their sub-graphs without requiring intervention from the Engineering Team.
@@ -28,8 +64,6 @@ flowchart LR
     linkStyle 2 stroke:#ff0000,stroke-width:2px;
     linkStyle 3 stroke:#00ff00,stroke-width:2px;
     linkStyle 4 stroke:#00ff00,stroke-width:2px;
-
-
 ```
 
 ## Implementation
@@ -41,7 +75,8 @@ flowchart LR
   - **Delete Token:** Only Admins will be able to delete tokens, the token will be deleted from the DB, all the sub-graphs associated with the token will be deleted.
 - There are 2 User Flows for the Auth Layer:
     - **Create Subgraph:** For creating a new subgraph, the user will need to provide a valid token with the `create` scope, when a subgraph is created, the same token will be stored in the DB associated with the subgraph that was created.
-    - **Deploy Subgraph:** Only the user that created the subgraph will be able to deploy it, the user will need to provide a valid token with the `deploy` scope, when a subgraph is deployed, the same token will be stored in the DB associated with the subgraph that was deployed.
+    - **Deploy Subgraph:** Only the user that created the subgraph will be able to deploy it, using the same token, the user will need to provide a valid token with the `deploy` scope.
+- By default user tokens that have a `create` scope will be able to `deploy` subgraphs, but if Admin wants to restrict the creation of new subgraphs, it could just change the scope of the token to `deploy`. This is to simplify the process of creating new subgraphs for the Engineering Team, and to avoid having to create a new token for each subgraph.
 - The Auth Layer will be implemented as a NodeJS server.
 - The Auth Layer will be deployed as a Docker container.
 - The Docker container will be deployed as part of the Helm chart for the Hedera The Graph Node (optionally), or as a separate Helm chart.
