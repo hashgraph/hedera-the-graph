@@ -91,6 +91,76 @@ flowchart LR
 - **Admin Service (custom):** Provides the admin flows for the Auth Layer, it is a separate service from the Middleware Service, and it is only accessible on the Admin Port (8022), this is to prevent any unauthorized access to the admin flows, by keeping it secured behind a different port and accesible only by the Engineering Team.
 
 
+### Database Schema
+- **Tokens Table:** Stores the tokens and their corresponding scopes.
+    - **Scopes:** `create`, `deploy`, `admin`
+    - **Token Hash:** The token will be stored as a hash in the DB.
+    - Others?
+
+- **Subgraphs Table:** Stores the subgraphs and their corresponding tokens.
+    - **Subgraph Name:** The name of the subgraph.
+    - **Token Hash:** The token will be stored as a hash in the DB.
+    - Others?
+
+```mermaid
+    erDiagram
+        Token ||--o{ Subgraph : "Have many"
+```
+
+### Interfaces
+
+**ApiProxi:** Interface for the Proxy Service.
+```javascript
+interface IApiProxi {
+    proxyRequest(body): response;
+}
+```
+
+**TokenValidation:** Interface for the TokenValidation Service.
+```javascript
+interface ITokenService {
+    isValidToken(token, method, params): boolean;
+}
+```
+
+**Admin:** Interface for the Admin Service.
+```javascript
+interface IAdminService {
+    createToken(token, scopes): boolean;
+    updateToken(token, scopes): boolean;
+    deleteToken(token): boolean;
+}
+```
+
+**DBSetup:** Interface for the DBSetup Service.
+```javascript
+interface IDBSetupService {
+    setupDB(): boolean;
+}
+```
+
+**Database:** Interface for the Database Service.
+```javascript
+interface IDBService {
+    query(query): results;
+}
+```
+
+**Reverse Proxy:** Interface for the Server Service.
+```javascript
+interface IProxyService {
+    proxyRequest(body): response;
+}
+```
+
+**JsonRpcAuthentication Middleware:** Interface for the Server Service.
+```javascript
+interface IJsonRpcAuthentication {
+    jsonRpcValidation(req, res, next)
+}
+```
+
+
 ## Configuration
 - DESTINATION_URL: The URL of the The Graph Service. 
 - DESTINATION_PORT: The port of the The Graph Service. default: 8020
