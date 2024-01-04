@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  envoy:
+    image: envoy-auth-layer:latest
+    command: -c /configs/envoy-auth-redis.yaml
+    env_file:
+      - .env
+    volumes:
+      - ./configs/:/configs/
+      - ./filters/:/filters/
+    ports:
+      - "9901:9901"
+      - "10000:10000"
+    stdin_open: true
+    tty: true
