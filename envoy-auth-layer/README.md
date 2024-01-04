@@ -108,19 +108,29 @@ DB_NAME=thegraphauth
 REDIS_HOST=host.docker.internal
 ```
 
-### Configure the details of the service to be proxied on the envoy.yaml file
+### Configure the details of the service to be proxied on the envoy.yam
+Either `envoy-auth-pg-db.yaml` or `envoy-auth-redis.yaml` file, by default will be proxying/relaying the request to address: `host.docker.internal` and port `8020`
 
 ```yaml
-
+  clusters:
+  - name: local_service
+    connect_timeout: 5s
+    type: LOGICAL_DNS
+    load_assignment:
+      cluster_name: local_service
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
                 address: host.docker.internal
                 port_value: 8020
-
 ```
 
 
 ### Run the container
 
-Change the `envoy` configuration file to execute on the command property of the `docker-compose.yaml`, for the desired DB Store of choice.
+Change the `envoy` configuration file to execute on the command property of the `docker-compose.yaml`, for the desired one (either `envoy-auth-pg-db.yaml` or `envoy-auth-redis.yaml`).
 
 **For Postgres:**
 ```
