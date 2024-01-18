@@ -63,8 +63,11 @@ CREATE TABLE IF NOT EXISTS auth.permissions
 
 INSERT INTO auth.permissions(
 	id, token, method, param_name)
-	VALUES (1, 'Bearer 12345', 'deploy_subgraph', 'test');
+	VALUES (1, 'Bearer 12345', 'subgraph_create', 'test');
 
+INSERT INTO auth.permissions(
+	id, token, method, param_name)
+	VALUES (1, 'Bearer 12345', 'subgraph_deploy', 'test');
 
 ```
 

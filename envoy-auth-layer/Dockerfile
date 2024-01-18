@@ -1,7 +1,7 @@
 FROM    envoyproxy/envoy:v1.28-latest
-# copy envoy.yaml to the container
-#COPY envoy.yaml /etc/envoy/envoy.yaml
-#RUN chmod go+r /etc/envoy/envoy.yaml
+
+# Copy the Filter Scripts
+COPY /filters/ /filters/
 
 # Install Lua and Luarocks
 RUN     apt-get update && apt-get install -y lua5.1 luarocks git
