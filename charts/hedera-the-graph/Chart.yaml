@@ -34,8 +34,8 @@ dependencies:
   - alias: ipfs
     name: ipfs
     condition: ipfs.enabled
-    repository: https://charts.truecharts.org/
-    version: 7.0.3
+    repository: oci://tccr.io/truecharts
+    version: 9.1.6
 
   - alias: index-node
     name: hedera-the-graph-node
