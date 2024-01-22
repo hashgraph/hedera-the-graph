@@ -12,6 +12,3 @@ RUN     apt-get install -y postgresql-client libpq-dev
 # Install Lua modules
 RUN     luarocks install lua-cjson
 RUN     luarocks install luasql-postgres PGSQL_INCDIR=/usr/include/postgresql/
-
-# Install Redis Lua module
-RUN luarocks install redis-lua
