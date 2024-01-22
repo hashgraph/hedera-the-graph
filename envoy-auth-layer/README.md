@@ -1,6 +1,6 @@
 # Readme
 
-This is a POC auth-layer for Hedera-The-Graph implementation that will allow a node operator to publish a secured `admin port` of the-graph deployment for hedera.
+This is a token verification auth-layer for Hedera-The-Graph implementation that will allows a node operator to publish a secured `admin port` of the-graph deployment for hedera.
 
 Uses EnvoyProxy as a reverse proxy that handles the token verification (auth layer)
 
@@ -27,9 +27,10 @@ This is an implementation of EnvoyProxy filters for authentication and authoriza
 
 1. JSON Validation
 2. Token Extraction
-3. Payload Params Extraction
-3. Token Validation (using both Postgres or Redis)
-4. Proxy Routing Configuration (using EnvoyProxy itself)
+3. Token Hashing
+4. Payload Params Extraction
+5. Token Validation using Postgres
+6. Proxy Routing Configuration (using EnvoyProxy itself)
 
 it includes a Dockerfile for building the image and a docker-compose file for running the container.
 
@@ -68,23 +69,7 @@ INSERT INTO auth.permissions(
 INSERT INTO auth.permissions(
 	id, token, method, param_name)
 	VALUES (1, 'Bearer 12345', 'subgraph_deploy', 'test');
-
 ```
-
-### Redis
-
-```
-docker run --name redis-envoy-test -p 6379:6379 -d redis
-```
-
-Run init script to insert token example on redis:
-
-```
-docker exec -it redis-envoy-test bash
-
-redis-cli SET "permissions:Bearer 12345:deploy_subgraph:test" "true"
-```
-
 
 ## Usage
 
@@ -107,12 +92,10 @@ DB_PASSWORD=mysecretpassword
 DB_HOST=host.docker.internal
 DB_PORT=5432
 DB_NAME=thegraphauth
-# Redis
-REDIS_HOST=host.docker.internal
 ```
 
 ### Configure the details of the service to be proxied on the envoy.yam
-Either `envoy-auth-pg-db.yaml` or `envoy-auth-redis.yaml` file, by default will be proxying/relaying the request to address: `host.docker.internal` and port `8020`
+Edit `envoy-auth.yaml` file with config needs, by default will be proxying/relaying the request to address: `host.docker.internal` and port `8020`
 
 ```yaml
   clusters:
@@ -133,30 +116,16 @@ Either `envoy-auth-pg-db.yaml` or `envoy-auth-redis.yaml` file, by default will 
 
 ### Run the container
 
-Change the `envoy` configuration file to execute on the command property of the `docker-compose.yaml`, for the desired one (either `envoy-auth-pg-db.yaml` or `envoy-auth-redis.yaml`).
-
-**For Postgres:**
-```
-command: -c /configs/envoy-auth-pg-db.yaml
-
-```
-**For Redis:**
-```
-command: -c /configs/envoy-auth-redis.yaml
-```
 
 **Start the container:**
 
 ```bash
-
 docker-compose up
-
 ```
 
 ### Test the service
 
 ```bash
-
 curl --location 'http://localhost:10000' \
 --header 'Content-Type: application/json' \
 --header 'Authorization: Bearer 12345' \
@@ -168,5 +137,4 @@ curl --location 'http://localhost:10000' \
         "name": "test"
     }
 }'
-
 ```

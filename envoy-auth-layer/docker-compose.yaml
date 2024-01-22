@@ -3,7 +3,7 @@ version: '3'
 services:
   envoy:
     image: envoy-auth-layer:latest
-    command: -c /configs/envoy-auth-pg-db.yaml
+    command: -c /configs/envoy-auth.yaml
     env_file:
       - .env
     volumes:
