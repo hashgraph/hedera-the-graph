@@ -8,6 +8,7 @@ services:
       - .env
     volumes:
       - ./configs/:/configs/
+      - ./filters/:/filters/
     ports:
       - "9901:9901"
       - "10000:10000"

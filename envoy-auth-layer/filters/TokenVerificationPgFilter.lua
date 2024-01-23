@@ -1,30 +1,41 @@
-/*-
- *
- * Hedera JSON RPC Relay
- *
- * Copyright (C) 2024 Hedera Hashgraph, LLC
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- *
- */
+-- Hedera-The-Graph
+--
+-- Copyright (C) 2024 Hedera Hashgraph, LLC
+--
+-- Licensed under the Apache License, Version 2.0 (the "License");
+-- you may not use this file except in compliance with the License.
+-- You may obtain a copy of the License at
+--
+--      http://www.apache.org/licenses/LICENSE-2.0
+--
+-- Unless required by applicable law or agreed to in writing, software
+-- distributed under the License is distributed on an "AS IS" BASIS,
+-- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-- See the License for the specific language governing permissions and
+-- limitations under the License.
+
 
 local cjson = require("cjson")
 local luasql = require("luasql.postgres")
+local sha256 = require("sha2")
+
 
 local function extractToken(request_handle)
     -- Adjust the header name to match your token header
     return request_handle:headers():get("Authorization")
 end
+
+local function to_hex(str)
+    return (str:gsub('.', function (c)
+        return string.format('%02x', string.byte(c))
+    end))
+end
+
+local function sha256_hash(input)
+    local hash = sha256.sha256(input)
+    return to_hex(hash)
+end
+
 
 local function parseJsonBody(body)
     local success, jsonBody = pcall(cjson.decode, body)
@@ -62,7 +73,7 @@ local function checkTokenPermissions(token, method, paramName)
     paramName = escapeLiteral(conn, paramName)
 
     -- Build and execute the query
-    local query = string.format("SELECT * FROM auth.permissions WHERE token = '%s' AND method = '%s' AND param_name = '%s'", token, method, paramName)
+    local query = string.format("SELECT-- FROM auth.permissions WHERE token = '%s' AND method = '%s' AND param_name = '%s'", token, method, paramName)
     local cursor, error = conn:execute(query)
 
     if not cursor then
@@ -79,7 +90,12 @@ end
 
 function envoy_on_request(request_handle)
     local token = extractToken(request_handle)
-    if not token then
+    local hashed_token = sha256_hash(token)
+
+    print("Token: " .. token)
+    print("Hashed token: " .. hashed_token)    
+
+    if not hashed_token then
         request_handle:respond({[":status"] = "401"}, "No token provided")
         return
     end
@@ -96,7 +112,7 @@ function envoy_on_request(request_handle)
         return
     end
 
-    local hasPermission, permissionError = checkTokenPermissions(token, method, paramName)
+    local hasPermission, permissionError = checkTokenPermissions(hashed_token, method, paramName)
     if permissionError then
         request_handle:logErr(permissionError)
         request_handle:respond({[":status"] = "500"}, "Internal Server Error")
