@@ -54,12 +54,12 @@ CREATE DATABASE thegraphauth;
 CREATE SCHEMA auth
     AUTHORIZATION postgres;
 
-CREATE TABLE IF NOT EXISTS auth.permissions
+CREATE TABLE IF NOT EXISTS auth.subgraph_token
 (
     id integer,
-    token character varying(255) NOT NULL,
-    method character varying(50) NOT NULL,
-    param_name character varying(50) NOT NULL
+    email character varying(255) NOT NULL,
+    subgraph_name character varying(255) NOT NULL,
+    token_hash character varying(65) NOT NULL
 );
 
 INSERT INTO auth.permissions(

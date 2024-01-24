@@ -20,8 +20,7 @@ local luasql = require("luasql.postgres")
 local sha256 = require("sha2")
 
 
-local function extractToken(request_handle)
-    -- Adjust the header name to match your token header
+local function extractToken(request_handle)    
     return request_handle:headers():get("Authorization")
 end
 
@@ -36,11 +35,10 @@ local function sha256_hash(input)
     return to_hex(hash)
 end
 
-
 local function parseJsonBody(body)
     local success, jsonBody = pcall(cjson.decode, body)
     if not success then
-        return nil, nil, "JSON parsing failed"
+        return nil, nil, "INVALID JSON BODY"
     end
     return jsonBody.method, jsonBody.params and jsonBody.params.name, nil
 end
@@ -61,7 +59,15 @@ local function getDbConnection()
     return env:connect(db_name, db_user, db_password, db_host, db_port)
 end
 
-local function checkTokenPermissions(token, method, paramName)
+local function verifyValidMethod(method)
+    if((method == "subgraph_deploy") or (method == "subgraph_create") or (method == "subgraph_remove")) then
+        return true, nil
+    end
+    
+    return false, "Invalid method"
+end
+
+local function checkTokenPermissions(token, subgraphName)
     local conn, err = getDbConnection()
     if not conn then
         return false, "Database connection error: " .. err
@@ -69,11 +75,10 @@ local function checkTokenPermissions(token, method, paramName)
 
     -- Escape parameters
     token = escapeLiteral(conn, token)
-    method = escapeLiteral(conn, method)
-    paramName = escapeLiteral(conn, paramName)
+    subgraphName = escapeLiteral(conn, subgraphName)
 
     -- Build and execute the query
-    local query = string.format("SELECT-- FROM auth.permissions WHERE token = '%s' AND method = '%s' AND param_name = '%s'", token, method, paramName)
+    local query = string.format("SELECT-- FROM auth.subgraph_token WHERE token_hash = '%s' AND subgraph_name = '%s'", token, subgraphName)
     local cursor, error = conn:execute(query)
 
     if not cursor then
@@ -101,18 +106,23 @@ function envoy_on_request(request_handle)
     end
 
     local body = request_handle:body():getBytes(0, request_handle:body():length())
-    local method, paramName, parseError = parseJsonBody(body)
+    local method, subgraphName, parseError = parseJsonBody(body)
     if parseError then
         request_handle:respond({[":status"] = "400"}, parseError)
         return
     end
 
-    if not method or not paramName then
+    if not method or not subgraphName then
         request_handle:respond({[":status"] = "400"}, "Invalid request body")
         return
     end
 
-    local hasPermission, permissionError = checkTokenPermissions(hashed_token, method, paramName)
+    if not verifyValidMethod(method) then
+        request_handle:respond({[":status"] = "400"}, "Invalid method")
+        return
+    end
+
+    local hasPermission, permissionError = checkTokenPermissions(hashed_token, subgraphName)
     if permissionError then
         request_handle:logErr(permissionError)
         request_handle:respond({[":status"] = "500"}, "Internal Server Error")
