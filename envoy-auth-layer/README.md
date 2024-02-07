@@ -29,47 +29,53 @@ This is an implementation of EnvoyProxy filters for authentication and authoriza
 2. Token Extraction
 3. Token Hashing
 4. Payload Params Extraction
-5. Token Validation using Postgres
+5. Token Validation using JWT
 6. Proxy Routing Configuration (using EnvoyProxy itself)
 
 it includes a Dockerfile for building the image and a docker-compose file for running the container.
 
 ## Pre-requisites
 
-### Postgres
-```
-docker run --name postgres-envoy-test -e POSTGRES_PASSWORD=mysecretpassword -p 5432:5432 -d postgres
-```
+### OAUTH 2.0 Token Server
+This auth-token validation proxy layer relies on an OAuth 2.0 token server for token issuace and validation. The token server should be able to issue and validate the token using the `client_id` and `client_secret` provided in the `.env` file.
 
-Run init script to create the database and the table
+So make sure to have a token server running that is previously configured with a Client ID and Client Secret, and the `/token` and `/token/introspection` endpoints are accessible.
 
-```
-docker exec -it postgres-envoy-test bash
+### Token structure
 
-psql -U postgres
+Make sure that the access token has the following claims:
+  
+  ```json
+  {
+    "iss": "http://host.docker.internal:8080/realms/HederaTheGraph",
+    "resource_access": {
+        "htg-auth-layer": {
+            "roles": [
+                "subgraph_create",
+                "subgraph_deploy"
+            ]
+        }
+    },
+    "subgraph_access": "<CSV of subgraph names>",
+    "email_verified": true,
+    "active": true,
+    "email": "user1@gmail.com",
+    "client_id": "htg-auth-layer"
+  }
+  ```
 
-CREATE DATABASE thegraphauth;
-\c thegraphauth;
 
-CREATE SCHEMA auth
-    AUTHORIZATION postgres;
-
-CREATE TABLE IF NOT EXISTS auth.subgraph_token
-(
-    id integer,
-    email character varying(255) NOT NULL,
-    subgraph_name character varying(255) NOT NULL,
-    token_hash character varying(65) NOT NULL
-);
-
-INSERT INTO auth.permissions(
-	id, token, method, param_name)
-	VALUES (1, 'Bearer 12345', 'subgraph_create', 'test');
-
-INSERT INTO auth.permissions(
-	id, token, method, param_name)
-	VALUES (1, 'Bearer 12345', 'subgraph_deploy', 'test');
-```
+### Configure KeyCloak if using it as the token server
+1. For local testing you can install it using a docker container
+2. Create a realm for the Hedera-The-Graph
+3. Create a client for the auth-layer
+4. Create a client scope for the auth-layer.
+5. Map UserAttribute "subgraph_access" to the client scope.
+6. Create custom roles for that client: `subgraph_create` and `subgraph_deploy`
+7. Create a user and assign the roles to the user, set password and verify email.
+8. Add user attribute to the user "subgraph_access" and set the value to the subgraph names that the user can access. (CSV, ie: "subgraph1,subgraph2")
+9. Get a Token using the `/token` endpoint and use it for testing the auth-layer.
+10. Validate the token using the `/token/introspection` endpoint.
 
 ## Usage
 
@@ -86,12 +92,11 @@ docker build -t envoy-auth-layer .
 Add Postgres or Redis credentials to the .env file
 
 ```
-# Postgres
-DB_USER=postgres
-DB_PASSWORD=mysecretpassword
-DB_HOST=host.docker.internal
-DB_PORT=5432
-DB_NAME=thegraphauth
+# OAuth
+CLIENT_ID=<clientId>
+CLIENT_SECRET=<client_secret>
+TOKEN_INTROSPECTION_URL=http://host.docker.internal:8080/realms/HederaTheGraph/protocol/openid-connect/token/introspect
+
 ```
 
 ### Configure the details of the service to be proxied on the envoy.yam

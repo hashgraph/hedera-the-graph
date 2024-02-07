@@ -6,11 +6,8 @@ COPY /filters/ /filters/
 # Install Lua and Luarocks
 RUN     apt-get update && apt-get install -y lua5.1 luarocks git
 
-# Install PostgreSQL client and development headers, required for luasql-postgres
-RUN     apt-get install -y postgresql-client libpq-dev
-
 # Install Lua modules
 RUN     luarocks install lua-cjson
-RUN     luarocks install luasql-postgres PGSQL_INCDIR=/usr/include/postgresql/
 
-RUN     luarocks install sha2
+# Install http socket module
+RUN    luarocks install luasocket

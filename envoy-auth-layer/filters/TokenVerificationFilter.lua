@@ -16,23 +16,26 @@
 
 
 local cjson = require("cjson")
-local luasql = require("luasql.postgres")
-local sha256 = require("sha2")
+local http = require("socket.http")
+local ltn12 = require("ltn12")
+
+-- Configuration: Replace these with your actual details
+local introspectionUrl = os.getenv("TOKEN_INTROSPECTION_URL") or nil
+local clientId = os.getenv("CLIENT_ID") or nil
+local clientSecret = os.getenv("CLIENT_SECRET") or nil
+
 
 
 local function extractToken(request_handle)    
-    return request_handle:headers():get("Authorization")
-end
+    
+    local authHeader = request_handle:headers():get("Authorization")
+    if not authHeader then
+        return nil
+    end
 
-local function to_hex(str)
-    return (str:gsub('.', function (c)
-        return string.format('%02x', string.byte(c))
-    end))
-end
-
-local function sha256_hash(input)
-    local hash = sha256.sha256(input)
-    return to_hex(hash)
+    -- Remove the "Bearer " prefix from the token
+    return authHeader:gsub("Bearer%s+", "")
+    
 end
 
 local function parseJsonBody(body)
@@ -43,22 +46,6 @@ local function parseJsonBody(body)
     return jsonBody.method, jsonBody.params and jsonBody.params.name, nil
 end
 
-local function escapeLiteral(conn, literal)
-    -- Use the connection's escape method to safely escape literals
-    return conn:escape(literal)
-end
-
-local function getDbConnection()
-    local env = luasql.postgres()
-    local db_user = os.getenv("DB_USER") or "postgres"
-    local db_password = os.getenv("DB_PASSWORD") or ""
-    local db_name = os.getenv("DB_NAME") or "thegraphauth"
-    local db_host = os.getenv("DB_HOST") or "host.docker.internal"
-    local db_port = tonumber(os.getenv("DB_PORT")) or 5432
-
-    return env:connect(db_name, db_user, db_password, db_host, db_port)
-end
-
 local function verifyValidMethod(method)
     if((method == "subgraph_deploy") or (method == "subgraph_create") or (method == "subgraph_remove")) then
         return true, nil
@@ -67,40 +54,121 @@ local function verifyValidMethod(method)
     return false, "Invalid method"
 end
 
-local function checkTokenPermissions(token, subgraphName)
-    local conn, err = getDbConnection()
-    if not conn then
-        return false, "Database connection error: " .. err
+-- Function to check if a value exists in a table
+local function contains(table, value)
+    for _, v in ipairs(table) do
+        if v == value then
+            return true
+        end
     end
-
-    -- Escape parameters
-    token = escapeLiteral(conn, token)
-    subgraphName = escapeLiteral(conn, subgraphName)
-
-    -- Build and execute the query
-    local query = string.format("SELECT-- FROM auth.subgraph_token WHERE token_hash = '%s' AND subgraph_name = '%s'", token, subgraphName)
-    local cursor, error = conn:execute(query)
-
-    if not cursor then
-        conn:close()
-        return false, "Database error: " .. error
-    end
-
-    local result = cursor:numrows() > 0
-    cursor:close()
-    conn:close()
-
-    return result, nil
+    return false
 end
 
+-- Function to check if subgraphName is present in the "subgraph_access" claim
+local function checkSubgraphAccessClaim(result, subgraphName)
+    local subgraphAccessClaim = result.subgraph_access
+    if subgraphAccessClaim then
+        local subgraphList = {}
+        -- Split the comma-separated string into a table
+        for value in subgraphAccessClaim:gmatch("[^,]+") do
+            table.insert(subgraphList, value)
+        end
+        return contains(subgraphList, subgraphName)
+    end
+    return false
+end
+
+-- Function to check if the "method" parameter is included in roles
+local function checkMethodInRoles(result, method)
+    local roles = result.resource_access[clientId].roles
+    if roles then
+        return contains(roles, method)
+    end
+    return false
+end
+
+-- Variable to store the user associated with the token
+local tokenUser = "";
+
+local function checkTokenPermissions(token, subgraphName, method)
+
+    -- Prepare the HTTP request body
+    local requestBody = "token=" .. token .. "&client_id=" .. clientId .. "&client_secret=" .. clientSecret   
+
+    -- Prepare the HTTP request headers
+    local headers = {
+        ["Content-Type"] = "application/x-www-form-urlencoded",
+        ["Content-Length"] = string.len(requestBody)
+    }
+
+    -- Prepare a table to collect the response
+    local responseBody = {}    
+
+    -- Perform the HTTP POST request
+    local response, statusCode, responseHeaders, statusText = http.request{
+        method = "POST",
+        url = introspectionUrl,
+        headers = headers,
+        source = ltn12.source.string(requestBody),
+        sink = ltn12.sink.table(responseBody)
+    }
+
+    -- Check if the request was successful
+    if statusCode == 200 then
+        -- Concatenate the response body table into a string
+        responseBody = table.concat(responseBody)
+        
+        -- Parse the JSON response
+        local result = cjson.decode(responseBody)        
+        
+        -- Check if the token is active
+        if result.active then
+
+            -- check if the token claims has resource roles collection.
+            if not result.resource_access[clientId] then
+                return false, "Client roles not found in token"
+            end
+
+            -- check if the token claims has subgraph_access claim.
+            if not result.subgraph_access then
+                return false, "subgraph_access claim not found in token"
+            end
+
+            local subgraphAccessGranted = checkSubgraphAccessClaim(result, subgraphName)
+            local methodAccessGranted = checkMethodInRoles(result, method)
+
+            print("Token introspection successful for user: " .. result.email)
+            -- Set the token user for logging purposes
+            tokenUser = result.email
+
+            if not result.email_verified then
+                return false, "Email not verified for user: " .. tokenUser
+            end
+
+            if not subgraphAccessGranted then
+                return false, "Subgraph access not granted for '" .. subgraphName .. "'"
+            end
+
+            if not methodAccessGranted then
+                return false, "Access denied for method: " .. method
+            end
+        else
+            return false, "Token is invalid or expired."
+        end
+    else
+        return false, "Failed to introspect token. Status: " .. tostring(statusCode)
+    end
+
+    return true, nil
+end
+
+
+
+-- This function is called for each request, and is the entry point for the filter
 function envoy_on_request(request_handle)
     local token = extractToken(request_handle)
-    local hashed_token = sha256_hash(token)
 
-    print("Token: " .. token)
-    print("Hashed token: " .. hashed_token)    
-
-    if not hashed_token then
+    if not token then
         request_handle:respond({[":status"] = "401"}, "No token provided")
         return
     end
@@ -122,10 +190,11 @@ function envoy_on_request(request_handle)
         return
     end
 
-    local hasPermission, permissionError = checkTokenPermissions(hashed_token, subgraphName)
+    local hasPermission, permissionError = checkTokenPermissions(token, subgraphName, method)
+
     if permissionError then
         request_handle:logErr(permissionError)
-        request_handle:respond({[":status"] = "500"}, "Internal Server Error")
+        request_handle:respond({[":status"] = "401"}, permissionError)
         return
     end
 
@@ -134,5 +203,6 @@ function envoy_on_request(request_handle)
         return
     end
 
+    print("Token is authorized for method: ".. method .. " and subgraph: " .. subgraphName.. " by the user".. tokenUser)
     -- The request is authorized and processing continues
 end
