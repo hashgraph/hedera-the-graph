@@ -17,7 +17,7 @@ index-node:
     chains:
       testnet:
         providers:
-          - features: []
+          - features: ["archive"]
             label: hedera-testnet
             transport: rpc
             url: https://testnet.hashio.io/api
@@ -109,7 +109,7 @@ query-node:
     chains:
       testnet:
         providers:
-          - features: []
+          - features: ["archive"]
             label: hedera-testnet
             transport: rpc
             url: https://testnet.hashio.io/api

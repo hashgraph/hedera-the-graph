@@ -3,7 +3,7 @@ index-node:
     chains:
       mainnet:
         providers:
-          - features: []
+          - features: ["archive"]
             label: hedera-mainnet
             transport: rpc
             url: https://mainnet.hashio.io/api
@@ -13,7 +13,7 @@ query-node:
     chains:
       mainnet:
         providers:
-          - features: []
+          - features: ["archive"]
             label: hedera-mainnet
             transport: rpc
             url: https://mainnet.hashio.io/api

@@ -3,7 +3,7 @@ index-node:
     chains:
       previewnet:
         providers:
-          - features: []
+          - features: ["archive"]
             label: hedera-previewnet
             transport: rpc
             url: https://previewnet.hashio.io/api
@@ -13,7 +13,7 @@ query-node:
     chains:
       previewnet:
         providers:
-          - features: []
+          - features: ["archive"]
             label: hedera-previewnet
             transport: rpc
             url: https://previewnet.hashio.io/api
