@@ -81,7 +81,7 @@ Is possible to do queries using the index node, so for small testing environment
     enabled: false
   ```
 
-## Network Configuration
+## RPC Provider Configuration
 We have included override values for previewnet, testnet and mainnet:
 ```
  /values-overrides
