@@ -81,19 +81,23 @@ Is possible to do queries using the index node, so for small testing environment
     enabled: false
   ```
 
-## RPC Provider Configuration
-We have included override values for previewnet, testnet and mainnet:
-```
- /values-overrides
-    /values-mainnet.yaml
-    /values-previewnet.yaml
-    /values-testnet.yaml
-```
-Currently Hedera JSON RPC Relay does support archive feature, [HIP-584](https://hips.hedera.com/hip/hip-584)
+## RPC Provider Configuration Overview
 
-By default all configurations, support `archive` feature for the RPC node, but is possible to disable it by setting the following value:
+This section details the override values specified for different network environments: previewnet, testnet, and mainnet. The configuration files are organized as follows:
+```
+    /values-overrides
+        /values-mainnet.yaml
+        /values-previewnet.yaml
+        /values-testnet.yaml
+```
+### Support for Archive Feature
 
-Example for `testnet`:
+The Hedera JSON RPC Relay now includes support for the archive feature, as outlined in [HIP-584](https://hips.hedera.com/hip/hip-584). By default, the configuration for all networks enables the `archive` feature for the RPC node. However, it is possible to disable this feature if needed.
+
+#### Disabling Archive Feature
+
+To disable the archive feature, adjust the configuration as demonstrated below for the `testnet` environment:
+```
 ```yaml
 index-node:
   config:
@@ -104,9 +108,10 @@ index-node:
             label: hedera-testnet
             transport: rpc
             url: https://testnet.hashio.io/api
-
 ```
-more information on thegraph documentation for [configuration toml - providesrs](https://github.com/graphprotocol/graph-node/blob/master/docs/config.md#configuring-ethereum-providers)
+
+#### Additional Resources
+More information on thegraph node documentation for [configuration toml - providers](https://github.com/graphprotocol/graph-node/blob/master/docs/config.md#configuring-ethereum-providers)
 
 ## Installing the Chart
 
