@@ -97,7 +97,7 @@ The Hedera JSON RPC Relay now includes support for the archive feature, as outli
 #### Disabling Archive Feature
 
 To disable the archive feature, adjust the configuration as demonstrated below for the `testnet` environment:
-```
+
 ```yaml
 index-node:
   config:
