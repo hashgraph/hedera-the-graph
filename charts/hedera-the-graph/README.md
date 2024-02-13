@@ -81,6 +81,37 @@ Is possible to do queries using the index node, so for small testing environment
     enabled: false
   ```
 
+## RPC Provider Configuration Overview
+
+This section details the override values specified for different network environments: previewnet, testnet, and mainnet. The configuration files are organized as follows:
+```
+    /values-overrides
+        /values-mainnet.yaml
+        /values-previewnet.yaml
+        /values-testnet.yaml
+```
+### Support for Archive Feature
+
+The Hedera JSON RPC Relay now includes support for the archive feature, as outlined in [HIP-584](https://hips.hedera.com/hip/hip-584). By default, the configuration for all networks enables the `archive` feature for the RPC node. However, it is possible to disable this feature if needed.
+
+#### Disabling Archive Feature
+
+To disable the archive feature, adjust the configuration as demonstrated below for the `testnet` environment:
+
+```yaml
+index-node:
+  config:
+    chains:
+      testnet:
+        providers:
+          - features: []
+            label: hedera-testnet
+            transport: rpc
+            url: https://testnet.hashio.io/api
+```
+
+#### Additional Resources
+More information on thegraph node documentation for [configuration toml - providers](https://github.com/graphprotocol/graph-node/blob/master/docs/config.md#configuring-ethereum-providers)
 
 ## Installing the Chart
 
@@ -101,6 +132,8 @@ same for previewnet:
 ```bash
 helm install sl charts/hedera-the-graph -f charts/hedera-the-graph/values-overrides/values-previewnet.yaml  
 ```
+
+
 
 ## Uninstalling the Chart
 
