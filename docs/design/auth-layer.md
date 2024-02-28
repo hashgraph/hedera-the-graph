@@ -114,10 +114,17 @@ Any authentication server that supports OAuth2 and JWT standards can be used, bu
 
 We will be using the following endpoints of the Keycloak server:
 - **Token:** `/realms/HederaTheGraph/protocol/openid-connect/token` to obtain the access token.
-- **Introspect:** `/realms/HederaTheGraph/protocol/openid-connect/token/introspect` to validate the access token and retrieve token claims.
+- **Token Introspect:** `/realms/HederaTheGraph/protocol/openid-connect/token/introspect` to validate the access token and retrieve token claims.
 
-Users permissions will be defined with 3 custom roles: "create_subgraph", "deploy_subgraph" and "remove_subgraph". And with a custom claim called "subgraph_access" that will contain a CSV String with the subgraphs names that the user has access to.
+Users permissions will be defined with 3 custom roles: "subgraph_create", "subgraph_deploy" and "subgraph_remove". And with a custom claim called "subgraph_access" that will contain a CSV String with the subgraphs names that the user has access to.
 
+#### Roles: 
+1. **subgraph_create:** allows the user to create a new subgraph.
+2. **subgraph_deploy:** allows the user to deploy a subgraph.
+3. **subgraph_remove:** allows the user to remove a subgraph.
+
+#### Custom Claims:
+- **subgraph_access:** contains a CSV String with the subgraphs names that the user has access to. ie: "subgraph1,subgraph2,subgraph3"
 
 #### Token Request example:
 
