@@ -59,7 +59,7 @@ graph create --node http://<graph-node-host>:<admin-port> <subgraph-name> --acce
 graph deploy --ipfs http://<ipfs-host>:<ipfs-port> --node http://<graph-node-host>:<admin-port> <subgraph-name> --access-token <access-token>
 ```
 
-The graph-cli will upload the subgraph artifacts to the IPFS server specified obtaining  and then will send a request to the node to deploy the subgraph, including the access token in the header.
+The graph-cli will upload the subgraph artifacts to the IPFS server specified obtaining an IPFS Hash and then will send a request to the node to deploy the subgraph, including the access token in the header.
 
 ```HTTP
 
