@@ -116,7 +116,7 @@ We will be using the following endpoints of the Keycloak server:
 - **Token:** `/realms/HederaTheGraph/protocol/openid-connect/token` to obtain the access token.
 - **Token Introspect:** `/realms/HederaTheGraph/protocol/openid-connect/token/introspect` to validate the access token and retrieve token claims.
 
-Users permissions will be defined with 3 custom roles: "subgraph_create", "subgraph_deploy" and "subgraph_remove". And with a custom claim called "subgraph_access" that will contain a CSV String with the subgraphs names that the user has access to.
+Users permissions will be defined with 5 custom roles: "subgraph_create", "subgraph_deploy", "subgraph_remove", "subgraph_pause" and "subgraph_resume". And with a custom claim called "subgraph_access" that will contain a CSV String with the subgraphs names that the user has access to.
 
 #### Roles: 
 1. **subgraph_create:** allows the user to create a new subgraph.
@@ -134,7 +134,9 @@ Each role will enable the user to consume a protected endpoint on the Hedera-The
 
 #### Token Request example:
 
-On the example below, the `user` needs to have its email confirmed (activated) and set its own `password`. The `client_id` and the `client_secret` are needed to identify the application within the Keycloak server and would be provided to the developers by the Hedera-The-Graph node administrators.
+On the example below, the `user` needs to have their email confirmed (activated) and `password` set prior to requesting a token. The `client_id` and the `client_secret` are needed to identify the application within the Keycloak server and would be provided to the developers by the Hedera-The-Graph node administrators. 
+
+*This flow is based on the `password` grant type of the OAuth2 standard included on Keycloak. But different implementations of the `Auth-Server` can use different flows that are more suitable for their needs. Including a GUI Interface to generate an access token.*
 
 ```bash
 curl --location 'http://host.docker.internal:8080/realms/HederaTheGraph/protocol/openid-connect/token' \
