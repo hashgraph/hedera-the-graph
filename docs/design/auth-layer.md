@@ -122,11 +122,19 @@ Users permissions will be defined with 3 custom roles: "subgraph_create", "subgr
 1. **subgraph_create:** allows the user to create a new subgraph.
 2. **subgraph_deploy:** allows the user to deploy a subgraph.
 3. **subgraph_remove:** allows the user to remove a subgraph.
+4. **subgraph_pause:** allows the user to pause indexing a subgraph.
+5. **subgraph_resume:** allows the user to resume indexing a subgraph.
+
+Each role will enable the user to consume a protected endpoint on the Hedera-The-Graph node's Admin API. There is a 1:1 relationship between the roles and the protected endpoints. 
+
+*The only endpoint that is not supported is `subgraph_reassign` because its use is not recommended and it is not a common operation, besides it does not make sense to reassign a subgraph to another indexer, because by default Hedera-The-Graph node is a single indexer setup.
 
 #### Custom Claims:
 - **subgraph_access:** contains a CSV String with the subgraphs names that the user has access to. ie: "subgraph1,subgraph2,subgraph3"
 
 #### Token Request example:
+
+On the example below, the `user` needs to have its email confirmed (activated) and set its own `password`. The `client_id` and the `client_secret` are needed to identify the application within the Keycloak server and would be provided to the developers by the Hedera-The-Graph node administrators.
 
 ```bash
 curl --location 'http://host.docker.internal:8080/realms/HederaTheGraph/protocol/openid-connect/token' \
@@ -139,6 +147,9 @@ curl --location 'http://host.docker.internal:8080/realms/HederaTheGraph/protocol
 ```
 
 **response:**
+
+On the response below, the `access_token` is a JWT token that contains the user's permissions and the `subgraph_access` claim with the subgraphs names that the user has access to, the token is valid for `36000` seconds but the TTL of the token can be configured on the Keycloak server by the administrators and most likely will be set to a much higher value to be defined.
+
 ```json
 {
     "access_token": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI3QmZBRzFodlNib1dETkZlbzFJYTNNa3JUNXBhT2JEbGVNM29SUGVvV3Y0In0.eyJleHAiOjE3MDkxOTYxNzYsImlhdCI6MTcwOTE2MDE3NiwianRpIjoiZmMyYjE3MWMtYmEzMS00NzliLWE3ODUtMjEyZGJkODNiN2EyIiwiaXNzIjoiaHR0cDovL2hvc3QuZG9ja2VyLmludGVybmFsOjgwODAvcmVhbG1zL0hlZGVyYVRoZUdyYXBoIiwiYXVkIjoiYWNjb3VudCIsInN1YiI6ImYwZmEyNGQ2LTgwMWUtNDVhNi04Y2FmLTA4ZThiZWUwYjM4NyIsInR5cCI6IkJlYXJlciIsImF6cCI6Imh0Zy1hdXRoLWxheWVyIiwic2Vzc2lvbl9zdGF0ZSI6IjhhZjc1OGE2LTc5MTgtNDVhYi1iNmRhLWM1MGU2OTg4ODYxZSIsImFjciI6IjEiLCJhbGxvd2VkLW9yaWdpbnMiOlsiLyoiXSwicmVhbG1fYWNjZXNzIjp7InJvbGVzIjpbImRlZmF1bHQtcm9sZXMtaGVkZXJhdGhlZ3JhcGgiLCJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiaHRnLWF1dGgtbGF5ZXIiOnsicm9sZXMiOlsic3ViZ3JhcGhfY3JlYXRlIiwic3ViZ3JhcGhfZGVwbG95Il19LCJhY2NvdW50Ijp7InJvbGVzIjpbIm1hbmFnZS1hY2NvdW50IiwibWFuYWdlLWFjY291bnQtbGlua3MiLCJ2aWV3LXByb2ZpbGUiXX19LCJzY29wZSI6ImVtYWlsIHByb2ZpbGUgc3ViZ3JhcGhfYWNjZXNzIiwic2lkIjoiOGFmNzU4YTYtNzkxOC00NWFiLWI2ZGEtYzUwZTY5ODg4NjFlIiwiZW1haWxfdmVyaWZpZWQiOmZhbHNlLCJuYW1lIjoiRGV2ZWxvcGVyIEV4YW1wbGUiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJkZXZlbG9wZXIxIiwiZ2l2ZW5fbmFtZSI6IkRldmVsb3BlciIsImZhbWlseV9uYW1lIjoiRXhhbXBsZSIsImVtYWlsIjoiZGV2ZWxvcGVyMUBnbWFpbC5jb20ifQ.MpmvHDpCjaG5qqRMCpUOvCf4iM0CYWG_POFTK-uHizsD3fWd-nkVLjv35JV5x06PlC6e1QAOoSFFxyxeSZCceu2_8B9IjtTuqic9NvcCd_bX9AG2b5r3Iv5vwC0fyp79sf5_nPd3C-rn92LmJxLdsZLyFKbjGUnshFJn4zeRM8-8nxZ-4e5QKHIPvVIJsU74QliizbvUgFxIg_4tO9azOITSHplR1ztiTuOcHs75YIXX6q3Iox8IDarVhtoM-2GtFg0VSd4hcWNIHB8OyVveM0EKdu7qs7RnCYbRmiAKY1yYL2KyxmaTRg4PHqdkntzjv_wWx8pM2T_zz21yqq9tXA",
@@ -219,6 +230,6 @@ curl --location 'http://host.docker.internal:8080/realms/HederaTheGraph/protocol
 
 ### D. Hedera-TheGraph Node
 
-This component is responsible for indexing data from the Hedera network and storing it in a database. The Hedera-TheGraph node is also responsible for serving queries from the GraphQL API. The Hedera-TheGraph node will be modified to include the authentication proxy and to validate the access token before processing requests.
+This component is responsible for indexing data from the Hedera network and storing it in a database. The Hedera-TheGraph node is also responsible for serving queries from the GraphQL API. 
 
 The Admin API of the Hedera-TheGraph node will be reachable only via the `Auth-Proxy` and will require the access token to be included in the header of the requests, and the `Auth-Proxy` will validate the access token and the user's permissions before forwarding the request to the Hedera-TheGraph node.
