@@ -3,36 +3,45 @@ import {
   Collect,
   DecreaseLiquidity,
   IncreaseLiquidity,
-  NonfungiblePositionManager,
-  Transfer
+  NonfungiblePositionManager
 } from '../types/NonfungiblePositionManager/NonfungiblePositionManager'
 import { Bundle, Position, PositionSnapshot, Token } from '../types/schema'
 import { ADDRESS_ZERO, factoryContract, ZERO_BD, ZERO_BI } from '../utils/constants'
-import { Address, BigInt, ethereum } from '@graphprotocol/graph-ts'
+import { Address, BigInt, ethereum, log } from '@graphprotocol/graph-ts'
 import { convertTokenToDecimal, loadTransaction } from '../utils'
 
+export function isBlockNumberExcluded(blockNumber: BigInt): boolean {
+  // Initialize the list of excluded blocks each time the function is called
+  let excludedBlocks: BigInt[] = [
+    BigInt.fromI32(56517027),
+    BigInt.fromI32(56520786)
+    // Add more block numbers as needed here
+  ];
+
+  return excludedBlocks.some(excludedBlock => excludedBlock.equals(blockNumber));
+}
+
 function getPosition(event: ethereum.Event, tokenId: BigInt): Position | null {
+
   let position = Position.load(tokenId.toString())
   if (position === null) {
     let contract = NonfungiblePositionManager.bind(event.address)
     let positionCall = contract.try_positions(tokenId)
 
     // the following call reverts in situations where the position is minted
-    // and deleted in the same block - from my investigation this happens
-    // in calls from  BancorSwap
-    // (e.g. 0xf7867fa19aa65298fadb8d4f72d0daed5e836f3ba01f0b9b9631cdc6c36bed40)
+    // and deleted in the same block
     if (!positionCall.reverted) {
       let positionResult = positionCall.value
-      let poolAddress = factoryContract.getPool(positionResult.value2, positionResult.value3, positionResult.value4)
+      let poolAddress = factoryContract.getPool(positionResult.value0, positionResult.value1, positionResult.value2)
 
       position = new Position(tokenId.toString())
       // The owner gets correctly updated in the Transfer handler
       position.owner = Address.fromString(ADDRESS_ZERO)
       position.pool = poolAddress.toHexString()
-      position.token0 = positionResult.value2.toHexString()
-      position.token1 = positionResult.value3.toHexString()
-      position.tickLower = position.pool.concat('#').concat(positionResult.value5.toString())
-      position.tickUpper = position.pool.concat('#').concat(positionResult.value6.toString())
+      position.token0 = positionResult.value0.toHexString()
+      position.token1 = positionResult.value1.toHexString()
+      position.tickLower = position.pool.concat('#').concat(positionResult.value3.toString())
+      position.tickUpper = position.pool.concat('#').concat(positionResult.value4.toString())
       position.liquidity = ZERO_BI
       position.depositedToken0 = ZERO_BD
       position.depositedToken1 = ZERO_BD
@@ -41,20 +50,21 @@ function getPosition(event: ethereum.Event, tokenId: BigInt): Position | null {
       position.collectedFeesToken0 = ZERO_BD
       position.collectedFeesToken1 = ZERO_BD
       position.transaction = loadTransaction(event).id
-      position.feeGrowthInside0LastX128 = positionResult.value8
-      position.feeGrowthInside1LastX128 = positionResult.value9
+      position.feeGrowthInside0LastX128 = positionResult.value6
+      position.feeGrowthInside1LastX128 = positionResult.value7
     }
   }
 
   return position
 }
 
-function updateFeeVars(position: Position, event: ethereum.Event, tokenId: BigInt): Position {
+function updateFeeVars(position: Position, event: ethereum.Event, tokenId: BigInt): Position { 
+
   let positionManagerContract = NonfungiblePositionManager.bind(event.address)
   let positionResult = positionManagerContract.try_positions(tokenId)
   if (!positionResult.reverted) {
-    position.feeGrowthInside0LastX128 = positionResult.value.value8
-    position.feeGrowthInside1LastX128 = positionResult.value.value9
+    position.feeGrowthInside0LastX128 = positionResult.value.value6
+    position.feeGrowthInside1LastX128 = positionResult.value.value7
   }
   return position
 }
@@ -81,11 +91,11 @@ function savePositionSnapshot(position: Position, event: ethereum.Event): void {
 
 export function handleIncreaseLiquidity(event: IncreaseLiquidity): void {
   // temp fix
-  if (event.block.number.equals(BigInt.fromI32(14317993))) {
-    return
-  }
+  if (isBlockNumberExcluded(event.block.number)) {
+    return;
+}
 
-  let position = getPosition(event, event.params.tokenId)
+  let position = getPosition(event, event.params.tokenSN)
 
   // position was not able to be fetched
   if (position == null) {
@@ -107,7 +117,7 @@ export function handleIncreaseLiquidity(event: IncreaseLiquidity): void {
   position.depositedToken0 = position.depositedToken0.plus(amount0)
   position.depositedToken1 = position.depositedToken1.plus(amount1)
 
-  updateFeeVars(position!, event, event.params.tokenId)
+  updateFeeVars(position!, event, event.params.tokenSN)
 
   position.save()
 
@@ -116,11 +126,11 @@ export function handleIncreaseLiquidity(event: IncreaseLiquidity): void {
 
 export function handleDecreaseLiquidity(event: DecreaseLiquidity): void {
   // temp fix
-  if (event.block.number == BigInt.fromI32(14317993)) {
-    return
+  if (isBlockNumberExcluded(event.block.number)) {
+    return;
   }
 
-  let position = getPosition(event, event.params.tokenId)
+  let position = getPosition(event, event.params.tokenSN)
 
   // position was not able to be fetched
   if (position == null) {
@@ -141,13 +151,19 @@ export function handleDecreaseLiquidity(event: DecreaseLiquidity): void {
   position.withdrawnToken0 = position.withdrawnToken0.plus(amount0)
   position.withdrawnToken1 = position.withdrawnToken1.plus(amount1)
 
-  position = updateFeeVars(position!, event, event.params.tokenId)
+  position = updateFeeVars(position!, event, event.params.tokenSN)
   position.save()
   savePositionSnapshot(position!, event)
 }
 
 export function handleCollect(event: Collect): void {
-  let position = getPosition(event, event.params.tokenId)
+
+  // temp fix
+  if (isBlockNumberExcluded(event.block.number)) {
+      return;
+  }
+
+  let position = getPosition(event, event.params.tokenSN)
   // position was not able to be fetched
   if (position == null) {
     return
@@ -161,21 +177,8 @@ export function handleCollect(event: Collect): void {
   position.collectedFeesToken0 = position.collectedFeesToken0.plus(amount0)
   position.collectedFeesToken1 = position.collectedFeesToken1.plus(amount0)
 
-  position = updateFeeVars(position!, event, event.params.tokenId)
+  position = updateFeeVars(position!, event, event.params.tokenSN)
   position.save()
   savePositionSnapshot(position!, event)
 }
 
-export function handleTransfer(event: Transfer): void {
-  let position = getPosition(event, event.params.tokenId)
-
-  // position was not able to be fetched
-  if (position == null) {
-    return
-  }
-
-  position.owner = event.params.to
-  position.save()
-
-  savePositionSnapshot(position!, event)
-}

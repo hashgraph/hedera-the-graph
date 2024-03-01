@@ -20,61 +20,106 @@ export class StaticTokenDefinition {
 
   // Get all tokens with a static defintion
   static getStaticDefinitions(): Array<StaticTokenDefinition> {
-    let staticDefinitions = new Array<StaticTokenDefinition>(6)
+    let staticDefinitions = new Array<StaticTokenDefinition>(11)
 
-    // Add DGD
-    let tokenDGD = new StaticTokenDefinition(
-      Address.fromString('0xe0b7927c4af23765cb51314a0e0521a9645f0e2a'),
-      'DGD',
-      'DGD',
-      BigInt.fromI32(9)
+    // Add WHBAR
+    let tokenWHBAR = new StaticTokenDefinition(
+      Address.fromString('0x0000000000000000000000000000000000163b5a'),
+      'WHBAR',
+      'Wrapped HBAR',
+      BigInt.fromI32(8)
     )
-    staticDefinitions.push(tokenDGD)
+    staticDefinitions.push(tokenWHBAR)
 
-    // Add AAVE
-    let tokenAAVE = new StaticTokenDefinition(
-      Address.fromString('0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9'),
-      'AAVE',
-      'Aave Token',
-      BigInt.fromI32(18)
+    // Add HBARX
+    let tokenHBARX = new StaticTokenDefinition(
+      Address.fromString('0x00000000000000000000000000000000000cba44'),
+      'HBARX',
+      'HBARX',
+      BigInt.fromI32(8)
     )
-    staticDefinitions.push(tokenAAVE)
+    staticDefinitions.push(tokenHBARX)
+    
+    // Add USDC[hts]
+    let tokenUSDC = new StaticTokenDefinition(
+      Address.fromString('0x0000000000000000000000000000000000101ae3'),
+      'USDC',
+      'USDC [hts]',
+      BigInt.fromI32(6)
+    )
+    staticDefinitions.push(tokenUSDC)
 
-    // Add LIF
-    let tokenLIF = new StaticTokenDefinition(
-      Address.fromString('0xeb9951021698b42e4399f9cbb6267aa35f82d59d'),
-      'LIF',
-      'Lif',
-      BigInt.fromI32(18)
+    // Add USDC Native
+    let tokenUSDCNative = new StaticTokenDefinition(
+      Address.fromString('0x000000000000000000000000000000000006f89a'),
+      'USDC',
+      'USDC',
+      BigInt.fromI32(6)
     )
-    staticDefinitions.push(tokenLIF)
+    staticDefinitions.push(tokenUSDCNative)
+      
+    // Add Sauce
+    let tokenSauce = new StaticTokenDefinition(
+      Address.fromString('0x00000000000000000000000000000000000b2ad5'),
+      'SAUCE',
+      'SAUCE',
+      BigInt.fromI32(6)
+    )
+    staticDefinitions.push(tokenSauce)
 
-    // Add SVD
-    let tokenSVD = new StaticTokenDefinition(
-      Address.fromString('0xbdeb4b83251fb146687fa19d1c660f99411eefe3'),
-      'SVD',
-      'savedroid',
-      BigInt.fromI32(18)
+    // Add XSAUCE
+    let tokenXSauce = new StaticTokenDefinition(
+      Address.fromString('0x00000000000000000000000000000000001647e8'),
+      'XSAUCE',
+      'XSAUCE',
+      BigInt.fromI32(6)
     )
-    staticDefinitions.push(tokenSVD)
+    staticDefinitions.push(tokenXSauce)
 
-    // Add TheDAO
-    let tokenTheDAO = new StaticTokenDefinition(
-      Address.fromString('0xbb9bc244d798123fde783fcc1c72d3bb8c189413'),
-      'TheDAO',
-      'TheDAO',
-      BigInt.fromI32(16)
+    // Add USDT[hts]
+    let tokenUSDT = new StaticTokenDefinition(
+      Address.fromString('0x0000000000000000000000000000000000101af0'),
+      'USDT',
+      'USDT [hts]',
+      BigInt.fromI32(6)
     )
-    staticDefinitions.push(tokenTheDAO)
+    staticDefinitions.push(tokenUSDT)
 
-    // Add HPB
-    let tokenHPB = new StaticTokenDefinition(
-      Address.fromString('0x38c6a68304cdefb9bec48bbfaaba5c5b47818bb2'),
-      'HPB',
-      'HPBCoin',
-      BigInt.fromI32(18)
+    // Add DAI[hts]
+    let tokenDAI = new StaticTokenDefinition(
+      Address.fromString('0x0000000000000000000000000000000000101af5'),
+      'DAI',
+      'DAI [hts]',
+      BigInt.fromI32(6)
     )
-    staticDefinitions.push(tokenHPB)
+    staticDefinitions.push(tokenDAI)
+
+    // Add WBTC[hts]
+    let tokenWBTC = new StaticTokenDefinition(
+      Address.fromString('0x0000000000000000000000000000000000101afb'),
+      'WBTC',
+      'WBTC [hts]',
+      BigInt.fromI32(6)
+    )
+    staticDefinitions.push(tokenWBTC)
+
+    // Add WETH[hts]
+    let tokenWETH = new StaticTokenDefinition(
+      Address.fromString('0x000000000000000000000000000000000008437c'),
+      'WETH',
+      'WETH [hts]',
+      BigInt.fromI32(6)
+    )
+    staticDefinitions.push(tokenWETH)
+
+    // Add LINK[hts]
+    let tokenLINK = new StaticTokenDefinition(
+      Address.fromString('0x0000000000000000000000000000000000101b07'),
+      'LINK',
+      'LINK [hts]',
+      BigInt.fromI32(6)
+    )
+    staticDefinitions.push(tokenLINK)
 
     return staticDefinitions
   }
