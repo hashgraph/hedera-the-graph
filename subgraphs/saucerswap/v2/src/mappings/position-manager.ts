@@ -10,15 +10,14 @@ import { ADDRESS_ZERO, factoryContract, ZERO_BD, ZERO_BI } from '../utils/consta
 import { Address, BigInt, ethereum, log } from '@graphprotocol/graph-ts'
 import { convertTokenToDecimal, loadTransaction } from '../utils'
 
-export function isBlockNumberExcluded(blockNumber: BigInt): boolean {
-  // Initialize the list of excluded blocks each time the function is called
-  let excludedBlocks: BigInt[] = [
-    BigInt.fromI32(56517027),
-    BigInt.fromI32(56520786)
-    // Add more block numbers as needed here
-  ];
+const excludedBlocks: BigInt[] = [
+  BigInt.fromI32(56517027),
+  BigInt.fromI32(56520786)
+  // Add more block numbers as needed here
+];
 
-  return excludedBlocks.some(excludedBlock => excludedBlock.equals(blockNumber));
+export function isBlockNumberExcluded(blockNumber: BigInt): boolean {
+  return excludedBlocks.includes(blockNumber);
 }
 
 function getPosition(event: ethereum.Event, tokenId: BigInt): Position | null {
