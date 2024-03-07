@@ -24,8 +24,6 @@ local introspectionUrl = os.getenv("TOKEN_INTROSPECTION_URL") or nil
 local clientId = os.getenv("CLIENT_ID") or nil
 local clientSecret = os.getenv("CLIENT_SECRET") or nil
 
-
-
 local function extractToken(request_handle)    
     
     local authHeader = request_handle:headers():get("Authorization")
@@ -47,7 +45,12 @@ local function parseJsonBody(body)
 end
 
 local function verifyValidMethod(method)
-    if((method == "subgraph_deploy") or (method == "subgraph_create") or (method == "subgraph_remove")) then
+    if( (method == "subgraph_deploy") or 
+        (method == "subgraph_create") or 
+        (method == "subgraph_remove") or 
+        (method == "subgraph_pause") or
+        (method == "subgraph_resume") )
+        then
         return true, nil
     end
     
@@ -80,7 +83,7 @@ end
 
 -- Function to check if the "method" parameter is included in roles
 local function checkMethodInRoles(result, method)
-    local roles = result.resource_access[clientId].roles
+    local roles = result.realm_access.roles
     if roles then
         return contains(roles, method)
     end
@@ -124,11 +127,6 @@ local function checkTokenPermissions(token, subgraphName, method)
         -- Check if the token is active
         if result.active then
 
-            -- check if the token claims has resource roles collection.
-            if not result.resource_access[clientId] then
-                return false, "Client roles not found in token"
-            end
-
             -- check if the token claims has subgraph_access claim.
             if not result.subgraph_access then
                 return false, "subgraph_access claim not found in token"
@@ -137,9 +135,9 @@ local function checkTokenPermissions(token, subgraphName, method)
             local subgraphAccessGranted = checkSubgraphAccessClaim(result, subgraphName)
             local methodAccessGranted = checkMethodInRoles(result, method)
 
-            print("Token introspection successful for user: " .. result.email)
             -- Set the token user for logging purposes
             tokenUser = result.email
+            print("Token verification successful for user: " .. tokenUser .. ", subgraph: " .. subgraphName .. " and method: " .. method)
 
             if not result.email_verified then
                 return false, "Email not verified for user: " .. tokenUser
@@ -161,8 +159,6 @@ local function checkTokenPermissions(token, subgraphName, method)
 
     return true, nil
 end
-
-
 
 -- This function is called for each request, and is the entry point for the filter
 function envoy_on_request(request_handle)

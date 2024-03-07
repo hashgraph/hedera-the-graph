@@ -1,8 +1,8 @@
 # Readme
 
-This is a token verification auth-layer for Hedera-The-Graph implementation that will allows a node operator to publish a secured `admin port` of the-graph deployment for hedera.
+This is a token verification auth-layer-proxy for Hedera-The-Graph implementation that will allows a node operator to publish a secured `admin port` of the-graph deployment for hedera.
 
-Uses EnvoyProxy as a reverse proxy that handles the token verification (auth layer)
+Uses EnvoyProxy as a reverse proxy that handles the token verification. The token is verified using the OAuth 2.0 token server and the token claims are validated for the required roles and subgraph access.
 
 ```mermaid
 ---
@@ -20,6 +20,7 @@ flowchart LR
     linkStyle 4 stroke:#00ff00,stroke-width:2px;
 
 ```
+More information on the **Authorization Layer** can be found [here](link)
 
 ## Overview
 
@@ -64,18 +65,7 @@ Make sure that the access token has the following claims:
   }
   ```
 
-
-### Configure KeyCloak if using it as the token server
-1. For local testing you can install it using a docker container
-2. Create a realm for the Hedera-The-Graph
-3. Create a client for the auth-layer
-4. Create a client scope for the auth-layer.
-5. Map UserAttribute "subgraph_access" to the client scope.
-6. Create custom roles for that client: `subgraph_create` and `subgraph_deploy`
-7. Create a user and assign the roles to the user, set password and verify email.
-8. Add user attribute to the user "subgraph_access" and set the value to the subgraph names that the user can access. (CSV, ie: "subgraph1,subgraph2")
-9. Get a Token using the `/token` endpoint and use it for testing the auth-layer.
-10. Validate the token using the `/token/introspection` endpoint.
+For instructions on how to set-up the Auth Provider using KeyCloak, refer to the `Auth-Layer-Server` [README](link)
 
 ## Usage
 
@@ -83,7 +73,7 @@ Make sure that the access token has the following claims:
 
 ```bash
 
-docker build -t envoy-auth-layer .
+docker build -t envoy-auth-proxy .
 
 ```
 
