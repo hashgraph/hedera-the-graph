@@ -36,10 +36,6 @@ jobs:
         
             - name: Install luasocket
               run: luarocks install luasocket
-
-            - name: Print Current Directory
-              run: pwd && ls -la
-              working-directory: auth-layer-proxy/tests
             
             - name: Run tests
               run: lua test.lua              
