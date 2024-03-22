@@ -14,6 +14,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 
+local TokenVerificationFilter = {}
 
 local cjson = require("cjson")
 local http = require("socket.http")
@@ -96,7 +97,7 @@ local tokenUser = "";
 local function checkTokenPermissions(token, subgraphName, method)
 
     -- Prepare the HTTP request body
-    local requestBody = "token=" .. token .. "&client_id=" .. clientId .. "&client_secret=" .. clientSecret   
+    local requestBody = "token=" .. token .. "&client_id=" .. clientId .. "&client_secret=" .. clientSecret
 
     -- Prepare the HTTP request headers
     local headers = {
@@ -108,13 +109,13 @@ local function checkTokenPermissions(token, subgraphName, method)
     local responseBody = {}    
 
     -- Perform the HTTP POST request
-    local response, statusCode, responseHeaders, statusText = http.request{
+    local response, statusCode, responseHeaders, statusText = http.request({
         method = "POST",
         url = introspectionUrl,
         headers = headers,
         source = ltn12.source.string(requestBody),
         sink = ltn12.sink.table(responseBody)
-    }
+    })
 
     -- Check if the request was successful
     if statusCode == 200 then
@@ -162,7 +163,7 @@ end
 
 -- This function is called for each request, and is the entry point for the filter
 function envoy_on_request(request_handle)
-    local token = extractToken(request_handle)
+    local token = TokenVerificationFilter.extractToken(request_handle)
 
     if not token then
         request_handle:respond({[":status"] = "401"}, "No token provided")
@@ -170,7 +171,7 @@ function envoy_on_request(request_handle)
     end
 
     local body = request_handle:body():getBytes(0, request_handle:body():length())
-    local method, subgraphName, parseError = parseJsonBody(body)
+    local method, subgraphName, parseError = TokenVerificationFilter.parseJsonBody(body)
     if parseError then
         request_handle:respond({[":status"] = "400"}, parseError)
         return
@@ -181,24 +182,33 @@ function envoy_on_request(request_handle)
         return
     end
 
-    if not verifyValidMethod(method) then
+    if not TokenVerificationFilter.verifyValidMethod(method) then
         request_handle:respond({[":status"] = "400"}, "Invalid method")
         return
     end
 
-    local hasPermission, permissionError = checkTokenPermissions(token, subgraphName, method)
+    local hasPermission, permissionError = TokenVerificationFilter.checkTokenPermissions(token, subgraphName, method)
 
-    if permissionError then
+    if not hasPermission or permissionError then
         request_handle:logErr(permissionError)
         request_handle:respond({[":status"] = "401"}, permissionError)
-        return
-    end
-
-    if not hasPermission then
-        request_handle:respond({[":status"] = "401"}, "Unauthorized")
         return
     end
 
     print("Token is authorized for method: ".. method .. " and subgraph: " .. subgraphName.. " by the user".. tokenUser)
     -- The request is authorized and processing continues
 end
+
+print("TokenVerificationFilter loaded")
+
+-- Return the filter as a module for test purposes
+TokenVerificationFilter.extractToken = extractToken
+TokenVerificationFilter.parseJsonBody = parseJsonBody
+TokenVerificationFilter.verifyValidMethod = verifyValidMethod
+TokenVerificationFilter.checkTokenPermissions = checkTokenPermissions
+TokenVerificationFilter.envoy_on_request = envoy_on_request
+
+-- need to export the http module also, to be able to mock it.
+TokenVerificationFilter.http = http
+
+return TokenVerificationFilter

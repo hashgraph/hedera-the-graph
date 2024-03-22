@@ -133,3 +133,36 @@ curl --location 'http://localhost:10000' \
     }
 }'
 ```
+
+
+## Testing
+
+The tests are written using lunatest and can be run using the following command:
+
+Make sure to have installed the following prerequisites:
+1. lua
+2. luarocks
+
+Install the following luarocks packages:
+
+```bash
+luarocks install lua-cjson
+luarocks install luasocket
+luarocks install lunatest
+luarocks install luacov
+luarocks install luacov-console
+```
+
+Open a terminal and navigate to the folder containing the `tests` folder and run the following command:
+
+```bash
+lua test.lua
+```
+
+to show the coverage report, run the following command:
+
+```bash
+luacov
+luacov-console ../filters/ 
+luacov-console ../filters/ -s
+```

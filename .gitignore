@@ -141,3 +141,7 @@ charts/auth-layer-server/Chart.lock
 
 # DS_Store
 .DS_Store
+auth-layer-proxy/tests/coverage.txt
+auth-layer-proxy/tests/luacov.report.out
+auth-layer-proxy/tests/luacov.report.out.index
+auth-layer-proxy/tests/luacov.stats.out
