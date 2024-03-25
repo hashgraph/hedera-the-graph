@@ -13,11 +13,12 @@ With the following configurations:
     - Email as username is enabled
     - Login with email is enabled
 
-## Prerequisites
-- Minikube or a Kubernetes cluster
-- Helm 3
-- kubectl
+**For more information about KeyCloak Configuration, please visit the [KeyCloak Documentation](https://www.keycloak.org/docs/latest/server_admin/index.html)**
 
+## Prerequisites
+- Minikube or a Kubernetes cluster [(more here)](https://minikube.sigs.k8s.io/docs/start/)
+- Helm 3 [(install instructions here)](https://helm.sh/docs/intro/install/)
+- kubectl [(install instructions here)](https://kubernetes.io/docs/tasks/tools/)
 ## Installation
 To install the Authentication Layer Server, run the following commands:
 
@@ -97,7 +98,7 @@ Once you have your KeyCloak server running, you can create a new user by followi
 #### Groups and Roles
 
 **a. Subgraph Admin:**, has access to all the subgraphs admin endpoints. (`subgraph_create`, `subgraph_remove`, `subgraph_deploy`,`subgraph_pause` and `subgraph_resume`)
-**b. Subgraph Deployer:**, has access to: `subgraph_pause`, 'subgraph_resume' and 'subgraph_deploy' endpoints.
+**b. Subgraph Deployer:**, has access to: `subgraph_pause`, `subgraph_resume` and `subgraph_deploy` endpoints.
 **c. Subgraph Operator:**, has access to: `subgraph_pause` and 'subgraph_resume' endpoints.
 
 #### Get a Token from the Authentication Layer Server
