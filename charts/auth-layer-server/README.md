@@ -19,7 +19,9 @@ With the following configurations:
 - Minikube or a Kubernetes cluster [(more here)](https://minikube.sigs.k8s.io/docs/start/)
 - Helm 3 [(install instructions here)](https://helm.sh/docs/intro/install/)
 - kubectl [(install instructions here)](https://kubernetes.io/docs/tasks/tools/)
+
 ## Installation
+
 To install the Authentication Layer Server, run the following commands:
 
 - Install the chart, using the custom values file provided in the `values.yaml` file
@@ -27,10 +29,44 @@ To install the Authentication Layer Server, run the following commands:
 helm install htg-auth-server .
 ```
 
+### Helm Chart Overrides
+
+#### Admin Password
+
 Define a custom password, use `auth.adminPassword` like this: 
 ```bash
 helm install htg-auth-server . --set auth.adminPassword=yourpassword
 ```
+
+#### Client Secret
+
+Define a custom client secret, use `auth.clientSecret` like this: 
+```bash
+helm install htg-auth-server . --set auth.clientSecret=yourclientsecret
+```
+
+if setting the client secret from an umbrella chart and need to re-use the same client secret for other charts is recommended to use the `global.auth.clientSecret` property.
+```yaml
+global:
+    auth:
+        clientSecret: yourclientsecret
+```
+
+#### Use External DB (PostgreSQL)
+By default as part of the helm chart, it will deploy a PostgreSQL database. If you want to use an external database, you can use the following configuration:
+
+```yaml
+keycloak:
+    postgresql:
+        enabled: false
+    externalDatabase:
+        host: myexternalhost    
+        user: myuser
+        password: mypassword
+        database: mydatabase
+        port: 5432
+```
+
 
 *After installation please give some time (a few minutes) for the KeyCloak server to start and be ready to use.*
 
