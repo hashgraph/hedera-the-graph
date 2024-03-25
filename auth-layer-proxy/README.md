@@ -20,7 +20,7 @@ flowchart LR
     linkStyle 4 stroke:#00ff00,stroke-width:2px;
 
 ```
-More information on the **Authorization Layer** can be found [here](link)
+More information on the **Authorization Layer** can be found [here](https://github.com/hashgraph/hedera-the-graph/blob/main/docs/design/auth-layer.md)
 
 ## Overview
 
@@ -48,15 +48,32 @@ Make sure that the access token has the following claims:
   
   ```json
   {
+    "exp": 1711427468,
+    "iat": 1711391468,
+    "jti": "2fab170f-beb1-4821-acb4-ac19a71c9abe",
     "iss": "http://host.docker.internal:8080/realms/HederaTheGraph",
-    "resource_access": {
-        "htg-auth-layer": {
-            "roles": [
-                "subgraph_create",
-                "subgraph_deploy"
-            ]
-        }
+    "aud": "account",
+    "sub": "f60ffb03-d17f-4aa2-a34a-2c4891059c3c",
+    "typ": "Bearer",
+    "azp": "htg-auth-layer",
+    "session_state": "79fbb78a-3279-463e-8ee0-6ab37e06bcc2",
+    "acr": "1",
+    "allowed-origins": [
+        "/*"
+    ],
+    "realm_access": {
+        "roles": [
+            "default-roles-hederathegraph",
+            "subgraph_remove",
+            "subgraph_create",
+            "subgraph_deploy",
+            "offline_access",
+            "uma_authorization",
+            "subgraph_resume",
+            "subgraph_pause"
+        ]
     },
+    "scope": "profile subgraph_access email",
     "subgraph_access": "<CSV of subgraph names>",
     "email_verified": true,
     "active": true,
