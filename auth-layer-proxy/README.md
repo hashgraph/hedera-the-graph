@@ -28,9 +28,8 @@ This is an implementation of EnvoyProxy filters for authentication and authoriza
 
 1. JSON Validation
 2. Token Extraction
-3. Token Hashing
 4. Payload Params Extraction
-5. Token Validation using JWT
+5. Token Validation using JWT and Instrospect endpoint
 6. Proxy Routing Configuration (using EnvoyProxy itself)
 
 it includes a Dockerfile for building the image and a docker-compose file for running the container.
