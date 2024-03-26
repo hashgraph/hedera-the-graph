@@ -1,0 +1,19 @@
+enabled: true
+global:
+  auth:
+    clientSecret: ""
+clientSecret: ""
+keycloak:
+  enabled: true
+  auth:
+    adminUser: admin
+    adminPassword: ""
+  extraVolumes:
+    - name: keycloak-realm-volume
+      configMap:
+        name: keycloak-realm-config
+  extraVolumeMounts:
+    - name: keycloak-realm-volume
+      mountPath: /opt/bitnami/keycloak/data/import/realm.json
+      subPath: realm.json
+  extraStartupArgs: "--import-realm"
