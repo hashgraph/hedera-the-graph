@@ -26,6 +26,7 @@ To install the Authentication Layer Server, run the following commands:
 
 - Install the chart, using the custom values file provided in the `values.yaml` file
 ```bash
+helm dependency update
 helm install htg-auth-server .
 ```
 
@@ -33,16 +34,16 @@ helm install htg-auth-server .
 
 #### Admin Password
 
-Define a custom password, use `auth.adminPassword` like this: 
+Define a custom password, use `keycloak.auth.adminPassword` like this: 
 ```bash
-helm install htg-auth-server . --set auth.adminPassword=yourpassword
+helm install htg-auth-server . --set keycloak.auth.adminPassword=yourpassword
 ```
 
 #### Client Secret
 
-Define a custom client secret, use `auth.clientSecret` like this: 
+Define a custom client secret, use `clientSecret` like this: 
 ```bash
-helm install htg-auth-server . --set auth.clientSecret=yourclientsecret
+helm install htg-auth-server . --set clientSecret=yourclientsecret
 ```
 
 if setting the client secret from an umbrella chart and need to re-use the same client secret for other charts is recommended to use the `global.auth.clientSecret` property.
@@ -80,7 +81,7 @@ You will need to port-forward the KeyCloak service to access the admin console. 
 kubectl port-forward service/htg-auth-server-keycloak 8080:80
 ```
 #### Login to the Admin Console
-Access console on the following URK: `http://localhost:8080/admin/master/console/#/HederaTheGraph`
+Access console on the following URK: http://localhost:8080/admin/master/console/#/HederaTheGraph
 
 Login with the following credentials:
 - Username: `admin`
