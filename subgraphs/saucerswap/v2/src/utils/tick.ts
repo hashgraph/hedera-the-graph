@@ -1,5 +1,5 @@
 /* eslint-disable prefer-const */
-import { BigDecimal, BigInt } from '@graphprotocol/graph-ts'
+import { BigDecimal, BigInt, log } from '@graphprotocol/graph-ts'
 import { bigDecimalExponated, safeDiv } from '.'
 import { Tick } from '../types/schema'
 import { Mint as MintEvent } from '../types/templates/Pool/Pool'
@@ -40,12 +40,15 @@ export function createTick(tickId: string, tickIdx: i32, poolId: string, event: 
   return tick
 }
 
-export function feeTierToTickSpacing(feeTier: BigInt): BigInt {
+export function feeTierToTickSpacing(feeTier: BigInt): BigInt {  
   if (feeTier.equals(BigInt.fromI32(10000))) {
     return BigInt.fromI32(200)
   }
   if (feeTier.equals(BigInt.fromI32(3000))) {
     return BigInt.fromI32(60)
+  }
+  if (feeTier.equals(BigInt.fromI32(1500))) {
+    return BigInt.fromI32(30)
   }
   if (feeTier.equals(BigInt.fromI32(500))) {
     return BigInt.fromI32(10)
@@ -53,6 +56,7 @@ export function feeTierToTickSpacing(feeTier: BigInt): BigInt {
   if (feeTier.equals(BigInt.fromI32(100))) {
     return BigInt.fromI32(1)
   }
-
+  // Added log to improve troubleshooting
+  log.error('look for fee tier exception (NOT FOUND): {}', [feeTier.toHex()])
   throw Error('Unexpected fee tier')
 }
