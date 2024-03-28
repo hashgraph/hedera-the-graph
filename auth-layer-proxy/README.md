@@ -1,6 +1,6 @@
 # Readme
 
-This is a token verification auth-layer-proxy for Hedera-The-Graph implementation that will allows a node operator to publish a secured `admin port` of the-graph deployment for hedera.
+This is a token verification auth-layer-proxy for Hedera-The-Graph implementation that will allow a node operator to publish a secured `admin port` of the-graph deployment for Hedera.
 
 Uses EnvoyProxy as a reverse proxy that handles the token verification. The token is verified using the OAuth 2.0 token server and the token claims are validated for the required roles and subgraph access.
 
@@ -44,6 +44,11 @@ So make sure to have a token server running that is previously configured with a
 ### Token structure
 
 Make sure that the access token has the following claims:
+- realm_access.roles: A list of roles that the user has. The roles are used to determine the access level of the user.
+- subgraph_access: A list of subgraph names that the user has access to. The subgraph names are used to determine the access level of the user.
+- active: A boolean value that indicates if the user is active or not.
+- email_verified: A boolean value that indicates if the user's email is verified or not.
+- email: The email of the user.
   
   ```json
   {
@@ -81,7 +86,7 @@ Make sure that the access token has the following claims:
   }
   ```
 
-For instructions on how to set-up the Auth Provider using KeyCloak, refer to the `Auth-Layer-Server` [README](link)
+For instructions on how to set-up the Auth Provider using KeyCloak, refer to the `Auth-Layer-Server` [README](https://github.com/hashgraph/hedera-the-graph/tree/main/charts/auth-layer-server)
 
 ## Usage
 
