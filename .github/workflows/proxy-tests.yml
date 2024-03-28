@@ -1,0 +1,50 @@
+name: Auth Layer Proxy Tests
+
+on:
+    pull_request:
+      branches: [ main, release/**]
+    push:
+      branches: [ main, release/*]
+      tags: [ v* ]
+
+jobs:
+    proxy-tests:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+
+            - name: Install Lua
+              uses: leafo/gh-actions-lua@v8
+              with:
+                luaVersion: '5.3'
+
+            - name: Install LuaRocks
+              uses: leafo/gh-actions-luarocks@v4
+
+            - name: Install lunatest
+              run: luarocks install lunatest
+        
+            - name: Install luacov
+              run: luarocks install luacov
+
+            - name: Install luacov-console
+              run: luarocks install luacov-console
+        
+            - name: Install cjson
+              run: luarocks install lua-cjson
+        
+            - name: Install luasocket
+              run: luarocks install luasocket
+            
+            - name: Run tests
+              run: lua test.lua              
+              working-directory: auth-layer-proxy/tests
+            
+            - name: Generate coverage report
+              run: luacov
+              working-directory: auth-layer-proxy/tests
+
+            - name: Generate Console Report
+              run: luacov-console ../filters/ && luacov-console ../filters/ -s  && luacov-console ../filters/ -s > coverage.txt
+              working-directory: auth-layer-proxy/tests
