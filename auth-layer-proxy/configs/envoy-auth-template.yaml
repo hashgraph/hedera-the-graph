@@ -1,0 +1,55 @@
+static_resources:
+  listeners:
+  - name: listener_0
+    address:
+      socket_address:
+        address: 0.0.0.0
+        port_value: ${PROXY_PORT}
+    filter_chains:
+    - filters:
+      - name: envoy.filters.network.http_connection_manager
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.filters.network.http_connection_manager.v3.HttpConnectionManager
+          stat_prefix: edge
+          http_filters:
+          - name: envoy.filters.http.lua
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua
+              default_source_code: 
+                filename: /etc/envoy/filters/TokenVerificationFilter.lua
+
+          - name: envoy.filters.http.router
+            typed_config:
+              "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router          
+          route_config:
+            virtual_hosts:
+            - name: all_domains
+              domains: ["*"]
+              routes:
+              - match:
+                  prefix: "/"
+                  headers:
+                    name: ":method"
+                    exact_match: "POST"
+                route:
+                  cluster: upstream_service
+
+  clusters:
+  - name: upstream_service
+    connect_timeout: 5s
+    type: ${SERVICE_TYPE}
+    load_assignment:
+      cluster_name: upstream_service
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: ${SERVICE_ADDRESS}
+                port_value: ${SERVICE_PORT}
+
+admin:
+  address:
+    socket_address:
+      address: 0.0.0.0
+      port_value: ${ENVOY_ADMIN_PORT}
