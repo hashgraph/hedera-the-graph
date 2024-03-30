@@ -2,15 +2,16 @@ version: '3'
 
 services:
   envoy:
-    image: envoy-auth-layer:latest
-    command: -c /configs/envoy-auth.yaml
+    image: envoy-auth-proxy:latest
+    command: ["/etc/envoy/start-envoy.sh"]
     env_file:
       - .env
     volumes:
-      - ./configs/:/configs/
-      - ./filters/:/filters/
-    ports:
-      - "9901:9901"
+      - ./configs/:/etc/envoy/configs/
+      - ./filters/:/etc/envoy/filters/
+      - ./scripts/start-envoy.sh:/start-envoy.sh
+    ports:      
       - "10000:10000"
+      - "15000:15000"
     stdin_open: true
     tty: true

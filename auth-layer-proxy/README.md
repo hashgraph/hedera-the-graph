@@ -103,6 +103,13 @@ docker build -t envoy-auth-proxy .
 Add Postgres or Redis credentials to the .env file
 
 ```
+# EnvoyProxy Configuration
+SERVICE_TYPE=LOGICAL_DNS
+SERVICE_ADDRESS=host.docker.internal
+SERVICE_PORT=8020
+ENVOY_ADMIN_PORT=15000
+PROXY_PORT=10000
+
 # OAuth
 CLIENT_ID=<clientId>
 CLIENT_SECRET=<client_secret>
@@ -110,7 +117,7 @@ TOKEN_INTROSPECTION_URL=http://host.docker.internal:8080/realms/HederaTheGraph/p
 
 ```
 
-### Configure the details of the service to be proxied on the envoy.yam
+### Configure the details of the service to be proxied on the envoy.yaml
 Edit `envoy-auth.yaml` file with config needs, by default will be proxying/relaying the request to address: `host.docker.internal` and port `8020`
 
 ```yaml
