@@ -41,7 +41,7 @@ securityContext: {}
 service:
   type: ClusterIP
   proxyPort: 10000
-  adminPort: 15000  
+  adminPort: 15000
 
 resources: {}
 
