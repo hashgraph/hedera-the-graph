@@ -1,29 +1,15 @@
-FROM    envoyproxy/envoy:v1.28-latest
+FROM envoyproxy/envoy:v1.28-latest
 
-# Copy the Filter Scripts
-COPY    /filters/ /etc/envoy/filters/
-# Copy the Configs templates
-COPY    /configs/ /etc/envoy/configs/
-# Copy the start script
-COPY    /scripts/start-envoy.sh /etc/envoy/start-envoy.sh
+# Copy all necessary files
+COPY /filters/ /etc/envoy/filters/
+COPY /configs/ /etc/envoy/configs/
+COPY /scripts/start-envoy.sh /etc/envoy/start-envoy.sh
 
-# Make the script executable
-RUN     chmod +x /etc/envoy/start-envoy.sh
-# give ownership to envoy user
-RUN     chown -R envoy:envoy /etc/envoy
-
-# install gettext for envsubst
-RUN     apt-get update
-RUN     apt-get install -y gettext-base
-
-# Install Lua and Luarocks
-RUN     apt-get update && apt-get install -y lua5.1 luarocks git
-
-# clean up temp data
-RUN     rm -rf /var/lib/apt/lists/*
-
-# Install Lua modules
-RUN     luarocks install lua-cjson
-
-# Install http socket module
-RUN    luarocks install luasocket
+# Make the start script executable, change ownership, install dependencies, and clean up in a single RUN to reduce layers
+RUN chmod +x /etc/envoy/start-envoy.sh && \
+    chown -R envoy:envoy /etc/envoy && \
+    apt-get update && \
+    apt-get install -y gettext-base lua5.1 luarocks git && \
+    luarocks install lua-cjson && \
+    luarocks install luasocket && \
+    rm -rf /var/lib/apt/lists/*
