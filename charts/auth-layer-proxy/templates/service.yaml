@@ -7,10 +7,11 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    {{- range .Values.service.ports }}
-    - name: {{ .name }}
-      port: {{ .servicePort }}
-      targetPort: {{ .containerPort }}
-    {{- end }}
+    - name: proxy
+      port: {{ .Values.service.proxyPort }}
+      targetPort: {{ .Values.configEnv.PROXY_PORT }}
+    - name: admin
+      port: {{ .Values.service.adminPort }}
+      targetPort: {{ .Values.configEnv.ENVOY_ADMIN_PORT }}
   selector:
     {{- include "auth-layer-proxy.selectorLabels" . | nindent 4 }}

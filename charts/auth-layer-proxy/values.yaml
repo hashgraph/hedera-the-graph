@@ -40,13 +40,8 @@ securityContext: {}
 
 service:
   type: ClusterIP
-  ports:
-  - name: envoy
-    containerPort: 10000
-    servicePort: 10000
-  - name: admin
-    containerPort: 15000
-    servicePort: 15000
+  proxyPort: 10000
+  adminPort: 15000  
 
 resources: {}
 

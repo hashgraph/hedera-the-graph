@@ -36,19 +36,20 @@ spec:
                 name: {{ include "auth-layer-proxy.fullname" . }}-env
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            {{- range .Values.service.ports }}
-            - name: {{ .name }}
-              containerPort: {{ .containerPort }}
+            - name: proxy
+              containerPort: {{ .Values.configEnv.PROXY_PORT }}
               protocol: TCP
-            {{- end }}
+            - name: admin
+              containerPort: {{ .Values.configEnv.ENVOY_ADMIN_PORT }}
+              protocol: TCP
           livenessProbe:
             httpGet:
               path: /server_info
-              port: {{ include "auth-layer-proxy.adminPort" . }}
+              port: {{ .Values.configEnv.ENVOY_ADMIN_PORT }}
           readinessProbe:
             httpGet:
               path: /ready
-              port: {{ include "auth-layer-proxy.adminPort" . }}
+              port: {{ .Values.configEnv.ENVOY_ADMIN_PORT }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

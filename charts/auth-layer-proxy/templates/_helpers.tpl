@@ -60,17 +60,3 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
-
-{{/*
-Define admin container port.
-*/}}
-{{- define "auth-layer-proxy.adminPort" -}}
-{{- $adminPort := 0 -}}
-{{- range .Values.service.ports -}}
-  {{- if eq .name "admin" -}}
-    {{- $adminPort = .containerPort -}}
-  {{- end -}}
-{{- end -}}
-{{- $adminPort -}}
-{{- end -}}
-
