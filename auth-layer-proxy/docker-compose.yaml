@@ -6,10 +6,10 @@ services:
     command: ["/etc/envoy/start-envoy.sh"]
     env_file:
       - .env
-    volumes:
-      - ./configs/:/etc/envoy/configs/
-      - ./filters/:/etc/envoy/filters/
-      - ./scripts/start-envoy.sh:/start-envoy.sh
+#    volumes:
+#      - ./configs/:/etc/envoy/configs/
+#      - ./filters/:/etc/envoy/filters/
+#      - ./scripts/start-envoy.sh:/etc/envoy/start-envoy.sh
     ports:      
       - "10000:10000"
       - "15000:15000"
