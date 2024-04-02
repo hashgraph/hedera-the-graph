@@ -4,8 +4,6 @@ This chart deploys the HederaTheGraph (HTG) Authentication Layer Proxy to your K
 Is based on the project [auth-layer-proxy](link) and is a proxy that adds authentication to the requests made to the TheGraph Admin API.
 
 ## Prerequisites
-
-## Prerequisites
 - Minikube or a Kubernetes cluster [(more here)](https://minikube.sigs.k8s.io/docs/start/)
 - Helm 3 [(install instructions here)](https://helm.sh/docs/intro/install/)
 - kubectl [(install instructions here)](https://kubernetes.io/docs/tasks/tools/)
@@ -46,5 +44,4 @@ The following table lists the configurable parameters of the chart and their def
 | `configEnv.CLIENT_SECRET` | OAuth Client Secret, provided by the auth server | `` |
 | `configEnv.TOKEN_INTROSPECTION_URL` | OAuth Token Introspection URL, provided by the auth server | `http://host.docker.internal:8080/realms/HederaTheGraph/protocol/openid-connect/token/introspect` |
 
-Is important to note that if the downstream service that we are protecting, in this case TheGraph, will be accessed by the proxy using a FQDN, the `SERVICE_TYPE` should be set to `LOGICAL_DNS` and the `SERVICE_ADDRESS` should be set to the FQDN of the service, otherwise, if the downstream service is accessed by the proxy using an IP address, the `SERVICE_TYPE` should be set to `STATIC` and the `SERVICE_ADDRESS` should be set to the IP address of the service.
-
+It is important to note that if the downstream service that we are protecting (in this case TheGraph) will be accessed by the proxy using a FQDN, the `SERVICE_TYPE` should be set to `LOGICAL_DNS` and the `SERVICE_ADDRESS` should be set to the FQDN of the service. Otherwise, if the downstream service is accessed by the proxy using an IP address, the `SERVICE_TYPE` should be set to `STATIC` and the `SERVICE_ADDRESS` should be set to the IP address of the service.

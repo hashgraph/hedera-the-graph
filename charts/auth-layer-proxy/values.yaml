@@ -1,52 +1,47 @@
-image:
-  repository: ghcr.io/hashgraph/hedera-the-graph
-  pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tagPrefix: "auth-layer-proxy-"
-  tag: "main"
+affinity: {}
 
 command: ["/etc/envoy/start-envoy.sh"]
 
 configEnv:
-  # EnvoyProxy Configuration
-  SERVICE_TYPE: "LOGICAL_DNS"
-  SERVICE_ADDRESS: "host.docker.internal"
-  SERVICE_PORT: "8020"
-  ENVOY_ADMIN_PORT: "15000"
-  PROXY_PORT: "10000"
-  # OAuth
   CLIENT_ID: "htg-auth-layer"
   CLIENT_SECRET: "2IfFX7eqQvg2wY2hh1qjtS8RrUY9YqEg"
+  ENVOY_ADMIN_PORT: "15000"
+  PROXY_PORT: "10000"
+  SERVICE_ADDRESS: "host.docker.internal"
+  SERVICE_PORT: "8020"
+  SERVICE_TYPE: "LOGICAL_DNS"
   TOKEN_INTROSPECTION_URL: "http://host.docker.internal:8080/realms/HederaTheGraph/protocol/openid-connect/token/introspect"
 
-imagePullSecrets: []
-nameOverride: ""
 fullnameOverride: ""
 
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
+image:
+  pullPolicy: IfNotPresent
+  repository: ghcr.io/hashgraph/hedera-the-graph
+  tag: "main"
+  tagPrefix: "auth-layer-proxy-"
+
+imagePullSecrets: []
+
+nameOverride: ""
+
+nodeSelector: {}
 
 podAnnotations: {}
 
 podSecurityContext: {}
 
+resources: {}
+
 securityContext: {}
 
 service:
-  type: ClusterIP
-  proxyPort: 10000
   adminPort: 15000
+  proxyPort: 10000
+  type: ClusterIP
 
-resources: {}
-
-nodeSelector: {}
+serviceAccount:
+  annotations: {}
+  create: true
+  name: ""
 
 tolerations: []
-
-affinity: {}
