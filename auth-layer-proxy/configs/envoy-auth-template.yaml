@@ -1,10 +1,30 @@
+admin:
+  address:
+    socket_address:
+      address: 0.0.0.0
+      port_value: ${ENVOY_ADMIN_PORT}
+
 static_resources:
+  clusters:
+  - name: upstream_service
+    connect_timeout: 5s
+    type: ${SERVICE_TYPE}
+    load_assignment:
+      cluster_name: upstream_service
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: ${SERVICE_ADDRESS}
+                port_value: ${SERVICE_PORT}
+
   listeners:
   - name: listener_0
     address:
       socket_address:
         address: 0.0.0.0
-        port_value: 10000
+        port_value: ${PROXY_PORT}
     filter_chains:
     - filters:
       - name: envoy.filters.network.http_connection_manager
@@ -16,7 +36,7 @@ static_resources:
             typed_config:
               "@type": type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua
               default_source_code: 
-                filename: /filters/TokenVerificationFilter.lua
+                filename: /etc/envoy/filters/TokenVerificationFilter.lua
 
           - name: envoy.filters.http.router
             typed_config:
@@ -32,18 +52,4 @@ static_resources:
                     name: ":method"
                     exact_match: "POST"
                 route:
-                  cluster: local_service
-
-  clusters:
-  - name: local_service
-    connect_timeout: 5s
-    type: LOGICAL_DNS
-    load_assignment:
-      cluster_name: local_service
-      endpoints:
-      - lb_endpoints:
-        - endpoint:
-            address:
-              socket_address:
-                address: host.docker.internal
-                port_value: 8020
+                  cluster: upstream_service

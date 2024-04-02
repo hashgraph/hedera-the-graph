@@ -93,40 +93,58 @@ For instructions on how to set-up the Auth Provider using KeyCloak, refer to the
 ### Build the image
 
 ```bash
-
 docker build -t envoy-auth-proxy .
-
 ```
 
 ### Configure the environment
 
 Add Postgres or Redis credentials to the .env file
 
-```
+```bash
+# EnvoyProxy Configuration
+SERVICE_TYPE=LOGICAL_DNS
+SERVICE_ADDRESS=host.docker.internal
+SERVICE_PORT=8020
+ENVOY_ADMIN_PORT=15000
+PROXY_PORT=10000
+
 # OAuth
 CLIENT_ID=<clientId>
 CLIENT_SECRET=<client_secret>
 TOKEN_INTROSPECTION_URL=http://host.docker.internal:8080/realms/HederaTheGraph/protocol/openid-connect/token/introspect
-
 ```
 
-### Configure the details of the service to be proxied on the envoy.yam
-Edit `envoy-auth.yaml` file with config needs, by default will be proxying/relaying the request to address: `host.docker.internal` and port `8020`
+| Parameter | Description | Default |
+| --------- | ----------- | ------- |
+| `SERVICE_TYPE` | EnvoyProxy Configuration downstream address type, can be `LOGICAL_DNS` for a FQDN or `STATIC` when using an IP address | `LOGICAL_DNS` |
+| `SERVICE_ADDRESS` | EnvoyProxy Configuration downstream address, can be either a FQDN or an IP | `host.docker.internal` |
+| `SERVICE_PORT` | EnvoyProxy Configuration downstream port, this would be the admin port on TheGraph indexer node | `8020` |
+| `ENVOY_ADMIN_PORT` | EnvoyProxy Configuration admin port | `15000` |
+| `PROXY_PORT` | EnvoyProxy Configuration proxy port | `10000` |
+| `CLIENT_ID` | OAuth Client ID, provided by the auth server | `htg-auth-layer` |
+| `CLIENT_SECRET` | OAuth Client Secret, provided by the auth server | `` |
+| `TOKEN_INTROSPECTION_URL` | OAuth Token Introspection URL, provided by the auth server | `http://host.docker.internal:8080/realms/HederaTheGraph/protocol/openid-connect/token/introspect` |
 
-```yaml
-  clusters:
-  - name: local_service
-    connect_timeout: 5s
-    type: LOGICAL_DNS
-    load_assignment:
-      cluster_name: local_service
-      endpoints:
-      - lb_endpoints:
-        - endpoint:
-            address:
-              socket_address:
-                address: host.docker.internal
-                port_value: 8020
+
+### Configure the details of the service to be proxied on the envoy.yaml
+EnvoyProxy needs a configuration file to run, the configuration will be created or updated on the container start, by the `scripts/start-envoy.sh` script, which will create or replace the `envoy-config.yaml` file using the template `configs/envoy-auth-template.yaml` and the environment variables.
+
+It will also print out the configuration as part of the logs for debugging and verification purposes.
+
+It is important to note that if the downstream service that we are protecting (in this case TheGraph) will be accessed by the proxy using a FQDN, the `SERVICE_TYPE` should be set to `LOGICAL_DNS` and the `SERVICE_ADDRESS` should be set to the FQDN of the service. Otherwise, if the downstream service is accessed by the proxy using an IP address, the `SERVICE_TYPE` should be set to `STATIC` and the `SERVICE_ADDRESS` should be set to the IP address of the service.
+
+#### Configuration Environment Variables by using DNS or FQDN for the service to be proxied.
+
+```bash
+SERVICE_TYPE=LOGICAL_DNS
+SERVICE_ADDRESS=host.docker.internal
+```
+
+#### Configuration Environment Variables by using IP Address for the service to be proxied.
+
+```bash
+SERVICE_TYPE=STATIC
+SERVICE_ADDRESS=10.100.1.1
 ```
 
 
