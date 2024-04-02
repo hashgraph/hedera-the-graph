@@ -41,7 +41,15 @@ The following table lists the configurable parameters of the chart and their def
 | `configEnv.ENVOY_ADMIN_PORT` | EnvoyProxy Configuration admin port | `15000` |
 | `configEnv.PROXY_PORT` | EnvoyProxy Configuration proxy port | `10000` |
 | `configEnv.CLIENT_ID` | OAuth Client ID, provided by the auth server | `htg-auth-layer` |
-| `configEnv.CLIENT_SECRET` | OAuth Client Secret, provided by the auth server | `` |
 | `configEnv.TOKEN_INTROSPECTION_URL` | OAuth Token Introspection URL, provided by the auth server | `http://host.docker.internal:8080/realms/HederaTheGraph/protocol/openid-connect/token/introspect` |
+| `configSecrets.clientSecret` | OAuth Client Secret, provided by the auth server | `` |
+
+Is also possible to use the global alternative to override `clientSecret` value, global has precendence over `configSecrets.clientSecret`, and if neither is provided a random 32 length value will be generated. Using the global alternative is useful when deploying multiple charts that share the same `clientSecret` value, otherwise, the `configSecrets.clientSecret` should be used.
+
+Using the following command:
+```bash
+helm install <releaseName> . --set global.auth.clientSecret=your-client-secret
+```
+
 
 It is important to note that if the downstream service that we are protecting (in this case TheGraph) will be accessed by the proxy using a FQDN, the `SERVICE_TYPE` should be set to `LOGICAL_DNS` and the `SERVICE_ADDRESS` should be set to the FQDN of the service. Otherwise, if the downstream service is accessed by the proxy using an IP address, the `SERVICE_TYPE` should be set to `STATIC` and the `SERVICE_ADDRESS` should be set to the IP address of the service.

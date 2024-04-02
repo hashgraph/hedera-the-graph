@@ -4,7 +4,6 @@ command: ["/etc/envoy/start-envoy.sh"]
 
 configEnv:
   CLIENT_ID: "htg-auth-layer"
-  CLIENT_SECRET: "2IfFX7eqQvg2wY2hh1qjtS8RrUY9YqEg"
   ENVOY_ADMIN_PORT: "15000"
   PROXY_PORT: "10000"
   SERVICE_ADDRESS: "host.docker.internal"
@@ -12,7 +11,14 @@ configEnv:
   SERVICE_TYPE: "LOGICAL_DNS"
   TOKEN_INTROSPECTION_URL: "http://host.docker.internal:8080/realms/HederaTheGraph/protocol/openid-connect/token/introspect"
 
+configSecrets:
+  clientSecret: ""
+
 fullnameOverride: ""
+
+global:
+  auth:
+    clientSecret: ""
 
 image:
   pullPolicy: IfNotPresent

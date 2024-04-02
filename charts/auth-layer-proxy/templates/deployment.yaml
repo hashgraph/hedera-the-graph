@@ -25,6 +25,8 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "auth-layer-proxy.fullname" . }}-env
+            - secretRef:
+                name: {{ include "auth-layer-proxy.fullname" . }}-secret
           image: "{{ .Values.image.repository }}:{{ .Values.image.tagPrefix }}{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           livenessProbe:
