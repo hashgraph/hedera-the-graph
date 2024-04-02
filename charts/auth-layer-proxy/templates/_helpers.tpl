@@ -60,16 +60,3 @@ Create the name of the service account to use
 {{- default "default" .Values.serviceAccount.name }}
 {{- end }}
 {{- end }}
-
-{{/*
-Define a function to choose a value from .Values.global.auth.clientSecret, .Values.configSecrets.clientSecret, or generate a random string.
-*/}}
-{{- define "auth-layer-proxy.clientSecret" -}}
-{{- if .Values.global.auth.clientSecret -}}
-  {{- .Values.global.auth.clientSecret -}}
-{{- else if .Values.configSecrets.clientSecret -}}
-  {{- .Values.configSecrets.clientSecret -}}
-{{- else -}}
-  {{- randAlphaNum 32 -}}
-{{- end -}}
-{{- end -}}

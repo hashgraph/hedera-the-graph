@@ -15,7 +15,7 @@ Is based on the project [auth-layer-proxy](link) and is a proxy that adds authen
 To install the Authentication Layer Proxy, run the following commands:
 
 ```bash
-helm install htg-auth-proxy .
+helm install htg-auth-proxy . --set configSecrets.clientSecret="<your-client-secret>"
 ```
 
 
@@ -43,13 +43,31 @@ The following table lists the configurable parameters of the chart and their def
 | `configEnv.CLIENT_ID` | OAuth Client ID, provided by the auth server | `htg-auth-layer` |
 | `configEnv.TOKEN_INTROSPECTION_URL` | OAuth Token Introspection URL, provided by the auth server | `http://host.docker.internal:8080/realms/HederaTheGraph/protocol/openid-connect/token/introspect` |
 | `configSecrets.clientSecret` | OAuth Client Secret, provided by the auth server | `` |
+| `global.auth.clientSecret` | Global OAuth Client Secret, provided by the auth server, has precedence over `configSecrets.clientSecret` | `` |
 
-Is also possible to use the global alternative to override `clientSecret` value, global has precendence over `configSecrets.clientSecret`, and if neither is provided a random 32 length value will be generated. Using the global alternative is useful when deploying multiple charts that share the same `clientSecret` value, otherwise, the `configSecrets.clientSecret` should be used.
+*It is important to note that if the downstream service that we are protecting (in this case TheGraph) will be accessed by the proxy using a FQDN, the `SERVICE_TYPE` should be set to `LOGICAL_DNS` and the `SERVICE_ADDRESS` should be set to the FQDN of the service. Otherwise, if the downstream service is accessed by the proxy using an IP address, the `SERVICE_TYPE` should be set to `STATIC` and the `SERVICE_ADDRESS` should be set to the IP address of the service.*
 
-Using the following command:
+### Client Secret Configuration
+`auth-layer-proxy` needs a valid `clientSecret` to be able to authenticate with the auth server. This can be provided as a `configSecrets.clientSecret` or as a global `global.auth.clientSecret`.
+
+`global.auth.clientSecret` has precedence over `configSecrets.clientSecret`.
+
+#### Install with Client Secret
 ```bash
-helm install <releaseName> . --set global.auth.clientSecret=your-client-secret
+helm install htg-auth-proxy . --set configSecrets.clientSecret="<your-client-secret>"
 ```
 
-
-It is important to note that if the downstream service that we are protecting (in this case TheGraph) will be accessed by the proxy using a FQDN, the `SERVICE_TYPE` should be set to `LOGICAL_DNS` and the `SERVICE_ADDRESS` should be set to the FQDN of the service. Otherwise, if the downstream service is accessed by the proxy using an IP address, the `SERVICE_TYPE` should be set to `STATIC` and the `SERVICE_ADDRESS` should be set to the IP address of the service.
+#### Install with Global Client Secret
+```bash
+helm install htg-auth-proxy . --set global.auth.clientSecret="<your-client-secret>"
+```
+### None Provided
+If none is provided, the installation will fail with the following error:
+```
+A valid client secret must be provided either via .Values.global.auth.clientSecret or .Values.configSecrets.clientSecret
+```
+#### Update Client Secret
+*Once the chart is installed, the `clientSecret` can be updated using the following command:*
+```bash
+helm upgrade <releaseName> . --set configSecrets.clientSecret="<your-client-secret>"
+```

@@ -11,7 +11,9 @@ configEnv:
   SERVICE_TYPE: "LOGICAL_DNS"
   TOKEN_INTROSPECTION_URL: "http://host.docker.internal:8080/realms/HederaTheGraph/protocol/openid-connect/token/introspect"
 
+
 configSecrets:
+  # If not provided, the helm chart will fail to render the templates
   clientSecret: ""
 
 fullnameOverride: ""
