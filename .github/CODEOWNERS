@@ -1,0 +1,22 @@
+###################################
+##### Global Protection Rule ######
+###################################
+# NOTE: This rule is overriden by the more specific rules below. This is the catch-all rule for all files not covered by the more specific rules below
+* @hashgraph/hedera-smart-contracts @hashgraph/hedera-the-graph
+
+#############################
+##### Auth-Layer-Proxy ######
+#############################
+/auth-layer-proxy/                                @AlfredoG87 @Nana-EC @hashgraph/hedera-smart-contracts
+/charts/auth-layer-proxy/                         @AlfredoG87 @Nana-EC @beeradb @hashgraph/hedera-smart-contracts
+
+###############################
+#####       Charts       ######
+###############################
+/charts/                                          @AlfredoG87 @Nana-EC @beeradb @hashgraph/hedera-smart-contracts
+
+###############################
+#####      Subgraphs     ######
+###############################
+/subgraphs/                                       @AlfredoG87 @Nana-EC @hashgraph/hedera-smart-contracts
+
