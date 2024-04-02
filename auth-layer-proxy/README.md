@@ -131,7 +131,7 @@ EnvoyProxy needs a configuration file to run, the configuration will be created 
 
 It will also print out the configuration as part of the logs for debugging and verification purposes.
 
-Is important to note that if the downstream service that we are protecting, in this case TheGraph, will be accessed by the proxy using a FQDN, the `SERVICE_TYPE` should be set to `LOGICAL_DNS` and the `SERVICE_ADDRESS` should be set to the FQDN of the service, otherwise, if the downstream service is accessed by the proxy using an IP address, the `SERVICE_TYPE` should be set to `STATIC` and the `SERVICE_ADDRESS` should be set to the IP address of the service.
+It is important to note that if the downstream service that we are protecting (in this case TheGraph) will be accessed by the proxy using a FQDN, the `SERVICE_TYPE` should be set to `LOGICAL_DNS` and the `SERVICE_ADDRESS` should be set to the FQDN of the service. Otherwise, if the downstream service is accessed by the proxy using an IP address, the `SERVICE_TYPE` should be set to `STATIC` and the `SERVICE_ADDRESS` should be set to the IP address of the service.
 
 #### Configuration Environment Variables by using DNS or FQDN for the service to be proxied.
 

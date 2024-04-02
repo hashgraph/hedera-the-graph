@@ -19,7 +19,9 @@ echo "SERVICE_PORT: $SERVICE_PORT"
 echo "ENVOY_ADMIN_PORT: $ENVOY_ADMIN_PORT"
 echo "PROXY_PORT: $PROXY_PORT"
 echo "CLIENT_ID: $CLIENT_ID"
-echo "CLIENT_SECRET: $CLIENT_SECRET"
+# Extract the first 4 characters of CLIENT_SECRET
+CLIENT_SECRET_FIRST_4=$(echo $CLIENT_SECRET | cut -c 1-4)
+echo "CLIENT_SECRET: ${CLIENT_SECRET_FIRST_4}******"
 echo "TOKEN_INTROSPECTION_URL: $TOKEN_INTROSPECTION_URL"
 echo "----------------------------------------"
 

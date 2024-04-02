@@ -1,4 +1,24 @@
+admin:
+  address:
+    socket_address:
+      address: 0.0.0.0
+      port_value: ${ENVOY_ADMIN_PORT}
+
 static_resources:
+  clusters:
+  - name: upstream_service
+    connect_timeout: 5s
+    type: ${SERVICE_TYPE}
+    load_assignment:
+      cluster_name: upstream_service
+      endpoints:
+      - lb_endpoints:
+        - endpoint:
+            address:
+              socket_address:
+                address: ${SERVICE_ADDRESS}
+                port_value: ${SERVICE_PORT}
+
   listeners:
   - name: listener_0
     address:
@@ -33,23 +53,3 @@ static_resources:
                     exact_match: "POST"
                 route:
                   cluster: upstream_service
-
-  clusters:
-  - name: upstream_service
-    connect_timeout: 5s
-    type: ${SERVICE_TYPE}
-    load_assignment:
-      cluster_name: upstream_service
-      endpoints:
-      - lb_endpoints:
-        - endpoint:
-            address:
-              socket_address:
-                address: ${SERVICE_ADDRESS}
-                port_value: ${SERVICE_PORT}
-
-admin:
-  address:
-    socket_address:
-      address: 0.0.0.0
-      port_value: ${ENVOY_ADMIN_PORT}
