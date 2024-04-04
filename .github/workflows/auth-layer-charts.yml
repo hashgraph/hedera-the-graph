@@ -41,13 +41,5 @@ jobs:
       - name: Install ct
         uses: helm/chart-testing-action@v2.6.1
 
-      - name: Create custom values file
-        run: |
-          cat <<EOF > custom-values.yaml
-          global:
-            auth:
-              clientSecret: abc123
-          EOF
-
       - name: Install chart
-        run: ct install --helm-extra-args="--values custom-values.yaml --timeout 10m" --charts charts/hedera-the-graph-auth-layer --config .github/ct.yaml
+        run: ct install --helm-extra-args="--timeout 10m" --charts charts/hedera-the-graph-auth-layer --config .github/ct.yaml
