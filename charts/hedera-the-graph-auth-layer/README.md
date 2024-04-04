@@ -15,11 +15,12 @@ For more information on the individual components, please refer to the [auth-lay
 
 Is recommended to use the `values.yaml` file to set the values you want to override. The following table lists the configurable parameters that most likely will need to be overridden.
 
-| Parameter | Description | Default |
+| Value | Description | Default |
 | --------- | ----------- | ------- |
-| `auth-proxy.configEnv.SERVICE_TYPE` | The Type address of the downstream service, set as `DNS_LOGICAL` for a FQDN name, or `STATIC` for an IP address |
-| `auth-proxy.configEnv.SERVICE_ADDRESS` | The downstream IP or DNS address of your Hedera-The-Graph `index-node` |
-| `auth-proxy.configEnv.TOKEN_INTROSPECTION_URL` | The instrospect endpoint using the public DNS name of your Auth server, this is needed for verifying the token validity and claims |
+| `auth-proxy.configEnv.SERVICE_TYPE` | The Type address of the downstream service, set as `DNS_LOGICAL` for a FQDN name, or `STATIC` for an IP address | `LOGICAL_DNS` |
+| `auth-proxy.configEnv.SERVICE_ADDRESS` | The downstream IP or DNS address of your Hedera-The-Graph `index-node` | `host.docker.internal` |
+| `auth-proxy.configEnv.TOKEN_INTROSPECTION_URL` | The instrospect endpoint using the public DNS name of your Auth server, this is needed for verifying the token validity and claims | `http://host.docker.internal:8080/realms/HederaTheGraph/protocol/openid-connect/token/introspect` |
+| `auth-server.keycloak.auth.adminPassword` | The admin password to use on the Keycloak server | `` | 
 
 To install the chart with the release name `my-release` and a random 32 length client secret, run the following command:
 
