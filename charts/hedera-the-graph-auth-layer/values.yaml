@@ -1,13 +1,13 @@
 auth-proxy:
   enabled: true
-  configEnv:    
-    SERVICE_ADDRESS: "host.docker.internal"    
+  configEnv:
+    SERVICE_ADDRESS: "host.docker.internal"
     SERVICE_TYPE: "LOGICAL_DNS"
     TOKEN_INTROSPECTION_URL: "http://host.docker.internal:8080/realms/HederaTheGraph/protocol/openid-connect/token/introspect"
 
 auth-server:
   enabled: true
-  keycloak:    
+  keycloak:
     auth:
       adminUser: admin
       adminPassword: ""
