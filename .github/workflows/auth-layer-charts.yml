@@ -42,4 +42,4 @@ jobs:
         uses: helm/chart-testing-action@v2.6.1
 
       - name: Install chart
-        run: ct install --helm-extra-args="--timeout 10m" --charts charts/hedera-the-graph-auth-layer --config .github/ct.yaml
+        run: ct install --helm-extra-args="--timeout 10m" --helm-extra-set-args="--set=global.auth.clientSecret=abcd1234" --charts charts/hedera-the-graph-auth-layer --config .github/ct.yaml
