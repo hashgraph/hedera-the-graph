@@ -1,4 +1,4 @@
-name: Hedera-TheGraph Auth-Layer Charts
+name: Auth-Layer Charts
 
 on:
   pull_request:
