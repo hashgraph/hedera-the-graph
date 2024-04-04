@@ -1,4 +1,4 @@
-name: Charts
+name: Hedera-TheGraph Charts
 
 on:
   pull_request:
