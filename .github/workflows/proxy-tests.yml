@@ -5,7 +5,14 @@ on:
       branches: [ main, release/**]
     push:
       branches: [ main, release/*]
-      tags: [ v* ]
+      tags: [ v*, v*.*.* ]
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
 
 jobs:
     proxy-tests:

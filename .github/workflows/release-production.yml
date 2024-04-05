@@ -2,7 +2,14 @@ name: Release Production Environment
 
 on:
   push:
-    tags: [ v* ]
+    tags: [ v*, v*.*.* ]
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  contents: read
 
 env:
   OWNER: hashgraph
