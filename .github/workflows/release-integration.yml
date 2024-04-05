@@ -18,7 +18,8 @@ env:
 
 jobs:
   publish:
-    runs-on: [self-hosted, ubuntu-latest]
+    runs-on: ubuntu-latest
+    # runs-on: [self-hosted, Linux, medium, ephemeral] # this will be enabled once we configure a self-hosted runner
 
     steps:
       - name: Checkout repository
