@@ -96,6 +96,12 @@ For instructions on how to set-up the Auth Provider using KeyCloak, refer to the
 docker build -t envoy-auth-proxy .
 ```
 
+#### On Mac M1
+
+```bash
+docker build --platform linux/amd64 -t envoy-auth-proxy .
+```
+
 ### Configure the environment
 
 Add Postgres or Redis credentials to the .env file
