@@ -7,7 +7,7 @@
     "codegen": "graph codegen --output-dir src/types/",
     "build": "graph build",
     "create": "graph create saucerswap-v2 --node http://127.0.0.1:8020",
-    "deploy-local": "graph deploy saucerswap-v2 --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
+    "deploy-local": "graph deploy saucerswap-v2 --debug --ipfs http://localhost:10125 --node http://127.0.0.1:8020",
     "deploy-stg": "graph deploy saucerswap-v2 --debug --ipfs https://api.thegraph.com/ipfs/ --node http://127.0.0.1:8020",
     "remove": "graph remove saucerswap-v2 --node http://127.0.0.1:8020"
   },

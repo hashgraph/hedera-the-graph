@@ -7,18 +7,8 @@ import {
 } from '../types/NonfungiblePositionManager/NonfungiblePositionManager'
 import { Bundle, Position, PositionSnapshot, Token } from '../types/schema'
 import { ADDRESS_ZERO, factoryContract, ZERO_BD, ZERO_BI } from '../utils/constants'
-import { Address, BigInt, ethereum, log } from '@graphprotocol/graph-ts'
+import { Address, BigInt, ByteArray, ethereum, log } from '@graphprotocol/graph-ts'
 import { convertTokenToDecimal, loadTransaction } from '../utils'
-
-const excludedBlocks: BigInt[] = [
-  BigInt.fromI32(56517027),
-  BigInt.fromI32(56520786)
-  // Add more block numbers as needed here
-];
-
-export function isBlockNumberExcluded(blockNumber: BigInt): boolean {
-  return excludedBlocks.includes(blockNumber);
-}
 
 function getPosition(event: ethereum.Event, tokenId: BigInt): Position | null {
 
@@ -89,13 +79,13 @@ function savePositionSnapshot(position: Position, event: ethereum.Event): void {
 }
 
 export function handleIncreaseLiquidity(event: IncreaseLiquidity): void {
-  // temp fix
-  if (isBlockNumberExcluded(event.block.number)) {
-    return;
-}
-
+  // log tokenSN
+  log.info('TokenSN: {}', [event.params.tokenSN.toString()])
   let position = getPosition(event, event.params.tokenSN)
 
+  // log all position data
+  log.info('Position: {}', [position.id])    
+  
   // position was not able to be fetched
   if (position == null) {
     return
@@ -105,7 +95,9 @@ export function handleIncreaseLiquidity(event: IncreaseLiquidity): void {
   if (Address.fromString(position.pool).equals(Address.fromHexString('0x8fe8d9bb8eeba3ed688069c3d6b556c9ca258248'))) {
     return
   }
-
+  log.info('Position: {}', [position.id])
+  // log position.token0
+  log.info('Position token0: {}, token1: {}', [position.token0, position.token1])
   let token0 = Token.load(position.token0)
   let token1 = Token.load(position.token1)
 
@@ -124,10 +116,6 @@ export function handleIncreaseLiquidity(event: IncreaseLiquidity): void {
 }
 
 export function handleDecreaseLiquidity(event: DecreaseLiquidity): void {
-  // temp fix
-  if (isBlockNumberExcluded(event.block.number)) {
-    return;
-  }
 
   let position = getPosition(event, event.params.tokenSN)
 
@@ -156,11 +144,6 @@ export function handleDecreaseLiquidity(event: DecreaseLiquidity): void {
 }
 
 export function handleCollect(event: Collect): void {
-
-  // temp fix
-  if (isBlockNumberExcluded(event.block.number)) {
-      return;
-  }
 
   let position = getPosition(event, event.params.tokenSN)
   // position was not able to be fetched

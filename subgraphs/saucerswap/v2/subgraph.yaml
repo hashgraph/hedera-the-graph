@@ -6,10 +6,10 @@ schema:
 features:
   - nonFatalErrors
 # Grafting is useful when you want to start a new subgraph from a specific block in the past of an existing subgraph indexed data, this is useful for quick fixes without having to re-index everything from scratch.
-#   - grafting
-# graft:
-#    base: QmSbSQfqGc74us3HuEdyZmktsg4eLmpwrSePvZaU1NgcgB
-#    block: 56520780
+#  - grafting
+#graft:
+#   base: QmTTqxMaxsaESEmanLTNMFR2sM18nNDPozoDhUpNW3UVj7
+#   block: 56517016
 dataSources:
   - kind: ethereum/contract
     name: Factory
