@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "auth-layer-proxy.fullname" . }}
+  labels:
+    {{- include "auth-layer-proxy.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "auth-layer-proxy.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "auth-layer-proxy.selectorLabels" . | nindent 8 }}
+    spec:
+      affinity:
+        {{- toYaml .Values.affinity | nindent 8 }}
+      containers:
+        - command: {{ .Values.command }}
+          envFrom:
+            - configMapRef:
+                name: {{ include "auth-layer-proxy.fullname" . }}-env
+            - secretRef:
+                name: {{ include "auth-layer-proxy.fullname" . }}-secret
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tagPrefix }}{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          livenessProbe:
+            httpGet:
+              path: /server_info
+              port: {{ .Values.configEnv.ENVOY_ADMIN_PORT }}
+          name: {{ .Chart.Name }}
+          ports:
+            - containerPort: {{ .Values.configEnv.PROXY_PORT }}
+              name: proxy
+              protocol: TCP
+            - containerPort: {{ .Values.configEnv.ENVOY_ADMIN_PORT }}
+              name: admin
+              protocol: TCP
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: {{ .Values.configEnv.ENVOY_ADMIN_PORT }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+      imagePullSecrets:
+        {{- toYaml .Values.imagePullSecrets | nindent 8 }}
+      nodeSelector:
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      serviceAccountName: {{ include "auth-layer-proxy.serviceAccountName" . }}
+      tolerations:
+        {{- toYaml .Values.tolerations | nindent 8 }}
+

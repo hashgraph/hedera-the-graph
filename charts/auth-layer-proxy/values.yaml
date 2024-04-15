@@ -1,0 +1,55 @@
+affinity: {}
+
+command: ["/etc/envoy/start-envoy.sh"]
+
+configEnv:
+  CLIENT_ID: "htg-auth-layer"
+  ENVOY_ADMIN_PORT: "15000"
+  PROXY_PORT: "10000"
+  SERVICE_ADDRESS: "host.docker.internal"
+  SERVICE_PORT: "8020"
+  SERVICE_TYPE: "LOGICAL_DNS"
+  TOKEN_INTROSPECTION_URL: "http://host.docker.internal:8080/realms/HederaTheGraph/protocol/openid-connect/token/introspect"
+
+
+configSecrets:
+  # If not provided, the helm chart will fail to render the templates
+  clientSecret: ""
+
+fullnameOverride: ""
+
+global:
+  auth:
+    clientSecret: ""
+
+image:
+  pullPolicy: IfNotPresent
+  repository: ghcr.io/hashgraph/hedera-the-graph
+  tag: "main"
+  tagPrefix: "auth-layer-proxy-"
+
+imagePullSecrets: []
+
+nameOverride: ""
+
+nodeSelector: {}
+
+podAnnotations: {}
+
+podSecurityContext: {}
+
+resources: {}
+
+securityContext: {}
+
+service:
+  adminPort: 15000
+  proxyPort: 10000
+  type: ClusterIP
+
+serviceAccount:
+  annotations: {}
+  create: true
+  name: ""
+
+tolerations: []
