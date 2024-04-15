@@ -138,6 +138,8 @@ charts/*.tar.gz
 charts/hedera-the-graph/Chart.lock
 charts/hedera-the-graph-node/Chart.lock
 charts/auth-layer-server/Chart.lock
+charts/auth-layer-proxy/Chart.lock
+charts/*/*.lock
 
 # DS_Store
 .DS_Store

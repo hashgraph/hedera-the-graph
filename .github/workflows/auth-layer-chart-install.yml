@@ -1,4 +1,4 @@
-name: Charts
+name: Auth-Layer Charts
 
 on:
   pull_request:
@@ -8,18 +8,6 @@ on:
     tags: [ v* ]
 
 jobs:
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Install ct
-        uses: helm/chart-testing-action@v2.6.1
-
-      - name: Run lint
-        run: ct lint --config .github/ct.yaml --all
-
   install:
     runs-on: ubuntu-latest
     steps:
@@ -32,7 +20,7 @@ jobs:
         run: curl --retry 3 -fsL https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 
       - name: Create k3d cluster
-        run: k3d cluster  create hedera-graph-node --agents 1 --timeout 5m --registry-create registry:0.0.0.0:5001 --image rancher/k3s:v1.25.9-k3s1
+        run: k3d cluster  create hedera-graph-auth-layer --agents 1 --timeout 5m --registry-create registry:0.0.0.0:5001 --image rancher/k3s:v1.25.9-k3s1
         timeout-minutes: 3
 
       - name: Set up Docker Qemu
@@ -42,5 +30,4 @@ jobs:
         uses: helm/chart-testing-action@v2.6.1
 
       - name: Install chart
-        run: ct install --helm-extra-args="--timeout 10m" --charts charts/hedera-the-graph --config .github/ct.yaml
-
+        run: ct install --helm-extra-args="--timeout 10m" --helm-extra-set-args="--set=global.auth.clientSecret=abcd1234" --charts charts/hedera-the-graph-auth-layer --config .github/ct.yaml
