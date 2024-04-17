@@ -79,25 +79,15 @@ function savePositionSnapshot(position: Position, event: ethereum.Event): void {
 }
 
 export function handleIncreaseLiquidity(event: IncreaseLiquidity): void {
-  // log tokenSN
-  log.info('TokenSN: {}', [event.params.tokenSN.toString()])
+  
   let position = getPosition(event, event.params.tokenSN)
-
-  // log all position data
-  log.info('Position: {}', [position.id])    
   
   // position was not able to be fetched
   if (position == null) {
     return
   }
 
-  // temp fix
-  if (Address.fromString(position.pool).equals(Address.fromHexString('0x8fe8d9bb8eeba3ed688069c3d6b556c9ca258248'))) {
-    return
-  }
-  log.info('Position: {}', [position.id])
-  // log position.token0
-  log.info('Position token0: {}, token1: {}', [position.token0, position.token1])
+  log.info('Position: {}', [position.id])    
   let token0 = Token.load(position.token0)
   let token1 = Token.load(position.token1)
 
@@ -124,11 +114,6 @@ export function handleDecreaseLiquidity(event: DecreaseLiquidity): void {
     return
   }
 
-  // temp fix
-  if (Address.fromString(position.pool).equals(Address.fromHexString('0x8fe8d9bb8eeba3ed688069c3d6b556c9ca258248'))) {
-    return
-  }
-
   let token0 = Token.load(position.token0)
   let token1 = Token.load(position.token1)
   let amount0 = convertTokenToDecimal(event.params.amount0, token0.decimals)
@@ -150,10 +135,6 @@ export function handleCollect(event: Collect): void {
   if (position == null) {
     return
   }
-  if (Address.fromString(position.pool).equals(Address.fromHexString('0x8fe8d9bb8eeba3ed688069c3d6b556c9ca258248'))) {
-    return
-  }
-
   let token0 = Token.load(position.token0)
   let amount0 = convertTokenToDecimal(event.params.amount0, token0.decimals)
   position.collectedFeesToken0 = position.collectedFeesToken0.plus(amount0)

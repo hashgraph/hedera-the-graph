@@ -4,21 +4,23 @@
   "repository": "https://github.com/hashgraph/hedera-the-graph/tree/main/subgraphs/saucerswap/v2",
   "license": "GPL-3.0-or-later",
   "scripts": {
-    "codegen": "graph codegen --output-dir src/types/",
+    "compile": "npm run generate && npm run codegen && npm run build",
+    "generate": "envsub --env-file .env subgraph.template.yaml subgraph.yaml",
+    "codegen": "graph codegen",
     "build": "graph build",
-    "create": "graph create saucerswap-v2 --node http://127.0.0.1:8020",
-    "deploy-local": "graph deploy saucerswap-v2 --debug --ipfs http://localhost:10125 --node http://127.0.0.1:8020",
-    "deploy-stg": "graph deploy saucerswap-v2 --debug --ipfs https://api.thegraph.com/ipfs/ --node http://127.0.0.1:8020",
-    "remove": "graph remove saucerswap-v2 --node http://127.0.0.1:8020"
+    "create": "source .env && graph create --node ${HEDERA_THE_GRAPH_NODE} --access-token ${ACCESS_TOKEN} ${SUBGRAPH_NAME}",
+    "deploy": "source .env && graph deploy --node ${HEDERA_THE_GRAPH_NODE} --ipfs ${IPFS_URL} --access-token ${ACCESS_TOKEN} ${SUBGRAPH_NAME}",
+    "remove": "source .env && graph remove --node ${HEDERA_THE_GRAPH_NODE}  --access-token ${ACCESS_TOKEN} ${SUBGRAPH_NAME}"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "^0.20.0",
     "@graphprotocol/graph-ts": "^0.20.0",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
+    "envsub": "^4.1.0",
     "eslint": "^6.2.2",
     "eslint-config-prettier": "^6.1.0",
     "prettier": "^1.18.2",
     "typescript": "^3.5.2"
-  }
+    }
 }
