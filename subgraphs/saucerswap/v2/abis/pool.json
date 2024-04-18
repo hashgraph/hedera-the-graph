@@ -5,6 +5,103 @@
     "type": "constructor"
   },
   {
+    "inputs": [],
+    "name": "AI",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "AS",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "int256",
+        "name": "respCode",
+        "type": "int256"
+      }
+    ],
+    "name": "AssociateFail",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "F0",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "F1",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "IIA",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "L",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "LO",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "LOK",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "M0",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "M1",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "MF",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "NP",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TLM",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TLU",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "TUM",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "int256",
+        "name": "respCode",
+        "type": "int256"
+      }
+    ],
+    "name": "TransferFail",
+    "type": "error"
+  },
+  {
     "anonymous": false,
     "inputs": [
       {
@@ -616,14 +713,14 @@
         "type": "uint256"
       }
     ],
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "index",
+        "name": "",
         "type": "uint256"
       }
     ],
@@ -681,7 +778,7 @@
     "inputs": [
       {
         "internalType": "bytes32",
-        "name": "key",
+        "name": "",
         "type": "bytes32"
       }
     ],
@@ -689,7 +786,7 @@
     "outputs": [
       {
         "internalType": "uint128",
-        "name": "_liquidity",
+        "name": "liquidity",
         "type": "uint128"
       },
       {
@@ -877,7 +974,7 @@
     "inputs": [
       {
         "internalType": "int16",
-        "name": "wordPosition",
+        "name": "",
         "type": "int16"
       }
     ],
@@ -909,7 +1006,7 @@
     "inputs": [
       {
         "internalType": "int24",
-        "name": "tick",
+        "name": "",
         "type": "int24"
       }
     ],

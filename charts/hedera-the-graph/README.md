@@ -124,7 +124,7 @@ helm install my-release hedera-the-graph
 By default it will use testnet, to use mainnet set the following value file:
 
 ```bash
-helm install sl charts/hedera-the-graph -f charts/hedera-the-graph/values-overrides/values-mainnet.yaml  
+helm install sl-htg3 charts/hedera-the-graph -f charts/hedera-the-graph/values-overrides/values-mainnet.yaml  
 ```
 
 same for previewnet:

@@ -13,11 +13,11 @@ features:
 dataSources:
   - kind: ethereum/contract
     name: Factory
-    network: mainnet
+    network: ${GRAPH_NETWORK}
     source:
-      address: "0x00000000000000000000000000000000003c3951"
+      address: "${GRAPH_CONTRACT_ADDRESS}"
       abi: Factory      
-      startBlock: 55651154
+      startBlock: ${GRAPH_START_BLOCK}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -42,11 +42,11 @@ dataSources:
           handler: handlePoolCreated
   - kind: ethereum/contract
     name: NonfungiblePositionManager
-    network: mainnet
+    network: ${GRAPH_NETWORK}
     source:
-      address: "0x00000000000000000000000000000000003ddbb9"
+      address: "${GRAPH_CONTRACT_NFT_MANAGER_ADDRESS}"
       abi: NonfungiblePositionManager      
-      startBlock: 56514876
+      startBlock: ${GRAPH_CONTRACT_NFT_MANAGER_START_BLOCK}
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.4
@@ -74,7 +74,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: Pool
-    network: mainnet
+    network: ${GRAPH_NETWORK}
     source:
       abi: Pool
     mapping:
