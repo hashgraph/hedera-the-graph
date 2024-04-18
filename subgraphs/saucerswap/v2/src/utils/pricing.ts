@@ -3,29 +3,40 @@ import { ONE_BD, ZERO_BD, ZERO_BI } from './constants'
 import { Bundle, Pool, Token } from './../types/schema'
 import { BigDecimal, BigInt } from '@graphprotocol/graph-ts'
 import { exponentToBigDecimal, safeDiv } from '../utils/index'
+import { 
+  TOKEN_WHBAR, 
+  TOKEN_USDC_HTS, 
+  TOKEN_USDT_HTS, 
+  TOKEN_DAI_HTS, 
+  TOKEN_WBTC_HTS, 
+  TOKEN_WETH_HTS, 
+  TOKEN_LINK_HTS, 
+  TOKEN_SAUCE,   
+  TOKEN_USDC_NATIVE,   
+  USDC_WHBAR_03_POOL
+} from "./constants"
 
-const WHBAR_ADDRESS = '0x0000000000000000000000000000000000163b5a'
-const USDC_WHBAR_03_POOL = '0xc5b707348da504e9be1bd4e21525459830e7b11d' // this pool is WHBAR/USDC
+let WHBAR_ADDRESS = TOKEN_WHBAR
 
 // token where amounts should contribute to tracked volume and liquidity
 // usually tokens that many tokens are paired with s
 export let WHITELIST_TOKENS: string[] = [
   WHBAR_ADDRESS, // WHBAR
-  '0x000000000000000000000000000000000006f89a', // USDC[hts]
-  '0x0000000000000000000000000000000000101af0', // USDT[hts]
-  '0x0000000000000000000000000000000000101af5', // DAI[hts]
-  '0x0000000000000000000000000000000000101afb', // WBTC[hts]
-  '0x000000000000000000000000000000000008437c', //WETH[hts]
-  '0x0000000000000000000000000000000000101b07', // LINK[hts]
-  '0x00000000000000000000000000000000000b2ad5', // SAUCE
+  TOKEN_USDC_HTS, // USDC[hts]
+  TOKEN_USDT_HTS, // USDT[hts]
+  TOKEN_DAI_HTS, // DAI[hts]
+  TOKEN_WBTC_HTS, // WBTC[hts]
+  TOKEN_WETH_HTS, //WETH[hts]
+  TOKEN_LINK_HTS, // LINK[hts]
+  TOKEN_SAUCE, // SAUCE
 
 ]
 
 let STABLE_COINS: string[] = [
-  '0x000000000000000000000000000000000006f89a', // USDC Native
-  '0x0000000000000000000000000000000000101ae3', // USDC[hts]
-  '0x0000000000000000000000000000000000101af0', // USDT[hts]
-  '0x0000000000000000000000000000000000101af5', // DAI[hts]
+  TOKEN_USDC_NATIVE, // USDC Native
+  TOKEN_USDC_HTS, // USDC[hts]
+  TOKEN_USDT_HTS, // USDT[hts]
+  TOKEN_DAI_HTS, // DAI[hts]
 ]
 
 let MINIMUM_ETH_LOCKED = BigDecimal.fromString('60')
