@@ -58,7 +58,7 @@ export function getEthPriceInUSD(): BigDecimal {
   // fetch eth prices for each stablecoin
   let usdcPool = Pool.load(USDC_WHBAR_03_POOL) // dai is token0
   if (usdcPool !== null) {
-    return usdcPool.token0Price //? maybe is token1?
+    return usdcPool.token0Price
   } else {
     return ZERO_BD
   }
