@@ -138,6 +138,8 @@ charts/*.tar.gz
 charts/hedera-the-graph/Chart.lock
 charts/hedera-the-graph-node/Chart.lock
 charts/auth-layer-server/Chart.lock
+charts/auth-layer-proxy/Chart.lock
+charts/*/*.lock
 
 # DS_Store
 .DS_Store
@@ -145,6 +147,9 @@ auth-layer-proxy/tests/coverage.txt
 auth-layer-proxy/tests/luacov.report.out
 auth-layer-proxy/tests/luacov.report.out.index
 auth-layer-proxy/tests/luacov.stats.out
+
+# subgraphs buid files
+subgraphs/saucerswap/*/build/*
 
 ### Ignore all Jetbrains IDE files
 .idea/

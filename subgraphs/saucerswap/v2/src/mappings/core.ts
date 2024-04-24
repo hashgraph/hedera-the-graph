@@ -272,11 +272,6 @@ export function handleSwap(event: SwapEvent): void {
   let factory = Factory.load(FACTORY_ADDRESS)
   let pool = Pool.load(event.address.toHexString())
 
-  // hot fix for bad pricing
-  if (pool.id == '0x9663f2ca0454accad3e094448ea6f77443880454') {
-    return
-  }
-
   let token0 = Token.load(pool.token0)
   let token1 = Token.load(pool.token1)
 
