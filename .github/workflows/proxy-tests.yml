@@ -1,6 +1,7 @@
 name: Auth Layer Proxy Tests
 
 on:
+    workflow_dispatch: # Enabled for testing
     pull_request:
       branches: [ main, release/**]
     push:
