@@ -56,7 +56,9 @@ This query fetches aggredated data from all uniswap pairs and tokens, to give a 
 
 ### Subgraph Endpoint 
 
-Synced at: https://mainnet-thegraph.swirldslabs.com/subgraphs/name/saucerswap/saucerswap-v1?selected=playground
+Synced at for mainnet: https://mainnet-thegraph.swirldslabs.com/subgraphs/name/saucerswap/saucerswap-v1?selected=playground
+
+Synced at for testnet: https://testnet-thegraph.swirldslabs.com/subgraphs/name/saucerswap/saucerswap-v1?selected=playground
 
 ### Transitioning to Saucerswap V1: Key Adjustments
 
