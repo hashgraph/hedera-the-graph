@@ -53,19 +53,19 @@ jobs:
             ##############
 
             - name: Install lunatest
-              run: luarocks install lunatest
+              run: /usr/bin/luarocks install lunatest
         
             - name: Install luacov
-              run: luarocks install luacov
+              run: /usr/bin/luarocks install luacov
 
             - name: Install luacov-console
-              run: luarocks install luacov-console
+              run: /usr/bin/luarocks install luacov-console
         
             - name: Install cjson
-              run: luarocks install lua-cjson
+              run: /usr/bin/luarocks install lua-cjson
         
             - name: Install luasocket
-              run: luarocks install luasocket
+              run: /usr/bin/luarocks install luasocket
             
             - name: Run tests
               run: lua test.lua              
