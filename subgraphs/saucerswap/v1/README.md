@@ -1,6 +1,4 @@
-# Uniswap V2 Subgraph
-
-[Uniswap](https://uniswap.org/) is a decentralized protocol for automated token exchange on Ethereum.
+# SAUCERSWAP V1 Subgraph
 
 This subgraph dynamically tracks any pair created by the uniswap factory. It tracks of the current state of Uniswap contracts, and contains derived stats for things like historical data and USD prices.
 
@@ -55,3 +53,55 @@ This query fetches aggredated data from all uniswap pairs and tokens, to give a 
   }
 }
 ```
+
+### Subgraph Endpoint 
+
+Synced at: https://mainnet-thegraph.swirldslabs.com/subgraphs/name/saucerswap/saucerswap-v1?selected=playground
+
+### Transitioning to Saucerswap V1: Key Adjustments
+
+The Saucerswap V1 subgraph is originally a fork of Uniswap v2 subgraph, but with some modifications to support Saucerswap V1.
+- All references to ETH and WETH have been replaced with HBAR and WHBAR respectively.
+- Token static definitions have been replaced with popular tokens on Hedera and Saucerswap.
+- Factory contract address has been updated to Saucerswap V1 factory contract address.
+- Abis have been updated to Saucerswap V1 abis, since the Saucerswap V1 contracts have different function signatures in some cases. Smart contracts to generate ABI files can be found in their respective repositories.
+    - Factory and Pool: https://github.com/saucerswaplabs/saucerswaplabs-core
+    - Periphery: https://github.com/saucerswaplabs/saucerswap-periphery
+
+## Setup
+
+### Pre-requisites
+1. yarn
+2. thegraph cli
+3. nodejs
+4. HederaTheGraph Index Server
+
+### Getting Started
+
+The subgraph is able to run on 2 different networks: `mainnet` and `testnet`, for each network there is an example `.env` file, `.env.mainnet` and `.env.testnet` respectively.
+You will need to change the `ACCESS_TOKEN` for the correct one for the network you want to run the subgraph on, if you are planning to deploy on your own private node of `HederaTheGraph` instance you don't need to provide a valid one.
+
+1. Clone the project and install dependencies:
+    ```bash
+    yarn install
+    ```
+
+2. Create a `.env` file, you can use the example `.env.mainnet` or `.env.testnet` files as a template.
+    ```bash 
+        cp .env.mainnet .env
+    ```
+
+3. Compile the subgraph    
+    ```bash
+    npm run compile
+    ```
+
+4. Create the subgraph
+    ```bash
+    npm run create
+    ```
+
+5. Deploy the subgraph
+    ```bash
+    npm run deploy
+    ```

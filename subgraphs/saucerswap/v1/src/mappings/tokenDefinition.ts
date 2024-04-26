@@ -1,64 +1,111 @@
-import { Address, BigInt } from '@graphprotocol/graph-ts'
+import {
+  Address,
+  BigInt,
+} from "@graphprotocol/graph-ts"
 
 // Initialize a Token Definition with the attributes
 export class TokenDefinition {
-  address: Address
+  address : Address
   symbol: string
   name: string
   decimals: BigInt
 
+  // Initialize a Token Definition with its attributes
+  constructor(address: Address, symbol: string, name: string, decimals: BigInt) {
+    this.address = address
+    this.symbol = symbol
+    this.name = name
+    this.decimals = decimals
+  }
+
   // Get all tokens with a static defintion
   static getStaticDefinitions(): Array<TokenDefinition> {
-    const staticDefinitions: Array<TokenDefinition> = [
-      {
-        address: Address.fromString('0xe0b7927c4af23765cb51314a0e0521a9645f0e2a'),
-        symbol: 'DGD',
-        name: 'DGD',
-        decimals: BigInt.fromI32(9),
-      },
-      {
-        address: Address.fromString('0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9'),
-        symbol: 'AAVE',
-        name: 'Aave Token',
-        decimals: BigInt.fromI32(18),
-      },
-      {
-        address: Address.fromString('0xeb9951021698b42e4399f9cbb6267aa35f82d59d'),
-        symbol: 'LIF',
-        name: 'Lif',
-        decimals: BigInt.fromI32(18),
-      },
-      {
-        address: Address.fromString('0xbdeb4b83251fb146687fa19d1c660f99411eefe3'),
-        symbol: 'SVD',
-        name: 'savedroid',
-        decimals: BigInt.fromI32(18),
-      },
-      {
-        address: Address.fromString('0xbb9bc244d798123fde783fcc1c72d3bb8c189413'),
-        symbol: 'TheDAO',
-        name: 'TheDAO',
-        decimals: BigInt.fromI32(16),
-      },
-      {
-        address: Address.fromString('0x38c6a68304cdefb9bec48bbfaaba5c5b47818bb2'),
-        symbol: 'HPB',
-        name: 'HPBCoin',
-        decimals: BigInt.fromI32(18),
-      },
-    ]
+    let staticDefinitions = new Array<TokenDefinition>(6)
+
+    // Add WHBAR
+    let tokenWHBAR = new TokenDefinition(
+      Address.fromString('0x0000000000000000000000000000000000163b5a'),
+      'WHBAR',
+      'Wrapped HBAR Token',
+      BigInt.fromI32(8)
+    )
+    staticDefinitions.push(tokenWHBAR)
+
+    // Add DAI
+    let tokenDAI = new TokenDefinition(
+      Address.fromString('0x0000000000000000000000000000000000101af5'),
+      'DAI',
+      'Dai Stablecoin',
+      BigInt.fromI32(8)
+    )
+    staticDefinitions.push(tokenDAI)
+
+    // Add USDC Briged
+    let tokenUSDCBridged = new TokenDefinition(
+      Address.fromString('0x0000000000000000000000000000000000101ae3'),
+      'USDC',
+      'USDC HTS',
+      BigInt.fromI32(6)
+    )
+    staticDefinitions.push(tokenUSDCBridged)
+
+    // Add USDC Native
+    let tokenUSDCNative = new TokenDefinition(
+      Address.fromString('0x0000000000000000000000000000000000101ae3'),
+      'USDC',
+      'USDC',
+      BigInt.fromI32(6)
+    )
+    staticDefinitions.push(tokenUSDCNative)
+
+    // Add USDT
+    let tokenUSDT = new TokenDefinition(
+      Address.fromString('0x0000000000000000000000000000000000101af0'),
+      'USDT',
+      'Tether USD',
+      BigInt.fromI32(6)
+    )
+    staticDefinitions.push(tokenUSDT)
+
+    // Add LINK
+    let tokenLINK = new TokenDefinition(
+      Address.fromString('0x0000000000000000000000000000000000101b07'),
+      'LINK',
+      'Chainlink Token',
+      BigInt.fromI32(8)
+    )
+    staticDefinitions.push(tokenLINK)
+
+    // Add WBTC
+    let tokenWBTC = new TokenDefinition(
+      Address.fromString('0x0000000000000000000000000000000000101afb'),
+      'WBTC',
+      'Wrapped Bitcoin',
+      BigInt.fromI32(8)
+    )
+    staticDefinitions.push(tokenWBTC)
+
+    // Add WETH
+    let tokenWETH = new TokenDefinition(
+      Address.fromString('0x000000000000000000000000000000000008437c'),
+      'WETH',
+      'WETH HTS',
+      BigInt.fromI32(8)
+    )
+    staticDefinitions.push(tokenWETH)
+
     return staticDefinitions
   }
 
   // Helper for hardcoded tokens
-  static fromAddress(tokenAddress: Address): TokenDefinition | null {
-    const staticDefinitions = this.getStaticDefinitions()
-    const tokenAddressHex = tokenAddress.toHexString()
+  static fromAddress(tokenAddress: Address) : TokenDefinition | null {
+    let staticDefinitions = this.getStaticDefinitions()
+    let tokenAddressHex = tokenAddress.toHexString()
 
     // Search the definition using the address
     for (let i = 0; i < staticDefinitions.length; i++) {
-      const staticDefinition = staticDefinitions[i]
-      if (staticDefinition.address.toHexString() == tokenAddressHex) {
+      let staticDefinition = staticDefinitions[i]
+      if(staticDefinition.address.toHexString() == tokenAddressHex) {
         return staticDefinition
       }
     }
@@ -66,4 +113,5 @@ export class TokenDefinition {
     // If not found, return null
     return null
   }
+
 }
