@@ -28,7 +28,10 @@ jobs:
               uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4.1.3
 
             - name: Prepare Lua Install
-              run: sudo apt-get install libreadline-dev libncurses-dev -y
+              run: |
+                sudo apt-get update
+                sudo apt-get install libreadline-dev libncurses-dev -y
+                
             - name: Install Lua
               uses: leafo/gh-actions-lua@35bcb06abec04ec87df82e08caa84d545348536e # v10.0.0
               with:
