@@ -150,3 +150,5 @@ auth-layer-proxy/tests/luacov.stats.out
 
 # subgraphs buid files
 subgraphs/saucerswap/*/build/*
+subgraphs/saucerswap/*/generated/*
+subgraphs/saucerswap/*/src/types/*

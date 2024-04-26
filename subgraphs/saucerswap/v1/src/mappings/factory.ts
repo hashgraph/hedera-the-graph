@@ -1,8 +1,8 @@
 /* eslint-disable prefer-const */
 import { log } from '@graphprotocol/graph-ts'
-import { PairCreated } from '../types/Factory/Factory'
-import { Bundle, Pair, Token, UniswapFactory } from '../types/schema'
-import { Pair as PairTemplate } from '../types/templates'
+import { PairCreated } from '../../generated/Factory/Factory'
+import { Bundle, Pair, Token, UniswapFactory } from '../../generated/schema'
+import { Pair as PairTemplate } from '../../generated/templates'
 import {  
   fetchTokenDecimals,
   fetchTokenName,
