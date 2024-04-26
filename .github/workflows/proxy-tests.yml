@@ -28,10 +28,11 @@ jobs:
               uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4.1.3
 
             - name: Install Lua
-              uses: leafo/gh-actions-lua@35bcb06abec04ec87df82e08caa84d545348536e # v10.0.0
-              with:
-                luaVersion: '5.3'
-                buildCache: true
+              run: sudo apt-get install liblua5.3-dev
+              #uses: leafo/gh-actions-lua@35bcb06abec04ec87df82e08caa84d545348536e # v10.0.0
+              #with:
+              #  luaVersion: '5.3'
+              #  buildCache: true
 
             - name: Install LuaRocks
               uses: leafo/gh-actions-luarocks@e65774a6386cb4f24e293dca7fc4ff89165b64c5 # v4.3.0
