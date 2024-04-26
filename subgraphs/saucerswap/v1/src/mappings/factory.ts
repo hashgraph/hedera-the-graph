@@ -11,7 +11,7 @@ import {
   ZERO_BD,
   ZERO_BI
 } from './helpers'
-import { FACTORY_ADDRESS } from '../types/utils/constants'
+import { FACTORY_ADDRESS } from '../utils/constants'
 
 export function handleNewPair(event: PairCreated): void {
   // load factory (create if first exchange)

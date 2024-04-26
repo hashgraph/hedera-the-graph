@@ -12,7 +12,7 @@ import {
   TOKEN_USDT_HTS, 
   TOKEN_LINK_HTS, 
   TOKEN_WBTC_HTS 
-} from '../types/utils/constants'
+} from '../utils/constants'
 
 let WETH_ADDRESS = TOKEN_WHBAR
 

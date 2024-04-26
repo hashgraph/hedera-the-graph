@@ -23,7 +23,7 @@ import {
   BI_18,
   createLiquiditySnapshot
 } from './helpers'
-import { FACTORY_ADDRESS } from '../types/utils/constants'
+import { FACTORY_ADDRESS } from '../utils/constants'
 
 import { ERC20 } from '../types/Factory/ERC20'
 

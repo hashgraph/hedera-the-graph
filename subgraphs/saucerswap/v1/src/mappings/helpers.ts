@@ -6,7 +6,7 @@ import { ERC20NameBytes } from '../types/Factory/ERC20NameBytes'
 import { User, Bundle, Token, LiquidityPosition, LiquidityPositionSnapshot, Pair } from '../types/schema'
 import { Factory as FactoryContract } from '../types/templates/Pair/Factory'
 import { TokenDefinition } from './tokenDefinition'
-import { FACTORY_ADDRESS } from '../types/utils/constants'
+import { FACTORY_ADDRESS } from '../utils/constants'
 
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
 
