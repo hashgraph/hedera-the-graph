@@ -148,5 +148,6 @@ auth-layer-proxy/tests/luacov.report.out
 auth-layer-proxy/tests/luacov.report.out.index
 auth-layer-proxy/tests/luacov.stats.out
 
-# subgraphs buid files
+# subgraphs build and generated files
 subgraphs/saucerswap/*/build/*
+subgraphs/saucerswap/*/generated/*
