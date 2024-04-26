@@ -2,7 +2,8 @@
 
 ### Subgraph Endpoint 
 
-Synced at: https://mainnet-thegraph.swirldslabs.com/subgraphs/name/saucerswap-v2?selected=playground
+Synced at on mainnet: https://mainnet-thegraph.swirldslabs.com/subgraphs/name/saucerswap/saucerswap-v2?selected=playground
+Synced at on testnet: https://testnet-thegraph.swirldslabs.com/subgraphs/name/saucerswap/saucerswap-v2?selected=playground
 
 ### Transitioning to Saucerswap V2: Key Adjustments
 

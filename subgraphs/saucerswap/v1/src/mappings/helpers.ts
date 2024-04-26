@@ -1,15 +1,14 @@
 /* eslint-disable prefer-const */
-import { Address, BigDecimal, BigInt } from '@graphprotocol/graph-ts'
-
-import { ERC20 } from '../types/Factory/ERC20'
-import { ERC20NameBytes } from '../types/Factory/ERC20NameBytes'
-import { ERC20SymbolBytes } from '../types/Factory/ERC20SymbolBytes'
-import { User } from '../types/schema'
-import { Factory as FactoryContract } from '../types/templates/Pair/Factory'
+import { log, BigInt, BigDecimal, Address, ethereum } from '@graphprotocol/graph-ts'
+import { ERC20 } from '../../generated/Factory/ERC20'
+import { ERC20SymbolBytes } from '../../generated/Factory/ERC20SymbolBytes'
+import { ERC20NameBytes } from '../../generated/Factory/ERC20NameBytes'
+import { User, Bundle, Token, LiquidityPosition, LiquidityPositionSnapshot, Pair } from '../../generated/schema'
+import { Factory as FactoryContract } from '../../generated/Factory/Factory'
 import { TokenDefinition } from './tokenDefinition'
+import { FACTORY_ADDRESS } from '../utils/constants'
 
 export const ADDRESS_ZERO = '0x0000000000000000000000000000000000000000'
-export const FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f'
 
 export let ZERO_BI = BigInt.fromI32(0)
 export let ONE_BI = BigInt.fromI32(1)
@@ -20,7 +19,7 @@ export let BI_18 = BigInt.fromI32(18)
 export let factoryContract = FactoryContract.bind(Address.fromString(FACTORY_ADDRESS))
 
 // rebass tokens, dont count in tracked volume
-export let UNTRACKED_PAIRS: string[] = ['0x9ea3b5b4ec044b70375236a281986106457b20ef']
+export let UNTRACKED_PAIRS: string[] = []
 
 export function exponentToBigDecimal(decimals: BigInt): BigDecimal {
   let bd = BigDecimal.fromString('1')
@@ -114,24 +113,27 @@ export function fetchTokenName(tokenAddress: Address): string {
   return nameValue
 }
 
-// HOT FIX: we cant implement try catch for overflow catching so skip total supply parsing on these tokens that overflow
-// TODO: find better way to handle overflow
-let SKIP_TOTAL_SUPPLY: string[] = ['0x0000000000bf2686748e1c0255036e7617e7e8a5']
+// HOT FIX: we cant implement try catch for overflow catching so skip total supply parsing on these tokens that overflow 
+// TODO: find better way to handle overflow 
+let SKIP_TOTAL_SUPPLY: string[] = [
+  ""
+]
 
 export function fetchTokenTotalSupply(tokenAddress: Address): BigInt {
   if (SKIP_TOTAL_SUPPLY.includes(tokenAddress.toHexString())) {
     return BigInt.fromI32(0)
   }
-  const contract = ERC20.bind(tokenAddress)
-  let totalSupplyValue = BigInt.zero()
-  const totalSupplyResult = contract.try_totalSupply()
+
+  let contract = ERC20.bind(tokenAddress)
+  let totalSupplyValue = null
+  let totalSupplyResult = contract.try_totalSupply()
   if (!totalSupplyResult.reverted) {
-    totalSupplyValue = totalSupplyResult.value
+    totalSupplyValue = totalSupplyResult as i32
   }
-  return totalSupplyValue
+  return BigInt.fromI32(totalSupplyValue as i32)
 }
 
-export function fetchTokenDecimals(tokenAddress: Address): BigInt | null {
+export function fetchTokenDecimals(tokenAddress: Address): BigInt {
   // static definitions overrides
   let staticDefinition = TokenDefinition.fromAddress(tokenAddress)
   if (staticDefinition != null) {
@@ -139,13 +141,33 @@ export function fetchTokenDecimals(tokenAddress: Address): BigInt | null {
   }
 
   let contract = ERC20.bind(tokenAddress)
+  // try types uint8 for decimals
+  let decimalValue = null
   let decimalResult = contract.try_decimals()
   if (!decimalResult.reverted) {
-    if (decimalResult.value.lt(BigInt.fromI32(255))) {
-      return decimalResult.value
-    }
+    decimalValue = decimalResult.value
   }
-  return null
+  return BigInt.fromI32(decimalValue as i32)
+}
+
+export function createLiquidityPosition(exchange: Address, user: Address): LiquidityPosition {
+  let id = exchange
+    .toHexString()
+    .concat('-')
+    .concat(user.toHexString())
+  let liquidityTokenBalance = LiquidityPosition.load(id)
+  if (liquidityTokenBalance === null) {
+    let pair = Pair.load(exchange.toHexString())
+    pair.liquidityProviderCount = pair.liquidityProviderCount.plus(ONE_BI)
+    liquidityTokenBalance = new LiquidityPosition(id)
+    liquidityTokenBalance.liquidityTokenBalance = ZERO_BD
+    liquidityTokenBalance.pair = exchange.toHexString()
+    liquidityTokenBalance.user = user.toHexString()
+    liquidityTokenBalance.save()
+    pair.save()
+  }
+  if (liquidityTokenBalance === null) log.error('LiquidityTokenBalance is null', [id])
+  return liquidityTokenBalance as LiquidityPosition
 }
 
 export function createUser(address: Address): void {
@@ -155,4 +177,30 @@ export function createUser(address: Address): void {
     user.usdSwapped = ZERO_BD
     user.save()
   }
+}
+
+export function createLiquiditySnapshot(position: LiquidityPosition, event: ethereum.Event): void {
+  let timestamp = event.block.timestamp.toI32()
+  let bundle = Bundle.load('1')
+  let pair = Pair.load(position.pair)
+  let token0 = Token.load(pair.token0)
+  let token1 = Token.load(pair.token1)
+
+  // create new snapshot
+  let snapshot = new LiquidityPositionSnapshot(position.id.concat(timestamp.toString()))
+  snapshot.liquidityPosition = position.id
+  snapshot.timestamp = timestamp
+  snapshot.block = event.block.number.toI32()
+  snapshot.user = position.user
+  snapshot.pair = position.pair
+  snapshot.token0PriceUSD = token0.derivedETH.times(bundle.ethPrice)
+  snapshot.token1PriceUSD = token1.derivedETH.times(bundle.ethPrice)
+  snapshot.reserve0 = pair.reserve0
+  snapshot.reserve1 = pair.reserve1
+  snapshot.reserveUSD = pair.reserveUSD
+  snapshot.liquidityTokenTotalSupply = pair.totalSupply
+  snapshot.liquidityTokenBalance = position.liquidityTokenBalance
+  snapshot.liquidityPosition = position.id
+  snapshot.save()
+  position.save()
 }
