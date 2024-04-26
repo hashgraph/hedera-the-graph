@@ -1,7 +1,16 @@
 version: 2
 updates:
   - package-ecosystem: github-actions
-    directory: "/"
+    directory: /
     schedule:
       interval: daily
-    open-pull-requests-limit: 5
+
+  - package-ecosystem: docker
+    directory: /auth-layer-proxy
+    schedule:
+      interval: daily
+
+  - package-ecosystem: npm
+    directory: /subgraphs/saucerswap/v2
+    schedule:
+      interval: daily
