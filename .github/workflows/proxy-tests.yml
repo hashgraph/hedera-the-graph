@@ -31,8 +31,6 @@ jobs:
               run: |
                 sudo apt-get update
                 sudo apt-get install -q build-essential libreadline-dev libncurses-dev lua5.3 -y
-                sudo update-alternatives --install /usr/bin/lua lua-interpreter /usr/bin/lua5.3 130
-                sudo update-alternatives --install /usr/bin/luac lua-compiler /usr/bin/luac5.3 130
 
             #############
             # Note: leado/gh-actions-lua doesn't seem to work with self-hosted runners
@@ -47,7 +45,7 @@ jobs:
             - name: Install LuaRocks
               uses: leafo/gh-actions-luarocks@e65774a6386cb4f24e293dca7fc4ff89165b64c5 # v4.3.0
               with:
-                withLuaPath: "/usr/bin/lua"
+                withLuaPath: "/usr/bin/lua5.3"
 
             - name: Install lunatest
               run: luarocks install lunatest
