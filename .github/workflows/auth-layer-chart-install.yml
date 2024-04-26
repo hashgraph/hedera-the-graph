@@ -1,7 +1,6 @@
 name: Auth-Layer Charts
 
 on:
-  workflow_dispatch: # Enabled for testing
   pull_request:
     branches: [ main, release/**]
   push:
@@ -40,7 +39,7 @@ jobs:
 
       - name: Install kubectl
         uses: azure/setup-kubectl@3e0aec4d80787158d308d7b364cb1b702e7feb7f # v4.0.0
-        
+
       - name: Install k3d
         run: curl --retry 3 -fsL https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
 
