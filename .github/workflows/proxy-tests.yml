@@ -31,9 +31,11 @@ jobs:
               run: |
                 sudo apt-get update
                 sudo apt-get install -q build-essential libreadline-dev libncurses-dev lua5.3 -y
-                which lua
-                lua -v
                 sudo apt-get install luarocks -y
+                which lua       
+                lua -v          
+                which luarocks
+                luarocks --version
             #############
             # Note: leado/gh-actions-lua doesn't seem to work with self-hosted runners
             # See issue #33 https://github.com/leafo/gh-actions-lua/issues/33
