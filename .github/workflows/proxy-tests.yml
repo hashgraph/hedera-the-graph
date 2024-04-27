@@ -46,12 +46,7 @@ jobs:
             - name: Lua Install
               run: |
                 sudo apt-get update
-                sudo apt-get install build-essential libreadline-dev -y
-                mkdir lua_build && cd lua_build
-                curl -R -O http://www.lua.org/ftp/lua-5.3.6.tar.gz
-                tar xzf lua-5.3.6.tar.gz && cd lua-5.3.6
-                make linux test
-                sudo make install
+                sudo apt-get install build-essential libreadline-dev lua5.3 -y
 
             - name: Luarocks Install
               run: |
