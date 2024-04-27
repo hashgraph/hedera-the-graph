@@ -27,11 +27,6 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@1d96c772d19495a3b5c517cd2bc0cb401ea0529f # v4.1.3
 
-            - name: Lua Install
-              run: |
-                sudo apt-get update
-                sudo apt-get install -q build-essential libreadline-dev libncurses-dev liblua5.3-dev luarocks -y
-
             #############
             # Note: leado/gh-actions-lua doesn't seem to work with self-hosted runners
             # See issue #33 https://github.com/leafo/gh-actions-lua/issues/33
@@ -48,20 +43,36 @@ jobs:
             #    withLuaPath: "/usr/bin/lua"
             ##############
 
+            - name: Lua Install
+              run: |
+                sudo apt-get update
+                sudo apt-get install build-essential libreadline-dev
+                mkdir lua_build && cd lua_build
+                curl -R -O http://www.lua.org/ftp/lua-5.3.6.tar.gz
+                tar xzf lua-5.3.6.tar.gz && cd lua-5.3.6
+                make linux test
+                sudo make install
+
+            - name: Luarocks Install
+              run: |
+                curl https://luarocks.org/releases/luarocks-3.8.0.tar.gz
+                tar xzfp luarocks-3.8.0.tar.gz && cd luarocks-3.8.0
+                ./configure && make && sudo make install
+
             - name: Install lunatest
-              run: luarocks install lunatest
+              run: sudo luarocks install lunatest
         
             - name: Install luacov
-              run: luarocks install luacov
+              run: sudo luarocks install luacov
 
             - name: Install luacov-console
-              run: luarocks install luacov-console
+              run: sudo luarocks install luacov-console
         
             - name: Install cjson
-              run: luarocks install lua-cjson
+              run: sudo luarocks install lua-cjson
         
             - name: Install luasocket
-              run: luarocks install luasocket
+              run: sudo luarocks install luasocket
             
             - name: Run tests
               run: lua test.lua              
