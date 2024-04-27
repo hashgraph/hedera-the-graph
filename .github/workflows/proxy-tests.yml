@@ -46,11 +46,11 @@ jobs:
             - name: Lua Install
               run: |
                 sudo apt-get update
-                sudo apt-get install build-essential libreadline-dev lua5.3 -y
+                sudo apt-get install build-essential libreadline-dev lua5.3 liblua5.3-dev -y
 
             - name: Luarocks Install
               run: |
-                sudo apt-get update && sudo apt-get install wget
+                sudo apt-get update && sudo apt-get install wget -y
                 wget https://luarocks.org/releases/luarocks-3.8.0.tar.gz
                 tar xzfp luarocks-3.8.0.tar.gz; cd luarocks-3.8.0
                 ./configure && make && sudo make install
