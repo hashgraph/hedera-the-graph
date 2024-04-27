@@ -50,6 +50,7 @@ jobs:
 
             - name: Luarocks Install
               run: |
+                sudo apt-get update && sudo apt-get install wget
                 wget https://luarocks.org/releases/luarocks-3.8.0.tar.gz
                 tar xzfp luarocks-3.8.0.tar.gz; cd luarocks-3.8.0
                 ./configure && make && sudo make install
