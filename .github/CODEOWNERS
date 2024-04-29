@@ -29,9 +29,6 @@
 # Protection Rules for Github Configuration Files and Actions Workflows
 /.github/                                       @hashgraph/release-engineering @hashgraph/release-engineering-managers
 
-# Legacy Maven project files
-**/pom.xml                                      @hashgraph/release-engineering @hashgraph/release-engineering-managers
-
 # Codacy Tool Configurations
 /config/                                        @hashgraph/release-engineering @hashgraph/release-engineering-managers
 .remarkrc                                       @hashgraph/release-engineering @hashgraph/release-engineering-managers

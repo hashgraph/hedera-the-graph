@@ -11,6 +11,6 @@ updates:
       interval: daily
 
   - package-ecosystem: npm
-    directory: /subgraphs/saucerswap/v2
+    directory: /subgraphs/
     schedule:
       interval: daily
