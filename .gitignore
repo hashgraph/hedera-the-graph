@@ -152,3 +152,6 @@ auth-layer-proxy/tests/luacov.stats.out
 subgraphs/saucerswap/*/build/*
 subgraphs/saucerswap/*/generated/*
 subgraphs/saucerswap/*/src/types/*
+
+### Ignore all Jetbrains IDE files
+.idea/
