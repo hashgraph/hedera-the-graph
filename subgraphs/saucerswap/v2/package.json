@@ -13,7 +13,7 @@
     "remove": "source .env && graph remove --node ${HEDERA_THE_GRAPH_NODE}  --access-token ${ACCESS_TOKEN} ${SUBGRAPH_NAME}"
   },
   "devDependencies": {
-    "@graphprotocol/graph-cli": "^0.20.0",
+    "@graphprotocol/graph-cli": "^0.71.1",
     "@graphprotocol/graph-ts": "^0.20.0",
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
