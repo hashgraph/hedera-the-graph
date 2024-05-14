@@ -1,0 +1,6 @@
+type Transfer @entity {
+    id: ID!
+    sender: String!
+    recipient: String!
+    amount: String!
+}
