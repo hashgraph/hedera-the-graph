@@ -97,24 +97,23 @@ You can check the indexing status of the subgraph using the provided GraphQL end
 curl -X POST -H "Content-Type: application/json" --data '{ "query": "{ indexingStatusForCurrentVersion(subgraphName: \"your-subgraph-name\") { synced } }" }' https://testnet-thegraph.swirldslabs.com/graphql
 ```
 
-### 6. Real world examples.
-We have already used this template to deploy Saucer Token subgraph on both testnet and mainnet. You can check the subgraph here:
+### 6. Already deployed world example
+We have already used this template to deploy `Sauce` Token subgraph on both `testnet` and `mainnet`. You can check the subgraph here:
 
-**Subgraph name:** `saucerswap/token-transfers`
+**Subgraph name:** `saucerswap/token-sauce-transfers`
 
 **Queries:**
-- Testnet: https://testnet-thegraph.swirldslabs.com/subgraphs/name/hashgraph/saucerswap/token-transfers
-- Mainnet: https://mainnet-thegraph.swirldslabs.com/subgraphs/name/hashgraph/saucerswap/token-transfers
+- Testnet: https://testnet-thegraph.swirldslabs.com/subgraphs/name/saucerswap/token-sauce-transfers/graphql
 
+- Mainnet: https://mainnet-thegraph.swirldslabs.com/subgraphs/name/hashgraph/saucerswap/token-sauce-transfers
 **Indexing Status:**
 - Testnet: 
     ```bash
-    # Check the indexing status for saucerswap/token-transfers on testnet
-    curl -X POST -H "Content-Type: application/json" --data '{ "query": "{ indexingStatusForCurrentVersion(subgraphName: \"saucerswap/token-transfers\") { synced } }" }' https://testnet-thegraph.swirldslabs.com/graphql
+    # Check the indexing status for saucerswap/token-sauce-transfers on testnet
+    curl -X POST -H "Content-Type: application/json" --data '{ "query": "{ indexingStatusForCurrentVersion(subgraphName: \"saucerswap/token-sauce-transfers\") { health synced chains { chainHeadBlock { number } latestBlock { number } } } }" }' https://testnet-thegraph.swirldslabs.com/graphql | jq
     ```
 
 - Mainnet: 
     ```bash
-    # Check the indexing status for saucerswap/token-transfers on mainnet
-    curl -X POST -H "Content-Type: application/json" --data '{ "query": "{ indexingStatusForCurrentVersion(subgraphName: \"saucerswap/token-transfers\") { synced } }" }' https://mainnet-thegraph.swirldslabs.com/graphql
+    curl -X POST -H "Content-Type: application/json" --data '{ "query": "{ indexingStatusForCurrentVersion(subgraphName: \"saucerswap/token-sauce-transfers\") { health synced chains { chainHeadBlock { number } latestBlock { number } } } }" }' https://mainnet-thegraph.swirldslabs.com/graphql | jq
     ```

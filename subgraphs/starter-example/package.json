@@ -8,8 +8,8 @@
     "generate": "envsub --env-file .env subgraph.template.yaml subgraph.yaml",
     "codegen": "graph codegen",
     "build": "graph build",
-    "create": "source .env && graph create --node ${ARKHIA_SUBGRAPH_URL}/${ARKHIA_API_KEY} ${SUBGRAPH_NAME}",
-    "deploy": "source .env && graph deploy --node ${ARKHIA_SUBGRAPH_URL}/${ARKHIA_API_KEY} --ipfs ${ARKHIA_IPFS_URL}/${ARKHIA_API_KEY} ${SUBGRAPH_NAME}",
+    "create": "source .env && graph create --node ${HEDERA_THE_GRAPH_NODE} ${SUBGRAPH_NAME} --access-token ${ACCESS_TOKEN}",
+    "deploy": "source .env && graph deploy --node ${HEDERA_THE_GRAPH_NODE} --ipfs ${IPFS_URL} ${SUBGRAPH_NAME} --access-token ${ACCESS_TOKEN}",
     "test": "graph test"
   },
   "author": "",
