@@ -86,7 +86,9 @@ npm run deploy
 You can query the subgraph using the GraphQL endpoint provided by the SwirldLabs Hosted TheGraph Service.
 
 **Previewnet:** `https://previewnet-thegraph.swirldslabs.com/subgraphs/name/your-subgraph-name/graphql`
+
 **Testnet:** `https://testnet-thegraph.swirldslabs.com/subgraphs/name/your-subgraph-name/graphql`
+
 **Mainnet:** `https://mainnet-thegraph.swirldslabs.com/subgraphs/name/your-subgraph-name/graphql`
 
 *Please refer to #6 example for the query to check a query example using curl, however the links above have a playground that can be used for query builder and execution*
@@ -98,7 +100,9 @@ You can query the subgraph using the GraphQL endpoint provided by the SwirldLabs
 You can check the indexing status of the subgraph using the provided GraphQL endpoint.
 
 **Previewnet:** ` https://previewnet-thegraph.swirldslabs.com/graphql`
+
 **Testnet:** ` https://testnet-thegraph.swirldslabs.com/graphql`
+
 **Mainnet:** ` https://mainnet-thegraph.swirldslabs.com/graphql`
 
 *Please refer to #6 example for the query to check the indexing status, a response example and how to interpret the response.*
@@ -181,8 +185,11 @@ We have already used this template to deploy `Sauce` Token subgraph on both `tes
     ```
 
     **health:** The health of the subgraph, it can be either `healthy` or `unhealthy`.
-    **synced:** The status of the subgraph, it can be either `true` or `false`.
-    **chains:** The chain head block and the latest block number that the subgraph is indexing.
-    **nonFatalErrors:** The non-fatal errors that the subgraph encountered while indexing.
-    **fatalError:** The fatal error that the subgraph encountered while indexing.
 
+    **synced:** The status of the subgraph, it can be either `true` or `false`.
+
+    **chains:** The chain head block and the latest block number that the subgraph is indexing.
+
+    **nonFatalErrors:** The non-fatal errors that the subgraph encountered while indexing.
+
+    **fatalError:** The fatal error that the subgraph encountered while indexing.
