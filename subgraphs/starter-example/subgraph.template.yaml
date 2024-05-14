@@ -1,4 +1,4 @@
-specVersion: 0.0.4
+specVersion: 0.0.5
 description: SubGraph for ERC20 contracts
 schema:
   file: ./schema.graphql
@@ -12,7 +12,7 @@ dataSources:
       startBlock: ${SUBGRAPH_START_BLOCK}
     mapping:
       kind: ethereum/events
-      apiVersion: 0.0.6
+      apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
         - Transfer

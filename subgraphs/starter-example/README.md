@@ -3,6 +3,7 @@
 This is a starter example for creating a subgraph using the Hedera network. Using the SwirldLabs Hosted TheGraph Service, however you can use any other service that supports TheGraph for deploying the subgraph, or a self hosted service.
 
 It indexes a simple ERC20 (HTS) token transfer events on the Hedera network.
+On the following example, we will use `USDC` token contract address on `testnet`.
 
 ## Getting Started
 
@@ -66,7 +67,7 @@ SUBGRAPH_NAME=erc20-transfers-example # Subgraph name
 - `testnet` or 
 - `mainnet`
 
-Depending on the network you want to deploy the subgraph on, it most correspond to the respective `HEDERA_THE_GRAPH_NODE` endpoint.
+Depending on the network you want to deploy the subgraph on, it must correspond to the respective `HEDERA_THE_GRAPH_NODE` endpoint.
 
 **SUBGRAPH_NAME:** The name of the subgraph you want to deploy, your access token should have the required permissions to deploy the subgraph with the provided name.
 
@@ -84,38 +85,104 @@ npm run deploy
 
 You can query the subgraph using the GraphQL endpoint provided by the SwirldLabs Hosted TheGraph Service.
 
-```bash
-# Query the subgraph
-curl -X POST -H "Content-Type: application/json" --data '{ "query": "{ transfers(first: 5) { id from to value } }" }' https://testnet-thegraph.swirldslabs.com/subgraphs/name/your-subgraph-name
-```
+**Previewnet:** `https://previewnet-thegraph.swirldslabs.com/subgraphs/name/your-subgraph-name/graphql`
+**Testnet:** `https://testnet-thegraph.swirldslabs.com/subgraphs/name/your-subgraph-name/graphql`
+**Mainnet:** `https://mainnet-thegraph.swirldslabs.com/subgraphs/name/your-subgraph-name/graphql`
+
+*Please refer to #6 example for the query to check a query example using curl, however the links above have a playground that can be used for query builder and execution*
+
+![alt text](image.png)
 
 ### 5. Check on Indexing Status
 
 You can check the indexing status of the subgraph using the provided GraphQL endpoint.
 
-```bash
-# Check the indexing status
-curl -X POST -H "Content-Type: application/json" --data '{ "query": "{ indexingStatusForCurrentVersion(subgraphName: \"your-subgraph-name\") { synced } }" }' https://testnet-thegraph.swirldslabs.com/graphql
-```
+**Previewnet:** ` https://previewnet-thegraph.swirldslabs.com/graphql`
+**Testnet:** ` https://testnet-thegraph.swirldslabs.com/graphql`
+**Mainnet:** ` https://mainnet-thegraph.swirldslabs.com/graphql`
+
+*Please refer to #6 example for the query to check the indexing status, a response example and how to interpret the response.*
 
 ### 6. Already deployed world example
 We have already used this template to deploy `Sauce` Token subgraph on both `testnet` and `mainnet`. You can check the subgraph here:
 
-**Subgraph name:** `saucerswap/token-sauce-transfers`
+**Subgraph name:** [`saucerswap/token-sauce-transfers`](https://mainnet-thegraph.swirldslabs.com/subgraphs/name/saucerswap/token-sauce-transfers/graphql)
 
 **Queries:**
 - Testnet: https://testnet-thegraph.swirldslabs.com/subgraphs/name/saucerswap/token-sauce-transfers/graphql
 
-- Mainnet: https://mainnet-thegraph.swirldslabs.com/subgraphs/name/hashgraph/saucerswap/token-sauce-transfers
+- Mainnet: https://mainnet-thegraph.swirldslabs.com/subgraphs/name/saucerswap/token-sauce-transfers
 
 **Indexing Status:**
-- Testnet: 
-    ```bash
-    # Check the indexing status for saucerswap/token-sauce-transfers on testnet
-    curl -X POST -H "Content-Type: application/json" --data '{ "query": "{ indexingStatusForCurrentVersion(subgraphName: \"saucerswap/token-sauce-transfers\") { health synced chains { chainHeadBlock { number } latestBlock { number } } } }" }' https://testnet-thegraph.swirldslabs.com/graphql | jq
-    ```
+
+- Testnet: *same as mainnet, with only difference on url*
 
 - Mainnet: 
     ```bash
-    curl -X POST -H "Content-Type: application/json" --data '{ "query": "{ indexingStatusForCurrentVersion(subgraphName: \"saucerswap/token-sauce-transfers\") { health synced chains { chainHeadBlock { number } latestBlock { number } } } }" }' https://mainnet-thegraph.swirldslabs.com/graphql | jq
+    curl -X POST -H "Content-Type: application/json" --data @- https://mainnet-thegraph.swirldslabs.com/graphql <<EOF | jq
+    {
+        "query": "{
+            indexingStatusForCurrentVersion(subgraphName: \"saucerswap/token-sauce-transfers\") {
+                health
+                synced
+                chains {
+                    chainHeadBlock {
+                        number
+                    }
+                    latestBlock {
+                        number
+                    }
+                }
+                nonFatalErrors {
+                    message
+                    block {
+                        number
+                        hash
+                    }
+                    handler
+                    deterministic
+                }
+                fatalError {
+                    message
+                    block {
+                        number
+                        hash
+                    }
+                    handler
+                }
+            }
+        }"
+    }
+    EOF    
     ```
+
+    **Indexing Status Response:**
+    ```json
+    {
+        "data": {
+            "indexingStatusForCurrentVersion": {
+            "health": "healthy",
+            "synced": false,
+            "chains": [
+                {
+                "chainHeadBlock": {
+                    "number": "63850747"
+                },
+                "latestBlock": {
+                    "number": "62492627"
+                }
+                }
+            ],
+            "nonFatalErrors": [],
+            "fatalError": null
+            }
+        }
+    }
+    ```
+
+    **health:** The health of the subgraph, it can be either `healthy` or `unhealthy`.
+    **synced:** The status of the subgraph, it can be either `true` or `false`.
+    **chains:** The chain head block and the latest block number that the subgraph is indexing.
+    **nonFatalErrors:** The non-fatal errors that the subgraph encountered while indexing.
+    **fatalError:** The fatal error that the subgraph encountered while indexing.
+
