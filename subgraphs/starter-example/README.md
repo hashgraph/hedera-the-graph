@@ -65,6 +65,7 @@ SUBGRAPH_NAME=erc20-transfers-example # Subgraph name
 -  `previewnet`, 
 - `testnet` or 
 - `mainnet`
+
 Depending on the network you want to deploy the subgraph on, it most correspond to the respective `HEDERA_THE_GRAPH_NODE` endpoint.
 
 **SUBGRAPH_NAME:** The name of the subgraph you want to deploy, your access token should have the required permissions to deploy the subgraph with the provided name.
@@ -106,6 +107,7 @@ We have already used this template to deploy `Sauce` Token subgraph on both `tes
 - Testnet: https://testnet-thegraph.swirldslabs.com/subgraphs/name/saucerswap/token-sauce-transfers/graphql
 
 - Mainnet: https://mainnet-thegraph.swirldslabs.com/subgraphs/name/hashgraph/saucerswap/token-sauce-transfers
+
 **Indexing Status:**
 - Testnet: 
     ```bash
