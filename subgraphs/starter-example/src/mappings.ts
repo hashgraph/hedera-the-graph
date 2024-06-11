@@ -2,14 +2,17 @@ import { Transfer as TransferEvent } from '../generated/ERC20/ERC20';
 import { Transfer } from "../generated/schema";
 
 export function handleTransfer(event: TransferEvent): void {
+
+	let id = event.transaction.hash.toHex() + "-" + event.logIndex.toString();
+
 	// Entities can be loaded from the store using a string ID; this ID
 	// needs to be unique across all entities of the same type
-	let entity = Transfer.load(event.transaction.hash.toHexString());
+	let entity = Transfer.load(id);
 
 	// Entities only exist after they have been saved to the store;
 	// `null` checks allow to create entities on demand
 	if (!entity) {
-		entity = new Transfer(event.transaction.hash.toHex());
+		entity = new Transfer(id);
 	}
 
 	// Entity fields can be set based on event parameters
