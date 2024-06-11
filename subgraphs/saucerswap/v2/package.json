@@ -1,7 +1,7 @@
 {
-  "name": "uniswap-v3-subgraph",
+  "name": "saucerswap-v2-subgraph",
   "version": "1.0.0",
-  "repository": "https://github.com/graphprotocol/uniswap-v3-subgraph",
+  "repository": "https://github.com/hashgraph/hedera-the-graph/tree/main/subgraphs/saucerswap/v2",
   "license": "GPL-3.0-or-later",
   "scripts": {
     "lint": "eslint . --ext .ts --fix",
