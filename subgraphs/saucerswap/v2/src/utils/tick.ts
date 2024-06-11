@@ -44,7 +44,7 @@ export function feeTierToTickSpacing(feeTier: BigInt): BigInt {
   if (feeTier.equals(BigInt.fromI32(100))) {
     return BigInt.fromI32(1)
   }
-    // Added log to improve troubleshooting
+  // Added log to improve troubleshooting
 
   log.error('look for fee tier exception (NOT FOUND): {}', [feeTier.toHex()])
 
