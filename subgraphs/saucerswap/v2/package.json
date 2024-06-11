@@ -11,8 +11,6 @@
     "codegen": "graph codegen --output-dir src/types/",
     "test": "graph test -d",
     "test:no-tty": "docker run -i --rm --mount type=bind,source=$INIT_CWD,target=/matchstick matchstick",
-    "create-local": "graph create ianlapham/uniswap-v3 --node http://127.0.0.1:8020",
-    "deploy-local": "graph deploy ianlapham/uniswap-v3 --debug --ipfs http://localhost:5001 --node http://127.0.0.1:8020",
     "generate": "envsub --env-file .env subgraph.template.yaml subgraph.yaml",
     "compile": "npm run generate && npm run codegen && npm run build",
     "create": "source .env && graph create --node ${HEDERA_THE_GRAPH_NODE} --access-token ${ACCESS_TOKEN} ${SUBGRAPH_NAME}",
