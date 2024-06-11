@@ -53,3 +53,10 @@ You will need to change the `ACCESS_TOKEN` for the correct one for the network y
     ```bash
     npm run deploy
     ```
+
+### Running Unit Tests
+
+1. Install [Docker](https://docs.docker.com/get-docker/) if you don't have it already
+2. Install postgres: `brew install postgresql`
+3. `yarn run build:docker`
+4. `yarn run test`
