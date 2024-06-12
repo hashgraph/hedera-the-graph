@@ -1,6 +1,6 @@
 apiVersion: v2
 name: hedera-the-graph
-version: 0.1.0-SNAPSHOT
+version: 0.2.0-SNAPSHOT
 description: Umbrella Helm chart deployment of the hedera-the-graph
 home: https://github.com/hashgraph/hedera-the-graph
 icon: https://camo.githubusercontent.com/cca6b767847bb8ca5c7059481ba13a5fc81c5938/68747470733a2f2f7777772e6865646572612e636f6d2f6c6f676f2d6361706974616c2d686261722d776f72646d61726b2e6a7067
@@ -40,10 +40,10 @@ dependencies:
     name: hedera-the-graph-node
     condition: index-node.enabled
     repository: file://../hedera-the-graph-node
-    version: 0.1.0-SNAPSHOT
+    version: 0.2.0-SNAPSHOT
 
   - alias: query-node
     name: hedera-the-graph-node
     condition: query-node.enabled
     repository: file://../hedera-the-graph-node
-    version: 0.1.0-SNAPSHOT
+    version: 0.2.0-SNAPSHOT
