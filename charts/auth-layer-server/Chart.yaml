@@ -1,9 +1,8 @@
 apiVersion: v2
 name: auth-layer-server
-appVersion: "19.1.0"
 description: A Helm chart for Authentication layer server for HederaTheGraph using Keycloak Bitnami chart as a base
 type: application
-version: 0.1.0
+version: 0.1.0-SNAPSHOT
 dependencies:
   - alias: keycloak
     name: keycloak
