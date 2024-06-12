@@ -25,7 +25,7 @@ global:
 image:
   pullPolicy: IfNotPresent
   repository: ghcr.io/hashgraph/hedera-the-graph
-  tag: "0.1.0"
+  tag: "main"
   tagPrefix: "auth-layer-proxy-"
 
 imagePullSecrets: []

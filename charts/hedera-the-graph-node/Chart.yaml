@@ -2,7 +2,7 @@ apiVersion: v2
 name: hedera-the-graph-node
 description: A Helm chart for Graph Protocol Nodes
 type: application
-version: 0.1.0
+version: 0.1.0-SNAPSHOT
 keywords:
   - graphprotocol
   - hedera
