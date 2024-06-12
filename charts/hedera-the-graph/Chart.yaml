@@ -46,4 +46,4 @@ dependencies:
     name: hedera-the-graph-node
     condition: query-node.enabled
     repository: file://../hedera-the-graph-node
-    version: 00.1.0-SNAPSHOT
+    version: 0.1.0-SNAPSHOT
