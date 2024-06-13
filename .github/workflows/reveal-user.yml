@@ -1,0 +1,15 @@
+name: Reveal UserName
+
+on:
+  pull_request:
+    branches: [ main, release/**]
+  workflow_dispatch:
+
+jobs:
+  publish:
+    name: Reveal UserName
+    runs-on: [self-hosted, Linux, medium, ephemeral]
+
+    steps:
+      - name: Print GitHub actor
+        run: echo "This workflow was triggered by ${{ github.actor }}."

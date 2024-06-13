@@ -1,4 +1,4 @@
-name: Reveal UserName
+name: Release Integration Environment
 
 on:
   push:
@@ -19,9 +19,40 @@ env:
 
 jobs:
   publish:
-    name: Reveal UserName
+    name: Publish
     runs-on: [self-hosted, Linux, medium, ephemeral]
 
     steps:
-      - name: Print GitHub actor
-        run: echo "This workflow was triggered by ${{ github.actor }}."
+      - name: Harden Runner
+        uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
+        with:
+          egress-policy: audit
+
+      - name: Checkout repository
+        uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
+        
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@0d4c9c5ea7693da7b068278f7b52bda2a190a446 # v3.2.0
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Qemu
+        uses: docker/setup-qemu-action@68827325e0b33c7199eb31dd4e31fbe9023e06e3 # v3.0.0
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@d70bba72b1f3fd22344832f00baa16ece964efeb # v3.3.0
+        with:
+          driver-opts: network=host
+
+      - name: Build and push images
+        uses: docker/build-push-action@ca052bb54ab0790a636c9b5f226502c73d547a25 # v5.4.0
+        with:
+          context: ./auth-layer-proxy
+          file: ./auth-layer-proxy/Dockerfile
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          platforms: linux/amd64
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ github.repository }}:auth-layer-proxy-main
