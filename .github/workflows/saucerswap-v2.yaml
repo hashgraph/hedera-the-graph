@@ -1,0 +1,51 @@
+name: SaucerSwap V2 Subgraph
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    name: build-and-test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18.x'
+
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - uses: actions/cache@v2
+        id: yarn-cache
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: yarn-${{ hashFiles('**/subgraphs/saucerswap/v2/yarn.lock') }}
+          restore-keys: |
+            yarn-
+
+      - name: Install dependencies
+        working-directory: subgraphs/saucerswap/v2
+        run: yarn install
+
+      - name: Build project
+        working-directory: subgraphs/saucerswap/v2
+        run: yarn build
+
+      - name: Build Docker
+        working-directory: subgraphs/saucerswap/v2
+        run: yarn build:docker
+
+      - name: Test
+        working-directory: subgraphs/saucerswap/v2
+        run: yarn test:no-tty

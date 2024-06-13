@@ -3,4 +3,6 @@ node_modules/
 src/types/
 .DS_STORE
 yarn-error.log
-generated/
+tests/.bin/
+tests/.docker/
+tests/.latest.json
