@@ -1,4 +1,4 @@
-FROM envoyproxy/envoy:v1.28-latest
+FROM envoyproxy/envoy:v1.30-latest
 
 # Copy all necessary files
 COPY /filters/ /etc/envoy/filters/
