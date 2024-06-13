@@ -3,6 +3,17 @@ entries:
   auth-layer-proxy:
   - apiVersion: v2
     appVersion: main
+    created: "2024-06-13T20:27:31.995036584Z"
+    description: A Helm chart for deploying the auth-layer-proxy onto a Kubernetes
+      cluster
+    digest: c34115a90215368d78264e050005b03ec067c7c39dc3bfb23cf8cb18c7bb8c46
+    name: auth-layer-proxy
+    type: application
+    urls:
+    - https://hashgraph.github.io/hedera-the-graph/charts/auth-layer-proxy-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: main
     created: "2024-06-13T19:58:17.903896348Z"
     description: A Helm chart for deploying the auth-layer-proxy onto a Kubernetes
       cluster
@@ -13,6 +24,22 @@ entries:
     - https://hashgraph.github.io/hedera-the-graph/charts/auth-layer-proxy-0.1.0.tgz
     version: 0.1.0
   auth-layer-server:
+  - apiVersion: v2
+    created: "2024-06-13T20:27:32.00792134Z"
+    dependencies:
+    - alias: keycloak
+      condition: keycloak.enabled
+      name: keycloak
+      repository: https://charts.bitnami.com/bitnami
+      version: 19.1.0
+    description: A Helm chart for Authentication layer server for HederaTheGraph using
+      Keycloak Bitnami chart as a base
+    digest: 3bfd41aa32103bdfd274eb191b90a1c7516d7299655e8b57a7810fc5a055b50c
+    name: auth-layer-server
+    type: application
+    urls:
+    - https://hashgraph.github.io/hedera-the-graph/charts/auth-layer-server-0.1.1.tgz
+    version: 0.1.1
   - apiVersion: v2
     created: "2024-06-13T19:58:17.916026479Z"
     dependencies:
@@ -30,6 +57,56 @@ entries:
     - https://hashgraph.github.io/hedera-the-graph/charts/auth-layer-server-0.1.0.tgz
     version: 0.1.0
   hedera-the-graph:
+  - apiVersion: v2
+    created: "2024-06-13T20:27:32.02578121Z"
+    dependencies:
+    - alias: postgresql
+      condition: postgresql.enabled
+      name: postgresql-ha
+      repository: https://charts.bitnami.com/bitnami
+      version: 11.8.1
+    - alias: ipfs
+      condition: ipfs.enabled
+      name: ipfs
+      repository: oci://tccr.io/truecharts
+      version: 9.1.6
+    - alias: index-node
+      condition: index-node.enabled
+      name: hedera-the-graph-node
+      repository: file://../hedera-the-graph-node
+      version: 0.1.1
+    - alias: query-node
+      condition: query-node.enabled
+      name: hedera-the-graph-node
+      repository: file://../hedera-the-graph-node
+      version: 0.1.1
+    description: Umbrella Helm chart deployment of the hedera-the-graph
+    digest: ef592bbfaeeb6f680a60adc18fa84b7fd1e36279ec71620ec4e04faf37ff2551
+    home: https://github.com/hashgraph/hedera-the-graph
+    icon: https://camo.githubusercontent.com/cca6b767847bb8ca5c7059481ba13a5fc81c5938/68747470733a2f2f7777772e6865646572612e636f6d2f6c6f676f2d6361706974616c2d686261722d776f72646d61726b2e6a7067
+    keywords:
+    - blockchain
+    - dlt
+    - hedera
+    - hashgraph
+    - smart
+    - contracts
+    - evm
+    - relay
+    - subgraph
+    - graphql
+    - thegraph
+    - graph-node
+    maintainers:
+    - email: engsmartcontracts@hedera.com
+      name: Hedera Smart Contracts Team
+    name: hedera-the-graph
+    sources:
+    - https://github.com/hashgraph/hedera-the-graph
+    type: application
+    urls:
+    - https://hashgraph.github.io/hedera-the-graph/charts/hedera-the-graph-0.1.1.tgz
+    version: 0.1.1
   - apiVersion: v2
     created: "2024-06-13T19:58:17.933595571Z"
     dependencies:
@@ -83,6 +160,27 @@ entries:
   hedera-the-graph-node:
   - apiVersion: v2
     appVersion: v0.29.0
+    created: "2024-06-13T20:27:32.02667962Z"
+    description: A Helm chart for Graph Protocol Nodes
+    digest: cb8c8b8aa624f234eb61b11c23e5d02e2b4682391424825dc98270c858e600f8
+    home: https://github.com/hashgraph/hedera-the-graph
+    keywords:
+    - graphprotocol
+    - hedera
+    - hashgraph
+    - thegraph
+    maintainers:
+    - email: engsmartcontracts@hedera.com
+      name: Hedera Smart Contracts Team
+    name: hedera-the-graph-node
+    sources:
+    - https://github.com/graphprotocol/graph-node
+    type: application
+    urls:
+    - https://hashgraph.github.io/hedera-the-graph/charts/hedera-the-graph-node-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: v0.29.0
     created: "2024-06-13T19:58:17.934412383Z"
     description: A Helm chart for Graph Protocol Nodes
     digest: 1c13216a734ba45dcf3ec279a77ace8b97a904ccd94a3ac12ff8d0e757442fe3
@@ -102,4 +200,4 @@ entries:
     urls:
     - https://hashgraph.github.io/hedera-the-graph/charts/hedera-the-graph-node-0.1.0.tgz
     version: 0.1.0
-generated: "2024-06-13T19:58:17.903131484Z"
+generated: "2024-06-13T20:27:31.99418984Z"
