@@ -27,19 +27,6 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@a5ac7e51b41094c92402da3b24376905380afc29 # v4.1.6
 
-            #############
-            # Note: leafo/gh-actions-lua doesn't seem to work with self-hosted runners
-            # See issue #33 https://github.com/leafo/gh-actions-lua/issues/33
-
-            #- name: Install Lua
-            #  uses: leafo/gh-actions-lua@35bcb06abec04ec87df82e08caa84d545348536e # v10.0.0
-            #  with:
-            #    luaVersion: '5.3'
-
-            #- name: Install LuaRocks
-            #  uses: leafo/gh-actions-luarocks@e65774a6386cb4f24e293dca7fc4ff89165b64c5 # v4.3.0
-            ##############
-
             - name: Lua Install
               run: |
                 sudo apt-get update
