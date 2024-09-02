@@ -20,7 +20,7 @@ env:
 jobs:
   docker-image-publish:
     name: Publish Docker Image
-    runs-on: [self-hosted, Linux, medium, ephemeral]
+    runs-on: smart-contracts-linux-medium
 
     steps:
       - name: Harden Runner
@@ -61,7 +61,7 @@ jobs:
           tags: ${{ env.REGISTRY }}/${{ github.repository }}:auth-layer-proxy-${{ env.TAG }}
 
   helm-chart-release:
-    runs-on: [self-hosted, Linux, medium, ephemeral]
+    runs-on: smart-contracts-linux-medium
     permissions:
       contents: write
     steps:
