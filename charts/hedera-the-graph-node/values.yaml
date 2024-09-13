@@ -38,7 +38,7 @@ image:
   pullPolicy: IfNotPresent
   repository: graphprotocol/graph-node
   # Overrides the image tag whose default is the chart appVersion.
-  tag: v0.29.0
+  tag: v0.35.1
 
 imagePullSecrets: []
 
