@@ -11,7 +11,7 @@ on:
 jobs:
   build-and-test:
     name: build-and-test
-    runs-on: ubuntu-latest
+    runs-on: smart-contracts-linux-medium
 
     steps:
       - name: Checkout code
@@ -21,6 +21,9 @@ jobs:
         uses: actions/setup-node@39370e3970a6d050c480ffad4ff0ed4d3fdee5af # v4.1.0
         with:
           node-version: '18.x'
+
+      - name: Setup Yarn
+        run: npm install -g yarn
 
       - name: Get yarn cache directory path
         id: yarn-cache-dir-path
