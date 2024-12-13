@@ -7,18 +7,18 @@
 #############################
 ##### Auth-Layer-Proxy ######
 #############################
-/auth-layer-proxy/                              @AlfredoG87 @Nana-EC @hashgraph/hedera-smart-contracts @hashgraph/release-engineering @hashgraph/release-engineering-managers
-/charts/auth-layer-proxy/                       @AlfredoG87 @Nana-EC @beeradb @hashgraph/hedera-smart-contracts @hashgraph/release-engineering @hashgraph/release-engineering-managers
+/auth-layer-proxy/                              @Nana-EC @hashgraph/hedera-smart-contracts @hashgraph/release-engineering @hashgraph/release-engineering-managers
+/charts/auth-layer-proxy/                       @Nana-EC @beeradb @hashgraph/hedera-smart-contracts @hashgraph/release-engineering @hashgraph/release-engineering-managers
 
 ###############################
 #####       Charts       ######
 ###############################
-/charts/                                        @AlfredoG87 @Nana-EC @beeradb @hashgraph/hedera-smart-contracts @hashgraph/release-engineering @hashgraph/release-engineering-managers
+/charts/                                        @Nana-EC @beeradb @hashgraph/hedera-smart-contracts @hashgraph/release-engineering @hashgraph/release-engineering-managers
 
 ###############################
 #####      Subgraphs     ######
 ###############################
-/subgraphs/                                     @AlfredoG87 @Nana-EC @hashgraph/hedera-smart-contracts @hashgraph/release-engineering @hashgraph/release-engineering-managers
+/subgraphs/                                     @Nana-EC @hashgraph/hedera-smart-contracts @hashgraph/release-engineering @hashgraph/release-engineering-managers
 
 #########################
 #####  Core Files  ######
