@@ -2,23 +2,23 @@
 ##### Global Protection Rule ######
 ###################################
 # NOTE: This rule is overriden by the more specific rules below. This is the catch-all rule for all files not covered by the more specific rules below
-*                                                 @hashgraph/hedera-smart-contracts @hashgraph/release-engineering @hashgraph/release-engineering-managers
+*                                               @hashgraph/hedera-smart-contracts @hashgraph/release-engineering @hashgraph/release-engineering-managers
 
 #############################
 ##### Auth-Layer-Proxy ######
 #############################
-/auth-layer-proxy/                                @AlfredoG87 @Nana-EC @hashgraph/hedera-smart-contracts @hashgraph/release-engineering @hashgraph/release-engineering-managers
-/charts/auth-layer-proxy/                         @AlfredoG87 @Nana-EC @beeradb @hashgraph/hedera-smart-contracts @hashgraph/release-engineering @hashgraph/release-engineering-managers
+/auth-layer-proxy/                              @Nana-EC @hashgraph/hedera-smart-contracts @hashgraph/release-engineering @hashgraph/release-engineering-managers
+/charts/auth-layer-proxy/                       @Nana-EC @beeradb @hashgraph/hedera-smart-contracts @hashgraph/release-engineering @hashgraph/release-engineering-managers
 
 ###############################
 #####       Charts       ######
 ###############################
-/charts/                                          @AlfredoG87 @Nana-EC @beeradb @hashgraph/hedera-smart-contracts @hashgraph/release-engineering @hashgraph/release-engineering-managers
+/charts/                                        @Nana-EC @beeradb @hashgraph/hedera-smart-contracts @hashgraph/release-engineering @hashgraph/release-engineering-managers
 
 ###############################
 #####      Subgraphs     ######
 ###############################
-/subgraphs/                                       @AlfredoG87 @Nana-EC @hashgraph/hedera-smart-contracts @hashgraph/release-engineering @hashgraph/release-engineering-managers
+/subgraphs/                                     @Nana-EC @hashgraph/hedera-smart-contracts @hashgraph/release-engineering @hashgraph/release-engineering-managers
 
 #########################
 #####  Core Files  ######
@@ -28,21 +28,22 @@
 
 # Protection Rules for Github Configuration Files and Actions Workflows
 /.github/                                       @hashgraph/devops-ci @hashgraph/devops-ci-committers @hashgraph/release-engineering @hashgraph/release-engineering-managers
+/.github/workflows/                             @hashgraph/devops-ci @hashgraph/devops-ci-committers @hashgraph/release-engineering @hashgraph/release-engineering-managers @hashgraph/hedera-smart-contracts 
 
 # Codacy Tool Configurations
-/config/                                        @hashgraph/release-engineering @hashgraph/release-engineering-managers
-.remarkrc                                       @hashgraph/release-engineering @hashgraph/release-engineering-managers
+/config/                                        @hashgraph/devops-ci @hashgraph/release-engineering @hashgraph/release-engineering-managers @hashgraph/hedera-smart-contracts
+.remarkrc                                       @hashgraph/devops-ci @hashgraph/release-engineering @hashgraph/release-engineering-managers @hashgraph/hedera-smart-contracts
 
 # Self-protection for root CODEOWNERS files (this file should not exist and should definitely require approval)
-/CODEOWNERS                                      @hashgraph/release-engineering @hashgraph/release-engineering-managers
+/CODEOWNERS                                     @hashgraph/release-engineering-managers
 
 # Protect the repository root files
-/README.md                                      @hashgraph/release-engineering @hashgraph/release-engineering-managers
-**/LICENSE                                      @hashgraph/release-engineering @hashgraph/release-engineering-managers
+/README.md                                      @hashgraph/devops-ci @hashgraph/release-engineering @hashgraph/release-engineering-managers @hashgraph/hedera-smart-contracts
+**/LICENSE                                      @hashgraph/release-engineering-managers
 
 # CodeCov configuration
-**/codecov.yml                                  @hashgraph/release-engineering @hashgraph/release-engineering-managers
+**/codecov.yml                                  @hashgraph/devops-ci @hashgraph/release-engineering @hashgraph/release-engineering-managers @hashgraph/hedera-smart-contracts
 
 # Git Ignore definitions
-**/.gitignore                                   @hashgraph/release-engineering @hashgraph/release-engineering-managers
-**/.gitignore.*                                 @hashgraph/release-engineering @hashgraph/release-engineering-managers
+**/.gitignore                                   @hashgraph/devops-ci @hashgraph/release-engineering @hashgraph/release-engineering-managers @hashgraph/hedera-smart-contracts
+**/.gitignore.*                                 @hashgraph/devops-ci @hashgraph/release-engineering @hashgraph/release-engineering-managers @hashgraph/hedera-smart-contracts
