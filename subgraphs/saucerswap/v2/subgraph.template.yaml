@@ -42,7 +42,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: Pool
-    network: mainnet
+    network: ${GRAPH_NETWORK}
     source:
       abi: Pool
     mapping:
