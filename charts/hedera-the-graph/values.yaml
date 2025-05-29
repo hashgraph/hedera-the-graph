@@ -89,7 +89,7 @@ postgresql:
   pgpool:
     childLifeTime: 60
     # https://www.pgpool.net/docs/46/en/html/runtime-config-connection-pooling.html
-    childMaxConnections: 10
+    childMaxConnections: 20
     existingSecret: hedera-the-graph-passwords
     extraEnvVarsSecret: hedera-the-graph-passwords
     resources:
