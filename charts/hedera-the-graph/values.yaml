@@ -61,9 +61,6 @@ ipfs:
   # Auto-generated from the ipfs sub-charts, Requiered if external ipfs is used
   host: ''
   port: 10125
-  podOptions:
-    nodeSelector:
-      kubernetes.io/arch: arm64
 
 labels: {}
 
