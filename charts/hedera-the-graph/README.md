@@ -11,9 +11,12 @@ This is a Helm chart for deploying a Hedera The Graph node, which is a node that
 
 ## Configuration
 
-### Values for installing all components.
+> [!TIP]
+> You can also override any value in the chart using the `--set*` flags when executing a [`helm install`](https://helm.sh/docs/helm/helm_install).
 
-No need to change any values if want to install all components and auto-generate a password for the postgres database.
+### Values for installing all components
+
+No need to change any values if want to install all components and auto-generate a password for the Postgres database.
 
 If wish to provide a custom password for the postgres database, set the following values:
 
@@ -24,9 +27,15 @@ global:
 
 ```
 
-### Values when using external ipfs server.
+Or alternatively,
 
-example to use `ipfs.infura.io` as external ipfs server.
+```sh
+helm install <RELEASE-NAME> . --set-string global.postgresql.password=1234
+```
+
+### Values when using external ipfs server
+
+Example to use `ipfs.infura.io` as external ipfs server.
 
 ```yaml
 ipfs:
@@ -35,9 +44,20 @@ ipfs:
   port: 5001
 ```
 
-### Values when using external postgres server.
+### Values when using internal IPFS server on a ARM64 host
 
-example to use `postgresql://postgres:password@remotehost:5432/graph-node` as external postgres server.
+By default, the IPFS node runs only on AMD64 hosts.
+If you are running on an ARM64 architecture, such as Apple Silicon Macs,
+you will need to change the arch selector.
+You can do so by running the following
+
+```sh
+helm install <RELEASE-NAME> . -f values-overrides/arm-arch.yaml 
+```
+
+### Values when using external postgres server
+
+Example to use `postgresql://postgres:password@remotehost:5432/graph-node` as external postgres server.
 
 ```yaml
 global:
@@ -48,7 +68,6 @@ global:
         password: "password"
         database: "graph-node"
 ```
-
 
 ### Index and Query Nodes
 
