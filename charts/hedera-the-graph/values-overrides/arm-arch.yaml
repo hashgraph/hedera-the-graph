@@ -1,0 +1,9 @@
+
+# This file contains overrides for deploying Hedera The Graph on ARM64 architecture machines,
+# such as Apple Silicon Macs.
+ipfs:
+  # The charts provided by TrueCharts use amd64 by default.
+  # See https://truecharts.org/common/podoptions/#nodeselector for details.
+  podOptions:
+    nodeSelector:
+      kubernetes.io/arch: arm64

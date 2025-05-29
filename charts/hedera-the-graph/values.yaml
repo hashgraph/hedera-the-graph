@@ -53,6 +53,8 @@ index-node:
         name: hedera-the-graph-passwords
   role: index-node
 
+# See the TrueCharts IPFS chart documentation for more details
+# https://truecharts.org/charts/stable/ipfs/
 ipfs:
   # Set to false if external ipfs is used
   enabled: true
@@ -67,9 +69,12 @@ labels: {}
 
 nameOverride: hedera-the-graph
 
+# See the Bitnami PostgreSQL HA chart documentation for more details
+# https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha#readme
 postgresql:
   # Set to false if external postgresql is used
   enabled: true
+  # https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha#metrics-parameters
   metrics:
     enabled: false
     resources:
@@ -80,11 +85,14 @@ postgresql:
         cpu: 20m
         memory: 25Mi
   nameOverride: postgres
+  # https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha#persistence-parameters
   persistence:
     size: 500Gi
+  # https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha#pgpool-ii-parameters
   pgpool:
     childLifeTime: 60
-    childMaxConnections: 50
+    # https://www.pgpool.net/docs/46/en/html/runtime-config-connection-pooling.html
+    childMaxConnections: 10
     existingSecret: hedera-the-graph-passwords
     extraEnvVarsSecret: hedera-the-graph-passwords
     resources:
@@ -94,6 +102,7 @@ postgresql:
       requests:
         cpu: 200m
         memory: 256Mi
+  # https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha#postgresql-with-repmgr-parameters
   postgresql:
     existingSecret: hedera-the-graph-passwords
     extraEnvVarsSecret: hedera-the-graph-passwords
