@@ -165,6 +165,54 @@ To uninstall/delete the `my-release` deployment:
 helm uninstall my-release
 ```
 
+### Re-installing the Chart using a random password
+
+If a random password was used when installing the chart,
+you need to ensure Postgres can be started properly when re-installing it.
+
+The issue comes from Helm not removing all the corresponding Persistent Volume Claims.
+This leads to an error when `install`ing a chart after `uninstall`ing it.
+The Postgres pod is not able to start triggering the following error
+
+```console
+$ kubectl logs <postgres-pod-name>
+[...]
+postgresql-repmgr 19:12:42.47 INFO  ==> ** Starting repmgrd **
+[2025-05-28 19:12:42] [NOTICE] repmgrd (repmgrd 5.3.3) starting up
+[2025-05-28 19:12:42] [ERROR] connection to database failed
+[2025-05-28 19:12:42] [DETAIL] 
+2025-05-28 19:12:42.478 GMT [155] FATAL:  password authentication failed for user "repmgr"
+2025-05-28 19:12:42.478 GMT [155] DETAIL:  Connection matched pg_hba.conf line 1: "host     all            repmgr    0.0.0.0/0    md5"
+connection to server at "thegraph-29-postgres-postgresql-0.thegraph-29-postgres-postgresql-headless.default.svc.cluster.local" (10.244.0.11), port 5432 failed: FATAL:  password authentication failed for user "repmgr"
+[...]
+```
+
+After re-installing, a new password is generated but the stored password in the PVC is the older **random** one.
+
+You should ensure both PVs and PVCs are properly removed after uninstalling the chart.
+
+> [!TIP]
+> You can delete the PVC manually after uninstalling the chart `<RELEASE-NAME>` using the following command
+>
+> ```sh
+> kubectl delete pvc data-<RELEASE-NAME>-postgres-postgresql-0
+> ```
+>
+> You can get the list of all PVCs using
+>
+> ```sh
+> kubectl get pvc
+> ```
+>
+> Alternatively, if you want to be completely sure no data from previous deployments are left, you can recreate Minikube. To do so, run
+>
+> ```sh
+> minikube delete
+> minikube start
+> ```
+
+See [_&sect; Values for installing all components_](#values-for-installing-all-components) to set a non-random password that can be reused across chart installations.
+
 ## Port Forwarding
 
 If you want to deploy subgraphs on your local instance, you may want to forward the following ports
