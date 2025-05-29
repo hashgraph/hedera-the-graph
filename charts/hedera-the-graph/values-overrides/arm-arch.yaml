@@ -4,6 +4,7 @@
 ipfs:
   # The charts provided by TrueCharts use amd64 by default.
   # See https://truecharts.org/common/podoptions/#nodeselector for details.
+  # To enable IPFS on ARM64, we need to change the `nodeSelector` to arm64.
   podOptions:
     nodeSelector:
       kubernetes.io/arch: arm64
