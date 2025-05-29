@@ -92,8 +92,10 @@ query-node:
 
 The default number of replicas for the Query Node is 1.
 
-#### Values if you don't want dedicated query node.
-Is possible to do queries using the index node, so for small testing environments is possible to disable the query node and use the index node for queries.
+#### Values if you do not want dedicated query node
+
+Is possible to do queries using the index node,
+so for small testing environments is possible to disable the query node and use the index node for queries.
 
   ```yaml
   query-node:
@@ -102,13 +104,15 @@ Is possible to do queries using the index node, so for small testing environment
 
 ## RPC Provider Configuration Overview
 
-This section details the override values specified for different network environments: previewnet, testnet, and mainnet. The configuration files are organized as follows:
-```
+This section details the override values specified for different network environments: previewnet, testnet, and mainnet. The configuration files are organized as follows
+
+```plain
     /values-overrides
         /values-mainnet.yaml
         /values-previewnet.yaml
         /values-testnet.yaml
 ```
+
 ### Support for Archive Feature
 
 The Hedera JSON RPC Relay now includes support for the archive feature, as outlined in [HIP-584](https://hips.hedera.com/hip/hip-584). By default, the configuration for all networks enables the `archive` feature for the RPC node. However, it is possible to disable this feature if needed.
@@ -130,6 +134,7 @@ index-node:
 ```
 
 #### Additional Resources
+
 More information on thegraph node documentation for [configuration toml - providers](https://github.com/graphprotocol/graph-node/blob/master/docs/config.md#configuring-ethereum-providers)
 
 ## Installing the Chart
@@ -152,12 +157,30 @@ same for previewnet:
 helm install sl charts/hedera-the-graph -f charts/hedera-the-graph/values-overrides/values-previewnet.yaml  
 ```
 
-
-
 ## Uninstalling the Chart
 
 To uninstall/delete the `my-release` deployment:
 
 ```bash
 helm uninstall my-release
+```
+
+## Port Forwarding
+
+If you want to deploy subgraphs on your local instance, you may want to forward the following ports
+
+```sh
+kubectl port-forward $QUERY_POD 8000 8020
+kubectl port-forward $IPFS_POD 5001
+```
+
+This will enable connections to
+
+- the GraphQL HTTP server at port `:8000`, used to query subgraphs, and
+- the JSON-RPC admin server at port `:8020`, used to create and deploy subgraphs.
+
+Moreover, if you want to access the Postgres database, you will need to forward the following port
+
+```sh
+kubectl port-forward $PG_POD 5432
 ```
