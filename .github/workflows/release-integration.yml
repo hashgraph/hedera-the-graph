@@ -55,8 +55,6 @@ jobs:
         with:
           context: ./auth-layer-proxy
           file: ./auth-layer-proxy/Dockerfile
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
           platforms: linux/amd64
           push: true
           tags: ${{ env.REGISTRY }}/${{ github.repository }}:auth-layer-proxy-main
