@@ -104,7 +104,7 @@ postgresql:
     extraEnvVars:
       # This is needed because starting from `v0.30.0` https://github.com/graphprotocol/graph-node/releases/tag/v0.30.0
       # of the graph-node, the encoding and locale options are required on new PostgreSQL databases.
-      # 
+      #
       # For more details, see `POSTGRES_INITDB_ARGS` in https://hub.docker.com/_/postgres, `Environment Variables` section and
       # https://github.com/bitnami/charts/tree/main/bitnami/postgresql#differences-between-bitnami-postgresql-image-and-docker-official-image
       - name: POSTGRES_INITDB_ARGS
