@@ -102,7 +102,6 @@ postgresql:
   # https://github.com/bitnami/charts/tree/main/bitnami/postgresql-ha#postgresql-with-repmgr-parameters
   postgresql:
     extraEnvVars:
-      # POSTGRES_INITDB_ARGS
       # This is needed because starting from `v0.30.0` https://github.com/graphprotocol/graph-node/releases/tag/v0.30.0
       # of the graph-node, the encoding and locale options are required on new PostgreSQL databases.
       # 
