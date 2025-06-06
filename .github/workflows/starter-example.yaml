@@ -22,11 +22,11 @@ jobs:
         with:
           node-version: '18.x'
 
-      - name: Install libpq
-        working-directory: subgraphs/starter-example
+      # Package files https://packages.ubuntu.com/jammy/amd64/libpq5/filelist
+      - name: Install `libpq.so.5` used by `binary-linux-22` in `npm run test`
         run: |
           sudo apt-get update
-          sudo apt-get install --yes libpq-dev
+          sudo apt-get install --yes libpq5
 
       - name: Install dependencies
         working-directory: subgraphs/starter-example
