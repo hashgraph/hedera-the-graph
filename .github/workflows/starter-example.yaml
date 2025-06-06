@@ -22,6 +22,10 @@ jobs:
         with:
           node-version: '18.x'
 
+      - name: Install libpq
+        working-directory: subgraphs/starter-example
+        run: sudo apt install --yes libpq-dev
+
       - name: Install dependencies
         working-directory: subgraphs/starter-example
         run: npm ci
