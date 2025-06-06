@@ -26,6 +26,18 @@ jobs:
         working-directory: subgraphs/starter-example
         run: npm ci
 
+      - name: Copy example environment variables to generate `subgraph.yaml`
+        working-directory: subgraphs/starter-example
+        run: cp .env.example .env
+
+      - name: Generate `subgraph.yaml` based on example environment variables
+        working-directory: subgraphs/starter-example
+        run: npm run generate
+
+      - name: Generate types
+        working-directory: subgraphs/starter-example
+        run: npm run codegen
+
       - name: Build project
         working-directory: subgraphs/starter-example
         run: npm run build
