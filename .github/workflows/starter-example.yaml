@@ -20,10 +20,10 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version: '18.x'
+          node-version: '20.x'
 
       # Package files https://packages.ubuntu.com/jammy/amd64/libpq5/filelist
-      - name: Install `libpq.so.5` used by `binary-linux-22` in `npm run test`
+      - name: Install libpq5
         run: |
           sudo apt-get update
           sudo apt-get install --yes libpq5
@@ -32,11 +32,11 @@ jobs:
         working-directory: subgraphs/starter-example
         run: npm ci
 
-      - name: Copy example environment variables to generate `subgraph.yaml`
+      - name: Setup environment variables
         working-directory: subgraphs/starter-example
         run: cp .env.example .env
 
-      - name: Generate `subgraph.yaml` based on example environment variables
+      - name: Generate subgraph.yaml
         working-directory: subgraphs/starter-example
         run: npm run generate
 
