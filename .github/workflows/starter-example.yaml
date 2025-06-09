@@ -1,0 +1,53 @@
+name: Starter Example Subgraph
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-test:
+    name: build-and-test
+    runs-on: smart-contracts-linux-medium
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '20.x'
+
+      # Package files https://packages.ubuntu.com/jammy/amd64/libpq5/filelist
+      - name: Install libpq5
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes libpq5
+
+      - name: Install dependencies
+        working-directory: subgraphs/starter-example
+        run: npm ci
+
+      - name: Setup environment variables
+        working-directory: subgraphs/starter-example
+        run: cp .env.example .env
+
+      - name: Generate subgraph.yaml
+        working-directory: subgraphs/starter-example
+        run: npm run generate
+
+      - name: Generate types
+        working-directory: subgraphs/starter-example
+        run: npm run codegen
+
+      - name: Build project
+        working-directory: subgraphs/starter-example
+        run: npm run build
+
+      - name: Test
+        working-directory: subgraphs/starter-example
+        run: npm run test
