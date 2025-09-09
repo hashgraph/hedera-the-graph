@@ -12,9 +12,8 @@
     "deploy": "source .env && graph deploy --node ${HEDERA_THE_GRAPH_NODE} --ipfs ${IPFS_URL} --access-token ${ACCESS_TOKEN} ${SUBGRAPH_NAME}",
     "remove": "source .env && graph remove --node ${HEDERA_THE_GRAPH_NODE}  --access-token ${ACCESS_TOKEN} ${SUBGRAPH_NAME}"
   },
-  "peerDependencies": {
-    "concat-stream": "2.0.0",
-    "dockerode": "4.0.8"
+  "dependencies": {
+    "debug": "4.4.1"
   },
   "devDependencies": {
     "@graphprotocol/graph-cli": "0.97.1",
